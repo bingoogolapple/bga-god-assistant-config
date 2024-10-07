@@ -1,0 +1,577 @@
+{
+  "form": {
+    "labelCol": 6,
+    "wrapperCol": 12
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "eaf5qid04k8": {
+        "type": "void",
+        "x-component": "FormGrid",
+        "x-validator": [],
+        "x-component-props": {
+          "minColumns": 12,
+          "maxColumns": 12,
+          "style": {
+            "padding": "20px 20px 20px 20px"
+          },
+          "rowGap": 20,
+          "columnGap": 20
+        },
+        "x-designable-id": "eaf5qid04k8",
+        "x-index": 0,
+        "properties": {
+          "1ip2rmhbckr": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "1ip2rmhbckr",
+            "x-index": 0,
+            "properties": {
+              "wdqjuacgusq": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "上帝小助手浏览器扩展程序是一个浏览器扩展开发平台",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "flexDirection": "row",
+                    "fontSize": "24px"
+                  }
+                },
+                "x-designable-id": "wdqjuacgusq",
+                "x-index": 0
+              }
+            }
+          },
+          "4ap1y3zknrp": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "flex-end",
+                "flexDirection": "row"
+              },
+              "gridSpan": 6
+            },
+            "x-designable-id": "4ap1y3zknrp",
+            "x-index": 1,
+            "properties": {
+              "uw17xv49mri": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "type": "primary",
+                  "children": "查看 Gitee 安装",
+                  "size": "large",
+                  "style": {
+                    "margin": "20px 0px 20px 0px"
+                  }
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://gitee.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
+                  }
+                },
+                "x-designable-id": "uw17xv49mri",
+                "x-index": 0
+              }
+            }
+          },
+          "17nznt2cn5b": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "flex-start",
+                "flexDirection": "row"
+              },
+              "gridSpan": 6
+            },
+            "x-designable-id": "17nznt2cn5b",
+            "x-index": 2,
+            "properties": {
+              "uw7m66fzcly": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "type": "primary",
+                  "children": "查看 GitHub 安装",
+                  "size": "large",
+                  "style": {
+                    "margin": "20px 0px 20px 0px"
+                  }
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://github.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
+                  }
+                },
+                "x-designable-id": "uw7m66fzcly",
+                "x-index": 0
+              }
+            }
+          },
+          "82et3r73xpe": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "82et3r73xpe",
+            "x-index": 3,
+            "properties": {
+              "d4xggnu3esy": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "1、用户可以通过低代码的方式快速搭建自己的专属新标签页，以及搭建各种自动化任务页面",
+                  "style": {
+                    "fontSize": "18px"
+                  }
+                },
+                "x-designable-id": "d4xggnu3esy",
+                "x-index": 0
+              }
+            }
+          },
+          "zxpcw4rkusb": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row"
+              },
+              "gridSpan": 12
+            },
+            "x-designable-id": "zxpcw4rkusb",
+            "x-index": 4,
+            "properties": {
+              "9dbqcnf0uzf": {
+                "type": "string",
+                "x-component": "Img",
+                "x-validator": [],
+                "x-component-props": {
+                  "style": {
+                    "width": "100%"
+                  }
+                },
+                "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-editor.png",
+                "x-designable-id": "9dbqcnf0uzf",
+                "x-index": 0
+              }
+            }
+          },
+          "rqufxiyxklv": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row"
+              },
+              "gridSpan": 12
+            },
+            "x-designable-id": "rqufxiyxklv",
+            "x-index": 5,
+            "properties": {
+              "7hjw2gim1jh": {
+                "type": "string",
+                "x-component": "Img",
+                "x-validator": [],
+                "x-component-props": {
+                  "style": {
+                    "width": "100%"
+                  }
+                },
+                "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-preview.png",
+                "x-designable-id": "7hjw2gim1jh",
+                "x-index": 0
+              }
+            }
+          },
+          "2m5lymudm0p": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row"
+              },
+              "gridSpan": 12
+            },
+            "x-designable-id": "2m5lymudm0p",
+            "x-index": 6,
+            "properties": {
+              "t5looi3a83h": {
+                "type": "string",
+                "x-component": "Img",
+                "x-validator": [],
+                "x-component-props": {
+                  "style": {
+                    "width": "100%"
+                  }
+                },
+                "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-editor2.jpg",
+                "x-designable-id": "t5looi3a83h",
+                "x-index": 0
+              }
+            }
+          },
+          "hqup31prbts": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row"
+              },
+              "gridSpan": 12
+            },
+            "x-designable-id": "hqup31prbts",
+            "x-index": 7,
+            "properties": {
+              "1gpnqfqpkv0": {
+                "type": "string",
+                "x-component": "Img",
+                "x-validator": [],
+                "x-component-props": {
+                  "style": {
+                    "width": "100%"
+                  }
+                },
+                "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-preview2.jpg",
+                "x-designable-id": "1gpnqfqpkv0",
+                "x-index": 0
+              }
+            }
+          },
+          "57ybbln58bm": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "57ybbln58bm",
+            "x-index": 8,
+            "properties": {
+              "7y0cawwx4pp": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "2、用户可以添加各种自动化任务脚本",
+                  "style": {
+                    "fontSize": "18px"
+                  }
+                },
+                "x-designable-id": "7y0cawwx4pp",
+                "x-index": 0
+              }
+            }
+          },
+          "zyb6c91zqax": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row"
+              }
+            },
+            "x-designable-id": "zyb6c91zqax",
+            "x-index": 9,
+            "properties": {
+              "c1lujmpl3px": {
+                "type": "string",
+                "x-component": "Img",
+                "x-validator": [],
+                "x-component-props": {
+                  "style": {
+                    "width": "100%"
+                  }
+                },
+                "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-userScripts-manage.png",
+                "x-designable-id": "c1lujmpl3px",
+                "x-index": 0
+              }
+            }
+          },
+          "0rv1s2an44r": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row"
+              }
+            },
+            "x-designable-id": "0rv1s2an44r",
+            "x-index": 10,
+            "properties": {
+              "pt2rwtqgpuu": {
+                "type": "string",
+                "x-component": "Img",
+                "x-validator": [],
+                "x-component-props": {
+                  "style": {
+                    "width": "100%"
+                  }
+                },
+                "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-userScripts-preview.png",
+                "x-designable-id": "pt2rwtqgpuu",
+                "x-index": 0
+              }
+            }
+          },
+          "adser5gxls7": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "flex-end",
+                "flexDirection": "row"
+              },
+              "gridSpan": 6
+            },
+            "x-designable-id": "adser5gxls7",
+            "x-index": 11,
+            "properties": {
+              "gxycxdcfcqh": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "type": "primary",
+                  "children": "查看 Gitee 安装",
+                  "size": "large",
+                  "style": {
+                    "margin": "20px 0px 20px 0px"
+                  }
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://gitee.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
+                  }
+                },
+                "x-designable-id": "gxycxdcfcqh",
+                "x-index": 0
+              }
+            }
+          },
+          "ykrebxo3ql4": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "flex-start",
+                "flexDirection": "row"
+              },
+              "gridSpan": 6
+            },
+            "x-designable-id": "ykrebxo3ql4",
+            "x-index": 12,
+            "properties": {
+              "psvgy57wqxu": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "type": "primary",
+                  "children": "查看 GitHub 安装",
+                  "size": "large",
+                  "style": {
+                    "margin": "20px 0px 20px 0px"
+                  }
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://github.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
+                  }
+                },
+                "x-designable-id": "psvgy57wqxu",
+                "x-index": 0
+              }
+            }
+          },
+          "tr2q92r7km5": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 6,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
+            },
+            "x-designable-id": "tr2q92r7km5",
+            "x-index": 13,
+            "properties": {
+              "4h54l3baxkz": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "扫码加微信群咨询或反馈问题",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "410px",
+                    "height": "390px"
+                  }
+                },
+                "x-designable-id": "4h54l3baxkz",
+                "x-index": 0,
+                "properties": {
+                  "yme3v3lfyvp": {
+                    "type": "string",
+                    "x-component": "Img",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "style": {
+                        "width": "180px"
+                      }
+                    },
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/WeChatGroup1QrCode.jpg",
+                    "x-designable-id": "yme3v3lfyvp",
+                    "x-index": 0
+                  }
+                }
+              }
+            }
+          },
+          "70ki77gkysd": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 6,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
+            },
+            "x-designable-id": "70ki77gkysd",
+            "x-index": 14,
+            "properties": {
+              "6rvhggvh6gf": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "扫码加作者微信咨询或反馈问题",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "410px",
+                    "height": "390px"
+                  }
+                },
+                "x-designable-id": "6rvhggvh6gf",
+                "x-index": 0,
+                "properties": {
+                  "ga72h9adc6s": {
+                    "type": "string",
+                    "x-component": "Img",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "style": {
+                        "width": "180px"
+                      }
+                    },
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/BGAQrCode.jpg",
+                    "x-designable-id": "ga72h9adc6s",
+                    "x-index": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "x-designable-id": "j8og0rt2isu"
+  }
+}

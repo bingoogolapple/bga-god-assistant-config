@@ -1,0 +1,138 @@
+{
+  "form": {
+    "labelCol": 6,
+    "wrapperCol": 12
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "ewxgclzzfvp": {
+        "type": "void",
+        "x-component": "Div",
+        "x-component-props": {
+          "style": {
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "center",
+            "padding": "20px 20px 20px 20px"
+          }
+        },
+        "x-designable-id": "ewxgclzzfvp",
+        "x-index": 0,
+        "properties": {
+          "x7m2iwm6z3l": {
+            "type": "string",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "开通会员-敬请期待",
+              "style": {
+                "fontSize": "24px"
+              }
+            },
+            "x-designable-id": "x7m2iwm6z3l",
+            "x-index": 0
+          },
+          "z02kiowdggl": {
+            "type": "void",
+            "x-component": "Div",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "flexDirection": "row",
+                "justifyContent": "space-around",
+                "alignItems": "center",
+                "margin": "20px 0px 0px 0px",
+                "width": "100%"
+              }
+            },
+            "x-designable-id": "z02kiowdggl",
+            "x-index": 1,
+            "properties": {
+              "6rvhggvh6gf": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "扫下方二维码加作者微信催更该功能",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "410px",
+                    "height": "390px"
+                  }
+                },
+                "x-designable-id": "6rvhggvh6gf",
+                "x-index": 0,
+                "properties": {
+                  "ga72h9adc6s": {
+                    "type": "string",
+                    "x-component": "Img",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "style": {
+                        "width": "180px"
+                      }
+                    },
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/BGAQrCode.jpg",
+                    "x-designable-id": "ga72h9adc6s",
+                    "x-index": 0
+                  }
+                }
+              },
+              "vrh7irzdd51": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "扫下方二维码加微信群催更该功能",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "410px",
+                    "height": "390px"
+                  }
+                },
+                "x-designable-id": "vrh7irzdd51",
+                "x-index": 1,
+                "properties": {
+                  "orl4ic2l9yz": {
+                    "type": "string",
+                    "x-component": "Img",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "style": {
+                        "width": "180px"
+                      }
+                    },
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/WeChatGroup1QrCode.jpg",
+                    "x-designable-id": "orl4ic2l9yz",
+                    "x-index": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "x-designable-id": "mk06mvbfv8k"
+  }
+}

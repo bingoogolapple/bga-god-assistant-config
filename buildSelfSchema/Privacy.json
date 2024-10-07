@@ -1,0 +1,121 @@
+{
+  "form": {
+    "labelCol": 6,
+    "wrapperCol": 12
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "ewxgclzzfvp": {
+        "type": "void",
+        "x-component": "Div",
+        "x-component-props": {
+          "style": {
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "center",
+            "padding": "20px 20px 20px 20px"
+          }
+        },
+        "x-designable-id": "ewxgclzzfvp",
+        "x-index": 0,
+        "properties": {
+          "x7m2iwm6z3l": {
+            "type": "string",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "上帝小助手无服务器，页面和配置信息都是托管到 git 仓库的",
+              "style": {
+                "fontSize": "24px"
+              }
+            },
+            "x-designable-id": "x7m2iwm6z3l",
+            "x-index": 0
+          },
+          "2b4ug4hq3p4": {
+            "type": "string",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "因此不会收集任何用户信息",
+              "style": {
+                "fontSize": "24px",
+                "margin": "10px 0px 0px 0px"
+              }
+            },
+            "x-designable-id": "2b4ug4hq3p4",
+            "x-index": 1
+          },
+          "q1yt6v4l5ix": {
+            "type": "void",
+            "x-component": "Div",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "alignItems": "center",
+                "margin": "30px 0px 0px 0px"
+              }
+            },
+            "x-designable-id": "q1yt6v4l5ix",
+            "properties": {
+              "gxycxdcfcqh": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "type": "primary",
+                  "children": "查看 Gitee 仓库里的配置信息",
+                  "size": "large"
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://gitee.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
+                  }
+                },
+                "x-designable-id": "gxycxdcfcqh",
+                "x-index": 0
+              },
+              "uw7m66fzcly": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "type": "primary",
+                  "children": "查看 GitHub 仓库里的配置信息",
+                  "size": "large",
+                  "style": {
+                    "margin": "0px 0px 0px 50px"
+                  }
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://github.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
+                  }
+                },
+                "x-designable-id": "uw7m66fzcly",
+                "x-index": 1
+              }
+            },
+            "x-index": 2
+          }
+        }
+      }
+    },
+    "x-designable-id": "oowbaegn6pp"
+  }
+}

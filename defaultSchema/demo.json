@@ -1,0 +1,208 @@
+{
+  "form": {
+    "labelCol": 6,
+    "wrapperCol": 12
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "q5l4kmucw83": {
+        "type": "void",
+        "x-component": "Div",
+        "x-component-props": {
+          "className": "absolute inset-0 size-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]",
+          "style": {
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "center"
+          }
+        },
+        "x-designable-id": "q5l4kmucw83",
+        "x-index": 0,
+        "properties": {
+          "kicoo77eci2": {
+            "type": "string",
+            "x-component": "Text",
+            "x-component-props": {
+              "content": "demo，用于演示各种 api 的使用",
+              "mode": "normal",
+              "style": {
+                "display": "flex",
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "fontSize": "24px",
+                "margin": "20px 0px 20px 0px"
+              }
+            },
+            "x-designable-id": "kicoo77eci2",
+            "x-index": 0,
+            "x-validator": []
+          },
+          "mk5ysy0l3g4": {
+            "type": "void",
+            "x-component": "Space",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "flexWrap": "wrap"
+              }
+            },
+            "x-designable-id": "mk5ysy0l3g4",
+            "x-index": 1,
+            "properties": {
+              "4muhsm6iwyi": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "children": "监听点击事件"
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "/**\n * 添加点击事件\n **/\n$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})"
+                  }
+                },
+                "x-designable-id": "4muhsm6iwyi",
+                "x-index": 0
+              },
+              "c18g28ks4ex": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "children": "获取插件信息 chrome.runtime.getManifest"
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "$props({\n  onClick: async () => {\n    // 方式一\n    const manifest1 = await $chrome.runtime.getManifest()\n    alert(JSON.stringify(manifest1, null, 2))\n    // 方式二\n    const manifest2 = await $chrome.callMethodByPath(\"runtime.getManifest\")\n    alert(JSON.stringify(manifest2, null, 2))\n  },\n})\n"
+                  }
+                },
+                "x-designable-id": "c18g28ks4ex",
+                "x-index": 1
+              },
+              "hpz2w0a8jaw": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "children": "数据缓存和读取 chrome.storage.local.xxx"
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "/**\n * 写入缓存和读取缓存\n */\n$props({\n  onClick: async () => {\n    // 写入缓存-方式1\n    await $chrome.storage.local.set({\n      key1: `${new Date().toLocaleString()}`,\n      key2: `${Math.random()}`,\n    })\n    // 写入缓存-方式2\n    await $chrome.callMethodByPath(\"storage.local.set\", {\n      key3: `${new Date().toLocaleString()}`,\n      key4: `${Math.random()}`,\n    })\n\n    // 读取缓存-方式1\n    const result1 = await $chrome.storage.local.get([\"key1\", \"key2\"])\n\n    // 读取缓存-方式2\n    const result2 = await $chrome.callMethodByPath(\"storage.local.get\", [\n      \"key1\",\n      \"key2\",\n    ])\n\n    $message.success(JSON.stringify({ result1, result2 }))\n  },\n})\n"
+                  }
+                },
+                "x-designable-id": "hpz2w0a8jaw",
+                "x-index": 2
+              },
+              "x32qncihyix": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "children": "操作系统通知 chrome.notifications.xxx"
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "/**\n * 操作系统通知\n */\n$props({\n  onClick: () => {\n    let myNotificationId\n\n    // 创建系统通知\n    $chrome.notifications.create(\n      null,\n      {\n        type: \"basic\",\n        title: \"我是标题\",\n        message: \"我是内容\",\n        iconUrl: \"../images/128.png\",\n      },\n      $chrome.proxy((notificationId) => {\n        myNotificationId = notificationId\n        $message.info(`创建的系统通知 ID 为 ${notificationId}`)\n      })\n    )\n\n    // 延迟 3 秒更新系统通知\n    setTimeout(() => {\n      $chrome.notifications.update(\n        myNotificationId,\n        {\n          type: \"basic\",\n          title: \"我是修改后的标题\",\n          message: \"我是修改后内容\",\n          iconUrl: \"../images/128.png\",\n        },\n        $chrome.proxy((wasUpdated) => {\n          $message.info(`更新系统通知 ${wasUpdated}`)\n        })\n      )\n    }, 3000)\n\n    // 延迟 6 秒清除系统通知\n    setTimeout(() => {\n      $chrome.notifications.clear(\n        myNotificationId,\n        $chrome.proxy((wasCleared) => {\n          $message.info(`清除系统通知 ${wasCleared}`)\n        })\n      )\n    }, 6000)\n  },\n})"
+                  }
+                },
+                "x-designable-id": "x32qncihyix",
+                "x-index": 3
+              },
+              "3sxy8l7f5yj": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "children": "获取当前窗口激活的标签页 chrome.tabs.query"
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "/**\n * 获取当前窗口激活的标签页\n */\n$props({\n  onClick: async () => {\n    // 方式1\n    const tab1 = await $chrome.tabs.query({\n      active: true,\n      lastFocusedWindow: true,\n    })\n    alert(JSON.stringify(tab1))\n    // 方式2\n    const tab2 = await $chrome.callMethodByPath(\"tabs.query\", {\n      active: true,\n      lastFocusedWindow: true,\n    })\n    alert(JSON.stringify(tab2))\n  },\n})\n"
+                  }
+                },
+                "x-designable-id": "3sxy8l7f5yj",
+                "x-index": 4,
+                "x-validator": []
+              }
+            }
+          },
+          "bphz3gu732q": {
+            "type": "string",
+            "x-component": "Text",
+            "x-validator": [],
+            "x-component-props": {
+              "content": "生成当前激活标签的 url 二维码",
+              "style": {
+                "margin": "40px 0px 0px 0px"
+              }
+            },
+            "x-designable-id": "bphz3gu732q",
+            "x-index": 2
+          },
+          "m4sunypljsg": {
+            "type": "string",
+            "x-component": "QRCode",
+            "x-validator": [],
+            "x-component-props": {
+              "content": "我是二维码的内容"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "any"
+                }
+              ],
+              "fulfill": {
+                "run": "$effect(async () => {\n  const tabs = await $chrome.tabs.query({\n    active: true,\n    lastFocusedWindow: true,\n  })\n  $self.value = tabs[0].url\n}, [])\n"
+              }
+            },
+            "x-designable-id": "m4sunypljsg",
+            "x-index": 3
+          }
+        }
+      }
+    },
+    "x-designable-id": "up7rtzqk7au"
+  }
+}

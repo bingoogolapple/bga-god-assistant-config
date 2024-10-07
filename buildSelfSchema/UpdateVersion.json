@@ -1,0 +1,226 @@
+{
+  "form": {
+    "labelCol": 6,
+    "wrapperCol": 12
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "ewxgclzzfvp": {
+        "type": "void",
+        "x-component": "Div",
+        "x-component-props": {
+          "style": {
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "center",
+            "padding": "0px 0px 20px 0px"
+          }
+        },
+        "x-designable-id": "ewxgclzzfvp",
+        "x-index": 0,
+        "properties": {
+          "5pjdb56o8j7": {
+            "type": "void",
+            "x-component": "Div",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "alignItems": "center",
+                "margin": "0px 0px 0px 0px"
+              }
+            },
+            "x-designable-id": "5pjdb56o8j7",
+            "x-index": 0,
+            "properties": {
+              "4kwn0f8wdke": {
+                "type": "string",
+                "x-component": "Img",
+                "x-validator": [],
+                "x-component-props": {
+                  "style": {
+                    "height": "60px",
+                    "margin": "0px 0px 0px 0px",
+                    "width": "60px",
+                    "cursor": "pointer"
+                  }
+                },
+                "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-logo-128.png",
+                "x-designable-id": "4kwn0f8wdke",
+                "x-index": 0,
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://github.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
+                  }
+                }
+              },
+              "ibo8dtq47sx": {
+                "type": "void",
+                "x-component": "Div",
+                "x-component-props": {
+                  "style": {
+                    "margin": "0px 24px 0px 24px",
+                    "display": "flex",
+                    "flexDirection": "column",
+                    "alignItems": "flex-start",
+                    "justifyContent": "center"
+                  }
+                },
+                "x-designable-id": "ibo8dtq47sx",
+                "x-index": 1,
+                "properties": {
+                  "currentVersion": {
+                    "type": "string",
+                    "x-component": "Text",
+                    "x-component-props": {
+                      "content": "当前版本："
+                    },
+                    "name": "currentVersion",
+                    "x-designable-id": "wxtojx6pwie",
+                    "x-index": 0,
+                    "x-reactions": {
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ],
+                      "fulfill": {
+                        "run": "$chrome.runtime\n  .getManifest()\n  .then((manifest) => {\n    $self.value = `当前版本：${manifest.version}`\n  })\n  .catch((e) => {\n    $self.value = `当前版本：获取失败`\n  })\n"
+                      }
+                    }
+                  },
+                  "newVersion": {
+                    "type": "string",
+                    "x-component": "Text",
+                    "x-component-props": {
+                      "content": "最新版本："
+                    },
+                    "name": "newVersion",
+                    "x-designable-id": "pztpvkq39p3",
+                    "x-index": 1,
+                    "x-reactions": {
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ],
+                      "fulfill": {
+                        "run": "$utils\n  .getAssistantConfig()\n  .then((config) => {\n    $self.value = `最新版本：${config.version}`\n  })\n  .catch((e) => {\n    $self.value = `最新版本：获取失败`\n  })\n"
+                      }
+                    }
+                  }
+                }
+              },
+              "changeLog": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "children": "查看更新记录",
+                  "size": "small",
+                  "style": {}
+                },
+                "name": "changeLog",
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://github.com/bingoogolapple/bga-god-assistant-config/blob/main/CHANGELOG.md\",\n    })\n  },\n})\n"
+                  }
+                },
+                "x-designable-id": "xbn5m98r2j8",
+                "x-index": 2
+              }
+            }
+          },
+          "z02kiowdggl": {
+            "type": "void",
+            "x-component": "Div",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "alignItems": "center",
+                "margin": "20px 0px 0px 0px"
+              }
+            },
+            "x-designable-id": "z02kiowdggl",
+            "x-index": 1,
+            "properties": {
+              "5o5y52shvxt": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "不知道扩展所在文件夹（即加载来源、加载位置）",
+                  "style": {
+                    "fontSize": "12px"
+                  }
+                },
+                "x-designable-id": "5o5y52shvxt",
+                "x-index": 0
+              },
+              "1oqjnhek4l8": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "target": "_blank",
+                  "size": "small",
+                  "children": "点我查看扩展的加载来源、加载位置",
+                  "icon": "QuestionCircleOutlined"
+                },
+                "x-designable-id": "1oqjnhek4l8",
+                "x-index": 1,
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "$props({\n  onClick: async () => {\n    const id = await $chrome.runtime.getId()\n    $chrome.windows.create({\n      url: `chrome://extensions/?id=${id}`,\n      type: \"popup\",\n      left: 700,\n      top: 100,\n      width: 1000,\n      height: 1000,\n    })\n  },\n})\n"
+                  }
+                }
+              }
+            }
+          },
+          "ga72h9adc6s": {
+            "type": "string",
+            "x-component": "Img",
+            "x-validator": [],
+            "x-component-props": {
+              "style": {
+                "height": "240px",
+                "margin": "20px 0px 0px 0px"
+              }
+            },
+            "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-update-version-choose-dir.png",
+            "x-designable-id": "ga72h9adc6s",
+            "x-index": 2
+          }
+        }
+      }
+    },
+    "x-designable-id": "10cbh4jn4ey"
+  }
+}

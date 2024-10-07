@@ -1,0 +1,71 @@
+{
+  "version": "0.1.6",
+  "updateUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/god-assistant-0.1.6.zip",
+  "changelogUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/CHANGELOG.md",
+  "blacklistUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/configs/blacklistUrl.json",
+  "tailwindCss": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/configs/tailwindCss.json",
+  "vip": {
+    "enabled": false,
+    "configUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/configs/vip.json",
+    "freeDay": 3
+  },
+  "defaultSchema": {
+    "demo": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/defaultSchema/demo.json",
+    "popup": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/defaultSchema/popup.json",
+    "newtab": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/defaultSchema/newtab.json",
+    "sidePanel": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/defaultSchema/sidePanel.json",
+    "devtoolsPanel": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/defaultSchema/devtoolsPanel.json",
+    "elementsSidebarPane": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/defaultSchema/elementsSidebarPane.json"
+  },
+  "buildSelfSchemaList": [
+    {
+      "key": "UpdateVersion",
+      "title": "更新版本",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/UpdateVersion.json",
+      "showInOptionsMenu": false,
+      "order": -1
+    },
+    {
+      "key": "OpenVipDialog",
+      "title": "上帝小助手开通会员提示",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/OpenVipDialog.json",
+      "showInOptionsMenu": false,
+      "order": -1
+    },
+    {
+      "key": "LowCodePageTemplateMarket",
+      "title": "低代码页面模板市场",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/LowCodePageTemplateMarket.json",
+      "showInOptionsMenu": true,
+      "order": 1
+    },
+    {
+      "key": "UserScriptMarket",
+      "title": "用户脚本市场",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/UserScriptMarket.json",
+      "showInOptionsMenu": true,
+      "order": 2
+    },
+    {
+      "key": "SettingAssistant",
+      "title": "扩展选项设置",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/SettingAssistant.json",
+      "showInOptionsMenu": true,
+      "order": 3
+    },
+    {
+      "key": "About",
+      "title": "关于",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/About.json",
+      "showInOptionsMenu": true,
+      "order": 4
+    },
+    {
+      "key": "Privacy",
+      "title": "隐私声明",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/Privacy.json",
+      "showInOptionsMenu": true,
+      "order": 5
+    }
+  ]
+}
