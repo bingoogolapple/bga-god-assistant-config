@@ -225,91 +225,88 @@
               }
             }
           },
-          "4ap1y3zknrp": {
+          "5nctikp3enu": {
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-validator": [],
             "x-component-props": {
+              "gridSpan": 6,
               "style": {
                 "display": "flex",
-                "justifyContent": "flex-end",
-                "flexDirection": "row"
-              },
-              "gridSpan": 6
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
             },
-            "x-designable-id": "4ap1y3zknrp",
+            "x-designable-id": "5nctikp3enu",
             "x-index": 4,
             "properties": {
-              "uw17xv49mri": {
+              "8fmf446pt2a": {
                 "type": "string",
                 "x-component": "Button",
-                "x-component-props": {
-                  "target": "_blank",
-                  "type": "primary",
-                  "children": "从 Gitee 安装",
-                  "size": "large",
-                  "style": {
-                    "margin": "20px 0px 20px 0px"
-                  }
-                },
                 "x-reactions": {
+                  "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://space.bilibili.com/388642312/video\",\n    })\n  },\n})\n"
+                  },
                   "dependencies": [
                     {
                       "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
                       "property": "value",
                       "type": "any"
                     }
-                  ],
-                  "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://gitee.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
-                  }
+                  ]
                 },
-                "x-designable-id": "uw17xv49mri",
-                "x-index": 0,
-                "x-validator": []
+                "x-validator": [],
+                "x-component-props": {
+                  "children": "去 B 站查看教程",
+                  "target": "_blank",
+                  "type": "primary",
+                  "size": "large"
+                },
+                "x-designable-id": "8fmf446pt2a",
+                "x-index": 0
               }
             }
           },
-          "17nznt2cn5b": {
+          "mhgvfgk63kb": {
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-validator": [],
             "x-component-props": {
+              "gridSpan": 6,
               "style": {
                 "display": "flex",
-                "justifyContent": "flex-start",
-                "flexDirection": "row"
-              },
-              "gridSpan": 6
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
             },
-            "x-designable-id": "17nznt2cn5b",
+            "x-designable-id": "mhgvfgk63kb",
             "x-index": 5,
             "properties": {
-              "uw7m66fzcly": {
+              "bbm05k5xue3": {
                 "type": "string",
                 "x-component": "Button",
-                "x-component-props": {
-                  "target": "_blank",
-                  "type": "primary",
-                  "children": "从 GitHub 安装",
-                  "size": "large",
-                  "style": {
-                    "margin": "20px 0px 20px 0px"
-                  }
-                },
                 "x-reactions": {
+                  "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://www.youtube.com/@%E4%B8%8A%E5%B8%9D%E5%B0%8F%E5%8A%A9%E6%89%8B/videos\",\n    })\n  },\n})\n"
+                  },
                   "dependencies": [
                     {
                       "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
                       "property": "value",
                       "type": "any"
                     }
-                  ],
-                  "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://github.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
-                  }
+                  ]
                 },
-                "x-designable-id": "uw7m66fzcly",
+                "x-validator": [],
+                "x-component-props": {
+                  "children": "去 YouTube 查看教程",
+                  "target": "_blank",
+                  "type": "primary",
+                  "size": "large"
+                },
+                "x-designable-id": "bbm05k5xue3",
                 "x-index": 0
               }
             }
@@ -359,7 +356,7 @@
                 "x-validator": [],
                 "x-component-props": {
                   "style": {
-                    "width": "100%"
+                    "width": "900px"
                   }
                 },
                 "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-editor.png",
@@ -389,7 +386,7 @@
                 "x-validator": [],
                 "x-component-props": {
                   "style": {
-                    "width": "100%"
+                    "width": "900px"
                   }
                 },
                 "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-preview.png",
@@ -419,7 +416,7 @@
                 "x-validator": [],
                 "x-component-props": {
                   "style": {
-                    "width": "100%"
+                    "width": "900px"
                   }
                 },
                 "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-editor2.jpg",
@@ -449,7 +446,7 @@
                 "x-validator": [],
                 "x-component-props": {
                   "style": {
-                    "width": "100%"
+                    "width": "900px"
                   }
                 },
                 "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-preview2.jpg",
@@ -503,7 +500,7 @@
                 "x-validator": [],
                 "x-component-props": {
                   "style": {
-                    "width": "100%"
+                    "width": "900px"
                   }
                 },
                 "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-userScripts-manage.png",
@@ -533,101 +530,12 @@
                 "x-validator": [],
                 "x-component-props": {
                   "style": {
-                    "width": "100%"
+                    "width": "900px"
                   }
                 },
                 "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/ga-userScripts-preview.png",
                 "x-designable-id": "pt2rwtqgpuu",
                 "x-index": 0
-              }
-            }
-          },
-          "adser5gxls7": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "style": {
-                "display": "flex",
-                "justifyContent": "flex-end",
-                "flexDirection": "row"
-              },
-              "gridSpan": 6
-            },
-            "x-designable-id": "adser5gxls7",
-            "x-index": 14,
-            "properties": {
-              "gxycxdcfcqh": {
-                "type": "string",
-                "x-component": "Button",
-                "x-component-props": {
-                  "target": "_blank",
-                  "type": "primary",
-                  "children": "从 Gitee 安装",
-                  "size": "large",
-                  "style": {
-                    "margin": "20px 0px 20px 0px"
-                  }
-                },
-                "x-reactions": {
-                  "dependencies": [
-                    {
-                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                      "property": "value",
-                      "type": "any"
-                    }
-                  ],
-                  "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://gitee.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
-                  }
-                },
-                "x-designable-id": "gxycxdcfcqh",
-                "x-index": 0
-              }
-            }
-          },
-          "ykrebxo3ql4": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "style": {
-                "display": "flex",
-                "justifyContent": "flex-start",
-                "flexDirection": "row"
-              },
-              "gridSpan": 6
-            },
-            "x-designable-id": "ykrebxo3ql4",
-            "x-index": 15,
-            "properties": {
-              "psvgy57wqxu": {
-                "type": "string",
-                "x-component": "Button",
-                "x-component-props": {
-                  "target": "_blank",
-                  "type": "primary",
-                  "children": "从 GitHub 安装",
-                  "size": "large",
-                  "style": {
-                    "margin": "20px 0px 20px 0px"
-                  }
-                },
-                "x-reactions": {
-                  "dependencies": [
-                    {
-                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                      "property": "value",
-                      "type": "any"
-                    }
-                  ],
-                  "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://github.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
-                  }
-                },
-                "x-designable-id": "psvgy57wqxu",
-                "x-index": 0,
-                "x-validator": []
               }
             }
           },
@@ -645,7 +553,7 @@
               }
             },
             "x-designable-id": "l1d8tmge6xi",
-            "x-index": 16,
+            "x-index": 14,
             "properties": {
               "vn73wnybw8q": {
                 "type": "void",
@@ -703,7 +611,7 @@
               }
             },
             "x-designable-id": "3wrnlrszhuj",
-            "x-index": 17,
+            "x-index": 15,
             "properties": {
               "lqs33cu1t3q": {
                 "type": "void",
@@ -761,7 +669,7 @@
               }
             },
             "x-designable-id": "2cwkh67ybeq",
-            "x-index": 18,
+            "x-index": 16,
             "properties": {
               "l1ep2ez9fqc": {
                 "type": "void",
@@ -808,6 +716,6 @@
         }
       }
     },
-    "x-designable-id": "wpxf2nf9zq6"
+    "x-designable-id": "9180z9wp08w"
   }
 }
