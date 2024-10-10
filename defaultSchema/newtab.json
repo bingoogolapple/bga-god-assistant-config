@@ -15,6 +15,74 @@
   "schema": {
     "type": "object",
     "properties": {
+      "oiiql0q7pb0": {
+        "type": "void",
+        "x-component": "FloatButtonGroup",
+        "x-component-props": {
+          "icon": "MoreOutlined",
+          "type": "primary",
+          "trigger": "hover",
+          "insetInlineEnd": 48,
+          "insetBlockEnd": 48,
+          "badge": {}
+        },
+        "x-designable-id": "oiiql0q7pb0",
+        "x-index": 0,
+        "properties": {
+          "utvm3pcabbi": {
+            "x-component": "FloatButton",
+            "x-component-props": {
+              "description": "",
+              "type": "primary",
+              "badge": {},
+              "target": "_blank",
+              "icon": "EditFilled",
+              "tooltip": "编辑当前页面"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "any"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    // 编辑当前页面\n    $ga.editCurrentPage()\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "utvm3pcabbi",
+            "x-index": 0
+          },
+          "3ce4pdz0w31": {
+            "x-component": "FloatButton",
+            "x-component-props": {
+              "description": "",
+              "type": "primary",
+              "insetInlineEnd": 24,
+              "insetBlockEnd": 48,
+              "badge": {},
+              "target": "_blank",
+              "icon": "SettingOutlined",
+              "tooltip": "低代码页面管理"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "any"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    // 低代码页面管理\n    $ga.lowCodePageManage()\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "3ce4pdz0w31",
+            "x-index": 1
+          }
+        }
+      },
       "kicoo77eci2": {
         "type": "string",
         "x-component": "Text",
@@ -31,7 +99,7 @@
           }
         },
         "x-designable-id": "kicoo77eci2",
-        "x-index": 0
+        "x-index": 1
       },
       "keyword": {
         "type": "string",
@@ -54,7 +122,7 @@
         },
         "name": "keyword",
         "x-designable-id": "rxg79wd5801",
-        "x-index": 1,
+        "x-index": 2,
         "x-reactions": {
           "dependencies": [
             {
@@ -81,7 +149,7 @@
           "size": 16
         },
         "x-designable-id": "u32x8afe7ch",
-        "x-index": 2,
+        "x-index": 3,
         "properties": {
           "tboibt6om8a": {
             "type": "string",
@@ -251,7 +319,7 @@
           }
         },
         "x-designable-id": "q4fx318cgcc",
-        "x-index": 3,
+        "x-index": 4,
         "properties": {
           "2su76jd3ydl": {
             "type": "array",
@@ -395,7 +463,7 @@
           }
         },
         "x-designable-id": "f513ch3scns",
-        "x-index": 4,
+        "x-index": 5,
         "properties": {
           "jw4tfln4pab": {
             "type": "array",
@@ -542,7 +610,7 @@
           }
         },
         "x-designable-id": "ho98j7lccnm",
-        "x-index": 5,
+        "x-index": 6,
         "properties": {
           "wjlg19hsd91": {
             "type": "array",
@@ -645,75 +713,241 @@
           }
         }
       },
-      "oiiql0q7pb0": {
-        "type": "void",
-        "x-component": "FloatButtonGroup",
+      "personalBookmarkList": {
+        "type": "array",
+        "x-component": "IteratorLayout",
         "x-component-props": {
-          "icon": "MoreOutlined",
-          "type": "primary",
-          "trigger": "hover",
-          "insetInlineEnd": 48,
-          "insetBlockEnd": 48,
-          "badge": {}
+          "style": {}
         },
-        "x-designable-id": "oiiql0q7pb0",
-        "x-index": 6,
-        "properties": {
-          "utvm3pcabbi": {
-            "x-component": "FloatButton",
-            "x-component-props": {
-              "description": "",
-              "type": "primary",
-              "badge": {},
-              "target": "_blank",
-              "icon": "EditFilled",
-              "tooltip": "编辑当前页面"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "any"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    // 编辑当前页面\n    $ga.editCurrentPage()\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "utvm3pcabbi",
-            "x-index": 0
-          },
-          "3ce4pdz0w31": {
-            "x-component": "FloatButton",
-            "x-component-props": {
-              "description": "",
-              "type": "primary",
-              "insetInlineEnd": 24,
-              "insetBlockEnd": 48,
-              "badge": {},
-              "target": "_blank",
-              "icon": "SettingOutlined",
-              "tooltip": "低代码页面管理"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "any"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    // 低代码页面管理\n    $ga.lowCodePageManage()\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "3ce4pdz0w31",
-            "x-index": 1
+        "default": [],
+        "x-validator": [],
+        "name": "personalBookmarkList",
+        "x-designable-id": "kkv73tvdfet",
+        "x-reactions": {
+          "dependencies": [
+            {
+              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+              "property": "value",
+              "type": "any"
+            }
+          ],
+          "fulfill": {
+            "run": "// TODO 改为你个人的远程书签配置链接\nconst configUrl = \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/personalBookmarkConfig.json\"\n\n\n\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
           }
-        }
+        },
+        "items": {
+          "type": "object",
+          "x-validator": [],
+          "name": "",
+          "x-designable-id": "8k6a3k1i88b",
+          "properties": {
+            "v0vzpxxa1ch": {
+              "type": "void",
+              "x-component": "Card",
+              "x-component-props": {
+                "title": "个人链接分组名称",
+                "style": {
+                  "margin": "16px 16px 16px 16px"
+                }
+              },
+              "x-designable-id": "v0vzpxxa1ch",
+              "x-index": 0,
+              "x-reactions": {
+                "dependencies": [
+                  {
+                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                    "property": "value",
+                    "type": "any"
+                  }
+                ],
+                "fulfill": {
+                  "state": {},
+                  "run": "$props({\n  title: $utils.getArrayFieldRowAndIndex($self, \"IteratorLayout\").row.title,\n})"
+                }
+              },
+              "properties": {
+                "list": {
+                  "type": "array",
+                  "x-component": "IteratorLayout",
+                  "x-component-props": {
+                    "style": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "flexWrap": "wrap"
+                    }
+                  },
+                  "x-validator": [],
+                  "x-designable-id": "7wsr7ntu5hd",
+                  "x-index": 0,
+                  "default": [],
+                  "name": "list",
+                  "x-reactions": {
+                    "dependencies": [
+                      {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                      }
+                    ],
+                    "fulfill": {
+                      "run": ""
+                    }
+                  },
+                  "items": {
+                    "type": "object",
+                    "x-designable-id": "k1l0c196bpp",
+                    "x-validator": [],
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "x-component": "Button",
+                        "x-component-props": {
+                          "target": "_blank",
+                          "type": "link"
+                        },
+                        "name": "title",
+                        "x-designable-id": "pqtwpvyxsiw",
+                        "x-index": 0,
+                        "x-reactions": {
+                          "dependencies": [
+                            {
+                              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                              "property": "value",
+                              "type": "any"
+                            }
+                          ],
+                          "fulfill": {
+                            "run": "$props({\n  onClick: () => {\n    // 获取迭代器布局中当前点击的条目数据和索引\n    const { row } = $utils.getArrayFieldRowAndIndex($self, \"IteratorLayout\")\n    $chrome.tabs.create({\n      url: row.url,\n    })\n  },\n})\n"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-index": 7
+      },
+      "groupBookmarkList": {
+        "type": "array",
+        "x-component": "IteratorLayout",
+        "x-component-props": {
+          "style": {}
+        },
+        "default": [],
+        "x-validator": [],
+        "name": "groupBookmarkList",
+        "x-designable-id": "z7kw9egmx2o",
+        "x-reactions": {
+          "dependencies": [
+            {
+              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+              "property": "value",
+              "type": "any"
+            }
+          ],
+          "fulfill": {
+            "run": "// TODO 改为你们小组的远程书签配置链接\nconst configUrl =\n  \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/groupBookmarkConfig.json\"\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
+          }
+        },
+        "items": {
+          "type": "object",
+          "x-validator": [],
+          "name": "",
+          "x-designable-id": "5k38nm56cbo",
+          "properties": {
+            "65bixtu67ww": {
+              "type": "void",
+              "x-component": "Card",
+              "x-component-props": {
+                "title": "小组链接分组名称",
+                "style": {
+                  "margin": "16px 16px 16px 16px"
+                }
+              },
+              "x-designable-id": "65bixtu67ww",
+              "x-index": 0,
+              "x-reactions": {
+                "dependencies": [
+                  {
+                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                    "property": "value",
+                    "type": "any"
+                  }
+                ],
+                "fulfill": {
+                  "state": {},
+                  "run": "$props({\n  title: $utils.getArrayFieldRowAndIndex($self, \"IteratorLayout\").row.title,\n})"
+                }
+              },
+              "properties": {
+                "list": {
+                  "type": "array",
+                  "x-component": "IteratorLayout",
+                  "x-component-props": {
+                    "style": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "flexWrap": "wrap"
+                    }
+                  },
+                  "x-validator": [],
+                  "x-designable-id": "jkt9jqras7u",
+                  "x-index": 0,
+                  "default": [],
+                  "name": "list",
+                  "x-reactions": {
+                    "dependencies": [
+                      {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                      }
+                    ],
+                    "fulfill": {
+                      "run": ""
+                    }
+                  },
+                  "items": {
+                    "type": "object",
+                    "x-designable-id": "vpt8y8zgp7u",
+                    "x-validator": [],
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "x-component": "Button",
+                        "x-component-props": {
+                          "target": "_blank",
+                          "type": "link"
+                        },
+                        "name": "title",
+                        "x-designable-id": "xatnue4f93j",
+                        "x-index": 0,
+                        "x-reactions": {
+                          "dependencies": [
+                            {
+                              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                              "property": "value",
+                              "type": "any"
+                            }
+                          ],
+                          "fulfill": {
+                            "run": "$props({\n  onClick: () => {\n    // 获取迭代器布局中当前点击的条目数据和索引\n    const { row } = $utils.getArrayFieldRowAndIndex($self, \"IteratorLayout\")\n    $chrome.tabs.create({\n      url: row.url,\n    })\n  },\n})\n"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-index": 8
       }
     },
-    "x-designable-id": "1zbmv4sw12e"
+    "x-designable-id": "qmdhowx71z2"
   }
 }
