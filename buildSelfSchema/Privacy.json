@@ -6,67 +6,226 @@
   "schema": {
     "type": "object",
     "properties": {
-      "ewxgclzzfvp": {
+      "eaf5qid04k8": {
         "type": "void",
-        "x-component": "Div",
+        "x-component": "FormGrid",
+        "x-validator": [],
         "x-component-props": {
+          "minColumns": 12,
+          "maxColumns": 12,
           "style": {
-            "display": "flex",
-            "flexDirection": "column",
-            "alignItems": "center",
             "padding": "20px 20px 20px 20px"
-          }
+          },
+          "rowGap": 20,
+          "columnGap": 20
         },
-        "x-designable-id": "ewxgclzzfvp",
+        "x-designable-id": "eaf5qid04k8",
         "x-index": 0,
         "properties": {
-          "x7m2iwm6z3l": {
-            "type": "string",
-            "x-component": "Text",
-            "x-component-props": {
-              "content": "上帝小助手无服务器，页面和配置信息都是托管到 git 仓库的",
-              "style": {
-                "fontSize": "24px"
-              }
-            },
-            "x-designable-id": "x7m2iwm6z3l",
-            "x-index": 0
-          },
-          "2b4ug4hq3p4": {
-            "type": "string",
-            "x-component": "Text",
-            "x-component-props": {
-              "content": "因此不会收集任何用户信息",
-              "style": {
-                "fontSize": "24px",
-                "margin": "10px 0px 0px 0px"
-              }
-            },
-            "x-designable-id": "2b4ug4hq3p4",
-            "x-index": 1
-          },
-          "q1yt6v4l5ix": {
+          "1ip2rmhbckr": {
             "type": "void",
-            "x-component": "Div",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "1ip2rmhbckr",
+            "x-index": 0,
+            "properties": {
+              "wdqjuacgusq": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "上帝小助手无服务器",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "flexDirection": "row",
+                    "fontSize": "24px",
+                    "margin": "0px 0px 0px 0px"
+                  }
+                },
+                "x-designable-id": "wdqjuacgusq",
+                "x-index": 0,
+                "x-validator": []
+              },
+              "qb6ndmlklsb": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "因此不会收集任何用户信息",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "flexDirection": "row",
+                    "fontSize": "24px",
+                    "margin": "0px 0px 0px 0px",
+                    "color": "rgba(126,211,33,1)"
+                  }
+                },
+                "x-designable-id": "qb6ndmlklsb",
+                "x-index": 1,
+                "x-validator": []
+              },
+              "s0n3acjyuqd": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "因此不会收集任何用户信息",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "flexDirection": "row",
+                    "fontSize": "24px",
+                    "margin": "0px 0px 0px 0px",
+                    "color": "rgba(126,211,33,1)"
+                  }
+                },
+                "x-designable-id": "s0n3acjyuqd",
+                "x-index": 2,
+                "x-validator": []
+              },
+              "15shjdmzi0m": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "因此不会收集任何用户信息",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "flexDirection": "row",
+                    "fontSize": "24px",
+                    "margin": "0px 0px 0px 0px",
+                    "color": "rgba(126,211,33,1)"
+                  }
+                },
+                "x-designable-id": "15shjdmzi0m",
+                "x-index": 3,
+                "x-validator": []
+              }
+            }
+          },
+          "w2er9shmqar": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12,
+              "style": {
+                "margin": "30px 0px 30px 0px"
+              }
+            },
+            "x-designable-id": "w2er9shmqar",
+            "x-index": 1,
+            "properties": {
+              "tzwssghhjo6": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "当前插件/扩展自身没用撒权限",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "flexDirection": "row",
+                    "fontSize": "24px",
+                    "margin": "0px 0px 0px 0px"
+                  }
+                },
+                "x-designable-id": "tzwssghhjo6",
+                "x-index": 0,
+                "x-validator": []
+              },
+              "cg16rzk64ah": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "但为了让用户在搭建自动化页面时能使用各种权限",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "flexDirection": "row",
+                    "fontSize": "24px",
+                    "margin": "0px 0px 0px 0px"
+                  }
+                },
+                "x-designable-id": "cg16rzk64ah",
+                "x-index": 1,
+                "x-validator": []
+              },
+              "amhasj7ubna": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "就在清单文件里把各种权限都加上了",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "flexDirection": "row",
+                    "fontSize": "24px",
+                    "margin": "0px 0px 0px 0px"
+                  }
+                },
+                "x-designable-id": "amhasj7ubna",
+                "x-index": 2,
+                "x-validator": []
+              }
+            }
+          },
+          "buis0ixacvg": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "buis0ixacvg",
+            "x-index": 2,
+            "properties": {
+              "dashcvmd11h": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "插件自身的页面和配置信息也都是托管到 git 仓库的",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "flexDirection": "row",
+                    "fontSize": "24px",
+                    "margin": "0px 0px 0px 0px"
+                  }
+                },
+                "x-designable-id": "dashcvmd11h",
+                "x-index": 0,
+                "x-validator": []
+              }
+            }
+          },
+          "4ap1y3zknrp": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
             "x-component-props": {
               "style": {
                 "display": "flex",
-                "flexDirection": "row",
-                "justifyContent": "center",
-                "alignItems": "center",
-                "margin": "30px 0px 0px 0px"
-              }
+                "justifyContent": "flex-end",
+                "flexDirection": "row"
+              },
+              "gridSpan": 6
             },
-            "x-designable-id": "q1yt6v4l5ix",
+            "x-designable-id": "4ap1y3zknrp",
+            "x-index": 3,
             "properties": {
-              "gxycxdcfcqh": {
+              "uw17xv49mri": {
                 "type": "string",
                 "x-component": "Button",
                 "x-component-props": {
                   "target": "_blank",
                   "type": "primary",
                   "children": "查看 Gitee 仓库里的配置信息",
-                  "size": "large"
+                  "size": "large",
+                  "style": {
+                    "margin": "0px 0px 20px 0px"
+                  }
                 },
                 "x-reactions": {
                   "dependencies": [
@@ -80,9 +239,27 @@
                     "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://gitee.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
                   }
                 },
-                "x-designable-id": "gxycxdcfcqh",
-                "x-index": 0
+                "x-designable-id": "uw17xv49mri",
+                "x-index": 0,
+                "x-validator": []
+              }
+            }
+          },
+          "17nznt2cn5b": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "flex-start",
+                "flexDirection": "row"
               },
+              "gridSpan": 6
+            },
+            "x-designable-id": "17nznt2cn5b",
+            "x-index": 4,
+            "properties": {
               "uw7m66fzcly": {
                 "type": "string",
                 "x-component": "Button",
@@ -92,7 +269,7 @@
                   "children": "查看 GitHub 仓库里的配置信息",
                   "size": "large",
                   "style": {
-                    "margin": "0px 0px 0px 50px"
+                    "margin": "0px 0px 20px 0px"
                   }
                 },
                 "x-reactions": {
@@ -108,14 +285,188 @@
                   }
                 },
                 "x-designable-id": "uw7m66fzcly",
-                "x-index": 1
+                "x-index": 0,
+                "x-validator": []
+              }
+            }
+          },
+          "tr2q92r7km5": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 4,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
               }
             },
-            "x-index": 2
+            "x-designable-id": "tr2q92r7km5",
+            "x-index": 5,
+            "properties": {
+              "4h54l3baxkz": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "扫码加微信群咨询或反馈问题",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "280px",
+                    "height": "280px"
+                  }
+                },
+                "x-designable-id": "4h54l3baxkz",
+                "x-index": 0,
+                "properties": {
+                  "yme3v3lfyvp": {
+                    "type": "string",
+                    "x-component": "Img",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "style": {
+                        "width": "180px"
+                      }
+                    },
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/WeChatGroup1QrCode.jpg",
+                    "x-designable-id": "yme3v3lfyvp",
+                    "x-index": 0
+                  }
+                }
+              }
+            }
+          },
+          "70ki77gkysd": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 4,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
+            },
+            "x-designable-id": "70ki77gkysd",
+            "x-index": 6,
+            "properties": {
+              "6rvhggvh6gf": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "扫码关注微信公众号咨询或反馈问题",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "320px",
+                    "height": "280px"
+                  }
+                },
+                "x-designable-id": "6rvhggvh6gf",
+                "x-index": 0,
+                "properties": {
+                  "ga72h9adc6s": {
+                    "type": "string",
+                    "x-component": "Img",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "style": {
+                        "width": "180px"
+                      }
+                    },
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/GongZhongHao.png",
+                    "x-designable-id": "ga72h9adc6s",
+                    "x-index": 0
+                  }
+                }
+              }
+            }
+          },
+          "4piuenntwdj": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 4,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
+            },
+            "x-designable-id": "4piuenntwdj",
+            "x-index": 7,
+            "properties": {
+              "dkn5z3j5aqo": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "扫码加作者微信咨询或反馈问题",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "280px",
+                    "height": "280px"
+                  }
+                },
+                "x-designable-id": "dkn5z3j5aqo",
+                "x-index": 0,
+                "properties": {
+                  "3o276ee7lr1": {
+                    "type": "string",
+                    "x-component": "Img",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "style": {
+                        "width": "180px"
+                      }
+                    },
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/BGAQrCode.png",
+                    "x-designable-id": "3o276ee7lr1",
+                    "x-index": 0
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "x-designable-id": "oowbaegn6pp"
+    "x-designable-id": "9180z9wp08w"
   }
 }
