@@ -6,53 +6,73 @@
   "schema": {
     "type": "object",
     "properties": {
-      "ewxgclzzfvp": {
+      "eaf5qid04k8": {
         "type": "void",
-        "x-component": "Div",
+        "x-component": "FormGrid",
+        "x-validator": [],
         "x-component-props": {
+          "minColumns": 12,
+          "maxColumns": 12,
           "style": {
-            "display": "flex",
-            "flexDirection": "column",
-            "alignItems": "center",
             "padding": "20px 20px 20px 20px"
-          }
+          },
+          "rowGap": 20,
+          "columnGap": 20,
+          "className": ""
         },
-        "x-designable-id": "ewxgclzzfvp",
+        "x-designable-id": "eaf5qid04k8",
         "x-index": 0,
         "properties": {
-          "x7m2iwm6z3l": {
-            "type": "string",
-            "x-component": "Text",
-            "x-component-props": {
-              "content": "开通会员-敬请期待",
-              "style": {
-                "fontSize": "24px"
-              }
-            },
-            "x-designable-id": "x7m2iwm6z3l",
-            "x-index": 0
-          },
-          "z02kiowdggl": {
+          "1ip2rmhbckr": {
             "type": "void",
-            "x-component": "Div",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
             "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "1ip2rmhbckr",
+            "x-index": 0,
+            "properties": {
+              "wdqjuacgusq": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "开通会员-敬请期待",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "flexDirection": "row",
+                    "fontSize": "24px",
+                    "margin": "0px 0px 0px 0px"
+                  }
+                },
+                "x-designable-id": "wdqjuacgusq",
+                "x-index": 0,
+                "x-validator": []
+              }
+            }
+          },
+          "tr2q92r7km5": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 4,
               "style": {
                 "display": "flex",
+                "justifyContent": "center",
                 "flexDirection": "row",
-                "justifyContent": "space-around",
-                "alignItems": "center",
-                "margin": "20px 0px 0px 0px",
-                "width": "100%"
+                "alignItems": "center"
               }
             },
-            "x-designable-id": "z02kiowdggl",
+            "x-designable-id": "tr2q92r7km5",
             "x-index": 1,
             "properties": {
-              "6rvhggvh6gf": {
+              "4h54l3baxkz": {
                 "type": "void",
                 "x-component": "Card",
                 "x-component-props": {
-                  "title": "扫下方二维码加作者微信催更该功能",
+                  "title": "扫码加微信群咨询或反馈问题",
                   "styles": {
                     "title": {
                       "display": "flex",
@@ -66,8 +86,66 @@
                     }
                   },
                   "style": {
-                    "width": "410px",
-                    "height": "390px"
+                    "width": "280px",
+                    "height": "280px"
+                  }
+                },
+                "x-designable-id": "4h54l3baxkz",
+                "x-index": 0,
+                "properties": {
+                  "yme3v3lfyvp": {
+                    "type": "string",
+                    "x-component": "Img",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "style": {
+                        "width": "180px"
+                      }
+                    },
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/WeChatGroup1QrCode.jpg",
+                    "x-designable-id": "yme3v3lfyvp",
+                    "x-index": 0
+                  }
+                }
+              }
+            }
+          },
+          "70ki77gkysd": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 4,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
+            },
+            "x-designable-id": "70ki77gkysd",
+            "x-index": 2,
+            "properties": {
+              "6rvhggvh6gf": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "扫码关注微信公众号咨询或反馈问题",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "320px",
+                    "height": "280px"
                   }
                 },
                 "x-designable-id": "6rvhggvh6gf",
@@ -82,17 +160,35 @@
                         "width": "180px"
                       }
                     },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/BGAQrCode.png",
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/GongZhongHao.png",
                     "x-designable-id": "ga72h9adc6s",
                     "x-index": 0
                   }
                 }
-              },
-              "vrh7irzdd51": {
+              }
+            }
+          },
+          "4piuenntwdj": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 4,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
+            },
+            "x-designable-id": "4piuenntwdj",
+            "x-index": 3,
+            "properties": {
+              "dkn5z3j5aqo": {
                 "type": "void",
                 "x-component": "Card",
                 "x-component-props": {
-                  "title": "扫下方二维码加微信群催更该功能",
+                  "title": "扫码加作者微信咨询或反馈问题",
                   "styles": {
                     "title": {
                       "display": "flex",
@@ -106,14 +202,14 @@
                     }
                   },
                   "style": {
-                    "width": "410px",
-                    "height": "390px"
+                    "width": "280px",
+                    "height": "280px"
                   }
                 },
-                "x-designable-id": "vrh7irzdd51",
-                "x-index": 1,
+                "x-designable-id": "dkn5z3j5aqo",
+                "x-index": 0,
                 "properties": {
-                  "orl4ic2l9yz": {
+                  "3o276ee7lr1": {
                     "type": "string",
                     "x-component": "Img",
                     "x-validator": [],
@@ -122,8 +218,8 @@
                         "width": "180px"
                       }
                     },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/WeChatGroup1QrCode.jpg",
-                    "x-designable-id": "orl4ic2l9yz",
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/BGAQrCode.png",
+                    "x-designable-id": "3o276ee7lr1",
                     "x-index": 0
                   }
                 }
@@ -133,6 +229,6 @@
         }
       }
     },
-    "x-designable-id": "mk06mvbfv8k"
+    "x-designable-id": "5aibn063luf"
   }
 }
