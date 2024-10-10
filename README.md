@@ -206,4 +206,4 @@ $props({
 
 | 扫码加微信群咨询或反馈问题                                             | 扫码加作者微信咨询或反馈问题                                  |
 | ---------------------------------------------------------------------- | ------------------------------------------------------------- |
-| <img width="180" alt="作者微信" src="./images/WeChatGroup1QrCode.jpg"> | <img width="180" alt="作者微信" src="./images/BGAQrCode.jpg"> |
+| <img width="180" alt="作者微信" src="./images/WeChatGroup1QrCode.jpg"> | <img width="180" alt="作者微信" src="./images/BGAQrCode.png"> |
