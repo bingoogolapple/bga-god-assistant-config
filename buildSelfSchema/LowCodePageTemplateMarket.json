@@ -130,7 +130,7 @@
                 "type": "void",
                 "x-component": "Card",
                 "x-component-props": {
-                  "title": "扫码关注微信公众号咨询或反馈问题",
+                  "title": "扫码关注微信公众号查看视频教程",
                   "styles": {
                     "title": {
                       "display": "flex",
