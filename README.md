@@ -1,8 +1,8 @@
 # 上帝小助手浏览器扩展程序
 
 - [0-查看视频教程](#0-查看视频教程)
-  - [0.1-在哔哩哔哩中查看](#01-在哔哩哔哩中查看)
-  - [0.2-在 YouTube 中查看](#02-在-youtube-中查看)
+  - [0.1-去哔哩哔哩查看视频教程](#01-去哔哩哔哩查看视频教程)
+  - [0.2-去 YouTube 查看视频教程](#02-去-youtube-查看视频教程)
 - [1-功能介绍](#1-功能介绍)
   - [1.1-低码搭建插件页面](#11-低代码搭建插件页面)
   - [1.2-用户脚本管理](#12-用户脚本管理)
@@ -20,7 +20,7 @@
 
 ## 0-查看视频教程
 
-### 0.1-在哔哩哔哩中查看
+### 0.1-去哔哩哔哩查看视频教程
 
 - [1-个人介绍，为什么要做上帝小助手浏览器插件/扩展开发平台](https://www.bilibili.com/video/BV1wy1yYDEnL)
 - [2-上帝小助手功能介绍](https://www.bilibili.com/video/BV1JM1yYLEe8)
@@ -28,7 +28,7 @@
 - [4-更新上帝小助手](https://www.bilibili.com/video/BV1Eu1yYyE9h)
 - [5-使用上帝小助手定制个人专属新标签页和小组新标签页](https://www.bilibili.com/video/BV1c82kYjEXH)
 
-### 0.2-在 YouTube 中查看
+### 0.2-去 YouTube 查看视频教程
 
 - [1-个人介绍，为什么要做上帝小助手浏览器插件/扩展开发平台](https://www.youtube.com/watch?v=FcpJoSvHEe4)
 - [2-上帝小助手功能介绍](https://www.youtube.com/watch?v=3Eyub74FSPU)
