@@ -43,17 +43,21 @@
 
 为用户提供了一个低代码搭建平台，用户可以通过低代码的方式快速搭建自己的专属新标签页，以及搭建各种自动化任务页面
 
-![ga-editor](./images/ga-editor.png)
-![ga-preview](./images/ga-preview.png)
-![ga-editor2](./images/ga-editor2.jpg)
-![ga-preview2](./images/ga-preview2.jpg)
+<img width="700" src="./images/ga-editor.png">
+
+<img width="700" src="./images/ga-preview.png">
+
+<img width="700" src="./images/ga-editor2.jpg">
+
+<img width="700" src="./images/ga-preview2.jpg">
 
 ### 1.2-用户脚本管理
 
 用户可以添加各种自动化任务脚本
 
-![ga-userScripts-manage](./images/ga-userScripts-manage.png)
-![ga-userScripts-preview](./images/ga-userScripts-preview.png)
+<img width="700" src="./images/ga-userScripts-manage.png">
+
+<img width="700" src="./images/ga-userScripts-preview.png">
 
 ## 2-安装和更新扩展
 
@@ -65,26 +69,27 @@
 
 3、打开开发者模式 -> 加载已解压的扩展程序
 
-![ga-chrome-open-dev-mode](./images/ga-chrome-open-dev-mode.png)
-![ga-edge-open-dev-mode](./images/ga-edge-open-dev-mode.png)
+<img width="600" src="./images/ga-chrome-open-dev-mode.png">
+
+<img width="600" src="./images/ga-edge-open-dev-mode.png">
 
 4、选择第 1 步中解压得到的目录后，扩展就算安装完成了
 
-![ga-choose-install-dir](./images/ga-choose-install-dir.png)
+<img width="600" src="./images/ga-choose-install-dir.png">
 
 5、建议将该扩展固定在浏览器顶部，方便后续能快速去编辑页面
 
-![ga-fixed](./images/ga-fixed.png)
+<img width="200" src="./images/ga-fixed.png">
 
 ### 2.2-更新扩展
 
 1、当扩展发布新版本后，用户在打开当前扩展的任意页面时，都会展示如下所示的升级提示弹窗，用户只需选择之前安装扩展时选择的安装目录即可升级扩展来使用最新功能
 
-![ga-update-version](./images/ga-update-version.png)
+<img width="500" src="./images/ga-update-version.png">
 
 2、更新扩展需要申请扩展安装目录的写权限，所以需要用户允许修改文件
 
-![ga-edge-upgrade-permission](./images/ga-edge-upgrade-permission.png)
+<img width="500" src="./images/ga-edge-upgrade-permission.png">
 
 ## 3-功能说明
 
@@ -92,14 +97,17 @@
 
 1、在扩展图标上右键选择「选项」或「扩展选项」打开扩展的配置项页面
 
-![ga-chrome-open-options](./images/ga-chrome-open-options.png)
-![ga-edge-open-options](./images/ga-edge-open-options.png)
+<img width="200" src="./images/ga-chrome-open-options.png">
+
+<img width="200" src="./images/ga-edge-open-options.png">
 
 2、然后就可以增删改你的专属浏览器页面了
 
-![ga-chrome-options-page](./images/ga-chrome-options-page.png)
-![ga-editor](./images/ga-editor.png)
-![ga-preview](./images/ga-preview.png)
+<img width="600" src="./images/ga-chrome-options-page.png">
+
+<img width="600" src="./images/ga-editor.png">
+
+<img width="600" src="./images/ga-preview.png">
 
 ### 3.2-本扩展对外暴露的浏览器接口
 
