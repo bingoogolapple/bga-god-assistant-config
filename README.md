@@ -1,7 +1,11 @@
 # 上帝小助手浏览器扩展程序
 
 - [0-查看视频教程](#0-查看视频教程)
+  - [0.1-在哔哩哔哩中查看](#01-在哔哩哔哩中查看)
+  - [0.2-在 YouTube 中查看](#02-在-youtube-中查看)
 - [1-功能介绍](#1-功能介绍)
+  - [1.1-低码搭建插件页面](#11-低代码搭建插件页面)
+  - [1.2-用户脚本管理](#12-用户脚本管理)
 - [2-安装和更新扩展](#2-安装和更新扩展)
   - [2.1-安装扩展](#21-安装扩展)
   - [2.2-更新扩展](#22-更新扩展)
@@ -9,35 +13,44 @@
   - [3.1-使用低码搭建页面](#31-使用低码搭建页面)
   - [3.2-本扩展对外暴露的浏览器接口](#32-本扩展对外暴露的浏览器接口)
 - [4-欢迎扫下方二维码咨询或反馈问题](#4-欢迎扫下方二维码咨询或反馈问题)
+  - [4.1-微信](#41-微信)
+  - [4.2-QQ](#42-qq)
+  - [4.3-Telegram](#43-telegram)
 
 ## 0-查看视频教程
 
-- 在哔哩哔哩中查看
-  - [1-个人介绍，为什么要做上帝小助手浏览器插件/扩展开发平台](https://www.bilibili.com/video/BV1wy1yYDEnL)
-  - [2-上帝小助手功能介绍](https://www.bilibili.com/video/BV1JM1yYLEe8)
-  - [3-安装上帝小助手](https://www.bilibili.com/video/BV1WF1yYQEGd)
-  - [4-更新上帝小助手](https://www.bilibili.com/video/BV1Eu1yYyE9h)
-  - [5-使用上帝小助手定制个人专属新标签页和小组新标签页](https://www.bilibili.com/video/BV1c82kYjEXH)
+### 0.1-在哔哩哔哩中查看
 
-- 在 YouTube 中查看
-  - [1-个人介绍，为什么要做上帝小助手浏览器插件/扩展开发平台](https://www.youtube.com/watch?v=FcpJoSvHEe4)
-  - [2-上帝小助手功能介绍](https://www.youtube.com/watch?v=3Eyub74FSPU)
-  - [3-安装上帝小助手](https://www.youtube.com/watch?v=SKysPdxW_x4)
-  - [4-更新上帝小助手](https://www.youtube.com/watch?v=yitVi3I-hrY)
-  - [5-使用上帝小助手定制个人专属新标签页和小组新标签页](https://www.youtube.com/watch?v=vg7uwPwuzf0)
+- [1-个人介绍，为什么要做上帝小助手浏览器插件/扩展开发平台](https://www.bilibili.com/video/BV1wy1yYDEnL)
+- [2-上帝小助手功能介绍](https://www.bilibili.com/video/BV1JM1yYLEe8)
+- [3-安装上帝小助手](https://www.bilibili.com/video/BV1WF1yYQEGd)
+- [4-更新上帝小助手](https://www.bilibili.com/video/BV1Eu1yYyE9h)
+- [5-使用上帝小助手定制个人专属新标签页和小组新标签页](https://www.bilibili.com/video/BV1c82kYjEXH)
+
+### 0.2-在 YouTube 中查看
+
+- [1-个人介绍，为什么要做上帝小助手浏览器插件/扩展开发平台](https://www.youtube.com/watch?v=FcpJoSvHEe4)
+- [2-上帝小助手功能介绍](https://www.youtube.com/watch?v=3Eyub74FSPU)
+- [3-安装上帝小助手](https://www.youtube.com/watch?v=SKysPdxW_x4)
+- [4-更新上帝小助手](https://www.youtube.com/watch?v=yitVi3I-hrY)
+- [5-使用上帝小助手定制个人专属新标签页和小组新标签页](https://www.youtube.com/watch?v=vg7uwPwuzf0)
 
 ## 1-功能介绍
 
 上帝小助手浏览器扩展程序是一个浏览器扩展开发平台
 
-- 为用户提供了一个低代码搭建平台，用户可以通过低代码的方式快速搭建自己的专属新标签页，以及搭建各种自动化任务页面
+### 1.1-低代码搭建插件页面
+
+为用户提供了一个低代码搭建平台，用户可以通过低代码的方式快速搭建自己的专属新标签页，以及搭建各种自动化任务页面
 
 ![ga-editor](./images/ga-editor.png)
 ![ga-preview](./images/ga-preview.png)
 ![ga-editor2](./images/ga-editor2.jpg)
 ![ga-preview2](./images/ga-preview2.jpg)
 
-- 用户可以添加各种自动化任务脚本
+### 1.2-用户脚本管理
+
+用户可以添加各种自动化任务脚本
 
 ![ga-userScripts-manage](./images/ga-userScripts-manage.png)
 ![ga-userScripts-preview](./images/ga-userScripts-preview.png)
@@ -221,14 +234,20 @@ $props({
 
 ## 4-欢迎扫下方二维码咨询或反馈问题
 
-### 微信
+### 4.1-微信
 
 | 扫码加「微信群」咨询或反馈问题                                       | 扫码关注「微信公众号」查看视频教程                             | 扫码加「作者微信」咨询或反馈问题                              |
 | -------------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------- |
 | <img width="180" alt="微信群" src="./images/WeChatGroup1QrCode.jpg"> | <img width="180" alt="公众号" src="./images/GongZhongHao.png"> | <img width="180" alt="作者微信" src="./images/BGAQrCode.png"> |
 
-### QQ
+### 4.2-QQ
 
 | 扫码加「QQ 群」咨询或反馈问题                                   | 扫码在「QQ 短视频」查看视频教程                                 | 扫码加「作者 QQ」咨询或反馈问题                                |
 | --------------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------- |
 | <img width="180" alt="QQ 群" src="./images/QQGroup1QrCode.jpg"> | <img width="180" alt="作者 QQ" src="./images/QQShortVideo.jpg"> | <img width="180" alt="作者 QQ" src="./images/BGAQQQrCode.jpg"> |
+
+### 4.3-Telegram
+
+| 扫码加「Telegram 群」咨询或反馈问题                                         | 点击下方链接加「Telegram 群」咨询或反馈问题                                  |
+| --------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| <img width="180" alt="Telegram 群" src="./images/TelegramGroup1QrCode.jpg"> | [https://t.me/god_assistant_extension](https://t.me/god_assistant_extension) |
