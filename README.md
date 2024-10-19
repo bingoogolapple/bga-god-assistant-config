@@ -1,5 +1,6 @@
 # 上帝小助手浏览器扩展程序
 
+- [0-查看视频教程](#0-查看视频教程)
 - [1-功能介绍](#1-功能介绍)
 - [2-安装和更新扩展](#2-安装和更新扩展)
   - [2.1-安装扩展](#21-安装扩展)
@@ -7,7 +8,23 @@
 - [3-功能说明](#3-功能说明)
   - [3.1-使用低码搭建页面](#31-使用低码搭建页面)
   - [3.2-本扩展对外暴露的浏览器接口](#32-本扩展对外暴露的浏览器接口)
-- [4-该扩展使用问题咨询](#4-该扩展使用问题咨询)
+- [4-欢迎扫下方二维码咨询或反馈问题](#4-欢迎扫下方二维码咨询或反馈问题)
+
+## 0-查看视频教程
+
+- 在哔哩哔哩中查看
+  - [1-个人介绍，为什么要做上帝小助手浏览器插件/扩展开发平台](https://www.bilibili.com/video/BV1wy1yYDEnL)
+  - [2-上帝小助手功能介绍](https://www.bilibili.com/video/BV1JM1yYLEe8)
+  - [3-安装上帝小助手](https://www.bilibili.com/video/BV1WF1yYQEGd)
+  - [4-更新上帝小助手](https://www.bilibili.com/video/BV1Eu1yYyE9h)
+  - [5-使用上帝小助手定制个人专属新标签页和小组新标签页](https://www.bilibili.com/video/BV1c82kYjEXH)
+
+- 在 YouTube 中查看
+  - [1-个人介绍，为什么要做上帝小助手浏览器插件/扩展开发平台](https://www.youtube.com/watch?v=FcpJoSvHEe4)
+  - [2-上帝小助手功能介绍](https://www.youtube.com/watch?v=3Eyub74FSPU)
+  - [3-安装上帝小助手](https://www.youtube.com/watch?v=SKysPdxW_x4)
+  - [4-更新上帝小助手](https://www.youtube.com/watch?v=yitVi3I-hrY)
+  - [5-使用上帝小助手定制个人专属新标签页和小组新标签页](https://www.youtube.com/watch?v=vg7uwPwuzf0)
 
 ## 1-功能介绍
 
