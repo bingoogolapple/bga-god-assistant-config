@@ -16,186 +16,112 @@
           "style": {
             "padding": "20px 20px 20px 20px"
           },
-          "rowGap": 20,
-          "columnGap": 20
+          "rowGap": 18,
+          "columnGap": 18
         },
         "x-designable-id": "eaf5qid04k8",
         "x-index": 0,
         "properties": {
-          "1ip2rmhbckr": {
+          "6jmlyjwpejy": {
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-validator": [],
             "x-component-props": {
               "gridSpan": 12
             },
-            "x-designable-id": "1ip2rmhbckr",
+            "x-designable-id": "6jmlyjwpejy",
             "x-index": 0,
             "properties": {
-              "wdqjuacgusq": {
+              "11dearwlrbi": {
                 "type": "string",
                 "x-component": "Text",
                 "x-component-props": {
-                  "content": "上帝小助手无服务器",
+                  "content": "1、软件隐私声明",
                   "style": {
                     "display": "flex",
-                    "justifyContent": "center",
+                    "justifyContent": "flex-start",
                     "flexDirection": "row",
-                    "fontSize": "18px",
+                    "fontSize": "20px",
                     "margin": "0px 0px 0px 0px"
                   }
                 },
-                "x-designable-id": "wdqjuacgusq",
+                "x-designable-id": "11dearwlrbi",
                 "x-index": 0,
-                "x-validator": []
-              },
-              "qb6ndmlklsb": {
-                "type": "string",
-                "x-component": "Text",
-                "x-component-props": {
-                  "content": "因此不会收集任何用户信息",
-                  "style": {
-                    "display": "flex",
-                    "justifyContent": "center",
-                    "flexDirection": "row",
-                    "fontSize": "18px",
-                    "margin": "0px 0px 0px 0px",
-                    "color": "rgba(126,211,33,1)"
-                  }
-                },
-                "x-designable-id": "qb6ndmlklsb",
-                "x-index": 1,
-                "x-validator": []
-              },
-              "s0n3acjyuqd": {
-                "type": "string",
-                "x-component": "Text",
-                "x-component-props": {
-                  "content": "因此不会收集任何用户信息",
-                  "style": {
-                    "display": "flex",
-                    "justifyContent": "center",
-                    "flexDirection": "row",
-                    "fontSize": "18px",
-                    "margin": "0px 0px 0px 0px",
-                    "color": "rgba(126,211,33,1)"
-                  }
-                },
-                "x-designable-id": "s0n3acjyuqd",
-                "x-index": 2,
-                "x-validator": []
-              },
-              "15shjdmzi0m": {
-                "type": "string",
-                "x-component": "Text",
-                "x-component-props": {
-                  "content": "因此不会收集任何用户信息",
-                  "style": {
-                    "display": "flex",
-                    "justifyContent": "center",
-                    "flexDirection": "row",
-                    "fontSize": "18px",
-                    "margin": "0px 0px 0px 0px",
-                    "color": "rgba(126,211,33,1)"
-                  }
-                },
-                "x-designable-id": "15shjdmzi0m",
-                "x-index": 3,
                 "x-validator": []
               }
             }
           },
-          "w2er9shmqar": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 12,
-              "style": {
-                "margin": "30px 0px 30px 0px"
-              }
-            },
-            "x-designable-id": "w2er9shmqar",
-            "x-index": 1,
-            "properties": {
-              "tzwssghhjo6": {
-                "type": "string",
-                "x-component": "Text",
-                "x-component-props": {
-                  "content": "当前插件/扩展自身没用撒权限",
-                  "style": {
-                    "display": "flex",
-                    "justifyContent": "center",
-                    "flexDirection": "row",
-                    "fontSize": "18px",
-                    "margin": "0px 0px 0px 0px"
-                  }
-                },
-                "x-designable-id": "tzwssghhjo6",
-                "x-index": 0,
-                "x-validator": []
-              },
-              "cg16rzk64ah": {
-                "type": "string",
-                "x-component": "Text",
-                "x-component-props": {
-                  "content": "但为了让用户在搭建自动化页面时能使用各种权限",
-                  "style": {
-                    "display": "flex",
-                    "justifyContent": "center",
-                    "flexDirection": "row",
-                    "fontSize": "18px",
-                    "margin": "0px 0px 0px 0px"
-                  }
-                },
-                "x-designable-id": "cg16rzk64ah",
-                "x-index": 1,
-                "x-validator": []
-              },
-              "amhasj7ubna": {
-                "type": "string",
-                "x-component": "Text",
-                "x-component-props": {
-                  "content": "就在清单文件里把各种权限都加上了",
-                  "style": {
-                    "display": "flex",
-                    "justifyContent": "center",
-                    "flexDirection": "row",
-                    "fontSize": "18px",
-                    "margin": "0px 0px 0px 0px"
-                  }
-                },
-                "x-designable-id": "amhasj7ubna",
-                "x-index": 2,
-                "x-validator": []
-              }
-            }
-          },
-          "buis0ixacvg": {
+          "h5sozsocugj": {
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-validator": [],
             "x-component-props": {
               "gridSpan": 12
             },
-            "x-designable-id": "buis0ixacvg",
-            "x-index": 2,
+            "x-designable-id": "h5sozsocugj",
+            "x-index": 1,
             "properties": {
-              "id1mmddl043": {
+              "grfq4m02i3f": {
                 "type": "string",
                 "x-component": "Text",
                 "x-component-props": {
-                  "content": "插件自身的页面和配置信息也都是托管到 git 仓库的",
+                  "content": "1.1、应用商店和高级版本通用隐私声明",
                   "style": {
                     "display": "flex",
-                    "justifyContent": "center",
+                    "justifyContent": "flex-start",
                     "flexDirection": "row",
                     "fontSize": "18px",
                     "margin": "0px 0px 0px 0px"
                   }
                 },
-                "x-designable-id": "id1mmddl043",
+                "x-designable-id": "grfq4m02i3f",
                 "x-index": 0,
+                "x-validator": []
+              }
+            }
+          },
+          "z9w6jpkamy0": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "z9w6jpkamy0",
+            "x-index": 2,
+            "properties": {
+              "f6f539b7kju": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "•上帝小助手是无服务器的，因此不会收集任何用户信息",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "14px",
+                    "margin": "0px 0px 0px 18px"
+                  }
+                },
+                "x-designable-id": "f6f539b7kju",
+                "x-index": 0,
+                "x-validator": []
+              },
+              "9k4sljjtip2": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "•上帝小助手自身的页面和配置信息也是托管在 git 仓库的，欢迎用户检查",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "14px",
+                    "margin": "0px 0px 0px 18px"
+                  }
+                },
+                "x-designable-id": "9k4sljjtip2",
+                "x-index": 1,
                 "x-validator": []
               }
             }
@@ -222,9 +148,9 @@
                   "target": "_blank",
                   "type": "primary",
                   "children": "查看 Gitee 仓库里的配置信息",
-                  "size": "large",
+                  "size": "middle",
                   "style": {
-                    "margin": "0px 0px 30px 0px"
+                    "margin": "0px 30px 0px 0px"
                   }
                 },
                 "x-reactions": {
@@ -236,7 +162,7 @@
                     }
                   ],
                   "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://gitee.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
+                    "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab(\n      \"https://gitee.com/bingoogolapple/bga-god-assistant-config\"\n    )\n  },\n})\n"
                   }
                 },
                 "x-designable-id": "uw17xv49mri",
@@ -267,9 +193,9 @@
                   "target": "_blank",
                   "type": "primary",
                   "children": "查看 GitHub 仓库里的配置信息",
-                  "size": "large",
+                  "size": "middle",
                   "style": {
-                    "margin": "0px 0px 30px 0px"
+                    "margin": "0px 0px 0px 30px"
                   }
                 },
                 "x-reactions": {
@@ -281,10 +207,235 @@
                     }
                   ],
                   "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    $chrome.tabs.create({\n      url: \"https://github.com/bingoogolapple/bga-god-assistant-config\",\n    })\n  },\n})\n"
+                    "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab(\n      \"https://github.com/bingoogolapple/bga-god-assistant-config\"\n    )\n  },\n})\n"
                   }
                 },
                 "x-designable-id": "uw7m66fzcly",
+                "x-index": 0,
+                "x-validator": []
+              }
+            }
+          },
+          "v7oh6nf7shf": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "v7oh6nf7shf",
+            "x-index": 5,
+            "properties": {
+              "l0j497cifed": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "1.2、初级版本隐私声明，即发布到应用商店中的版本",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "18px",
+                    "margin": "0px 0px 0px 0px"
+                  }
+                },
+                "x-designable-id": "l0j497cifed",
+                "x-index": 0,
+                "x-validator": []
+              }
+            }
+          },
+          "9uq4qh4ar3i": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "9uq4qh4ar3i",
+            "x-index": 6,
+            "properties": {
+              "mbqpfevd9kk": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "•上帝小助手自身只用到了 storage、userScripts 权限，清单文件 manifest.json 里也只申请了这两个权限",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "14px",
+                    "margin": "0px 0px 0px 18px"
+                  }
+                },
+                "x-designable-id": "mbqpfevd9kk",
+                "x-index": 0,
+                "x-validator": []
+              },
+              "rq8ck02hqs3": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "•storage 权限申请理由: 用于为用户提供存储低代码搭建的页面的 schema 信息和用户的自定义用户脚本信息",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "14px",
+                    "margin": "0px 0px 0px 18px"
+                  }
+                },
+                "x-designable-id": "rq8ck02hqs3",
+                "x-index": 1,
+                "x-validator": []
+              },
+              "nj06l6v4zwv": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "•userScripts 权限申请理由: 用于为用户提供注入自定义用户脚本 userScripts 和样式的能力，以便支持用户可以执行自定义的自动化任务",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "14px",
+                    "margin": "0px 0px 0px 18px"
+                  }
+                },
+                "x-designable-id": "nj06l6v4zwv",
+                "x-index": 2,
+                "x-validator": []
+              }
+            }
+          },
+          "bkhfhm93lnx": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "bkhfhm93lnx",
+            "x-index": 7,
+            "properties": {
+              "gujm1ff5bvk": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "1.3、高级版本隐私声明，即 git 仓库中的 god-assistant-版本号.zip 文件",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "18px",
+                    "margin": "0px 0px 0px 0px"
+                  }
+                },
+                "x-designable-id": "gujm1ff5bvk",
+                "x-index": 0,
+                "x-validator": []
+              }
+            }
+          },
+          "mz7q0ctr55e": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "mz7q0ctr55e",
+            "x-index": 8,
+            "properties": {
+              "d5pfyiucqr4": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "•为了让用户在搭建自动化页面时能使用各种权限，就在高级版本的清单文件 manifest.json 里把各种权限都加上了，方便用户使用",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "14px",
+                    "margin": "0px 0px 0px 18px"
+                  }
+                },
+                "x-designable-id": "d5pfyiucqr4",
+                "x-index": 0,
+                "x-validator": []
+              },
+              "sjgvvtjl0je": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "•高级版本和初级版本的唯一区别就是清单文件 manifest.json 里的权限声明不同，其余逻辑全是一样的",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "14px",
+                    "margin": "0px 0px 0px 18px"
+                  }
+                },
+                "x-designable-id": "sjgvvtjl0je",
+                "x-index": 1,
+                "x-validator": []
+              }
+            }
+          },
+          "gw8cpk74jue": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "gw8cpk74jue",
+            "x-index": 9,
+            "properties": {
+              "fcrwygyw9j2": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "1.4、高级版本和初级版本的区别",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "18px",
+                    "margin": "0px 0px 0px 0px"
+                  }
+                },
+                "x-designable-id": "fcrwygyw9j2",
+                "x-index": 0,
+                "x-validator": []
+              }
+            }
+          },
+          "uasi2izz892": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "uasi2izz892",
+            "x-index": 10,
+            "properties": {
+              "w7n5okky1x3": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "•高级版本和初级版本的唯一区别就是清单文件 manifest.json 里的权限声明不同，其余逻辑全是一样的",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "14px",
+                    "margin": "0px 0px 0px 18px"
+                  }
+                },
+                "x-designable-id": "w7n5okky1x3",
                 "x-index": 0,
                 "x-validator": []
               }
@@ -302,8 +453,8 @@
           "style": {
             "padding": "20px 20px 20px 20px"
           },
-          "rowGap": 20,
-          "columnGap": 20
+          "rowGap": 18,
+          "columnGap": 18
         },
         "x-designable-id": "vwfqjlg2gl7",
         "x-index": 1,
@@ -322,7 +473,7 @@
                 "type": "string",
                 "x-component": "Text",
                 "x-component-props": {
-                  "content": "欢迎扫下方二维码咨询或反馈问题",
+                  "content": "2、欢迎扫下方二维码咨询或反馈问题",
                   "style": {
                     "display": "flex",
                     "justifyContent": "flex-start",
@@ -836,8 +987,8 @@
           "style": {
             "padding": "20px 20px 20px 20px"
           },
-          "rowGap": 20,
-          "columnGap": 20
+          "rowGap": 18,
+          "columnGap": 18
         },
         "x-designable-id": "2don9d2f5ym",
         "x-index": 2,
@@ -856,7 +1007,7 @@
                 "type": "string",
                 "x-component": "Text",
                 "x-component-props": {
-                  "content": "如果您觉得上帝小助手浏览器扩展程序对你有帮助，可以扫描下方二维码打赏 10.24 元支持作者继续创作",
+                  "content": "3、打赏支持作者",
                   "style": {
                     "display": "flex",
                     "justifyContent": "flex-start",
@@ -866,6 +1017,35 @@
                   }
                 },
                 "x-designable-id": "fbuuitlwrer",
+                "x-index": 0,
+                "x-validator": []
+              }
+            }
+          },
+          "rg3inwkir28": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "rg3inwkir28",
+            "x-index": 1,
+            "properties": {
+              "jc2mfudls7w": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "如果您觉得上帝小助手浏览器扩展程序对你有帮助，可以扫描下方二维码打赏 10.24 元支持作者继续创作",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "14px",
+                    "margin": "0px 0px 0px 0px"
+                  }
+                },
+                "x-designable-id": "jc2mfudls7w",
                 "x-index": 0,
                 "x-validator": []
               }
@@ -885,7 +1065,7 @@
               }
             },
             "x-designable-id": "u640jhmvvli",
-            "x-index": 1,
+            "x-index": 2,
             "properties": {
               "9nnfehvkfxr": {
                 "type": "void",
@@ -943,7 +1123,7 @@
               }
             },
             "x-designable-id": "wbqb3rujjpp",
-            "x-index": 2,
+            "x-index": 3,
             "properties": {
               "i0dos0u88tq": {
                 "type": "void",
@@ -1001,7 +1181,7 @@
               }
             },
             "x-designable-id": "3zbo4i0mwp8",
-            "x-index": 3,
+            "x-index": 4,
             "properties": {
               "1562cfnvykv": {
                 "type": "void",
