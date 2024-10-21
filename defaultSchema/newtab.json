@@ -4,7 +4,7 @@
     "wrapperCol": 12,
     "style": {
       "height": "100vh",
-      "backgroundImage": "url(https://i1.hdslb.com/bfs/archive/b2a4fa80ba466e9ef8f1a031dbfc0d093f2a9bd2.jpg)",
+      "backgroundImage": "url(https://images.pexels.com/photos/957085/milky-way-starry-sky-night-sky-star-957085.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)",
       "backgroundRepeat": "no-repeat",
       "backgroundSize": "cover",
       "backgroundPosition": "center",
@@ -306,7 +306,7 @@
                 }
               ],
               "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://search.bilibili.com/all?keyword=${$deps.keyword}`)\n  },\n})\n"
+                "run": "$props({\n  onClick: async () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      await $utils.copyTextToClipboard(\"abcdefgh\")\n      const aa = await $utils.readTextFromClipboard()\n      $message.info(`复制内容为：${aa}`)\n\n      $utils.copyImageToClipboard(\n        \"https://p0.meituan.net/travelcube/54d950bb348f35f1151440f71e6e055b1960.png\"\n      )\n      return\n    }\n\n    $utils.openUrl(`https://search.bilibili.com/all?keyword=${$deps.keyword}`)\n  },\n})\n"
               }
             },
             "x-designable-id": "amu7medcqyl",
@@ -396,6 +396,19 @@
           }
         }
       },
+      "wuqaowyupn7": {
+        "type": "void",
+        "x-component": "DynamicSchemaBlock",
+        "x-component-props": {
+          "schema": {},
+          "valueType": "unfold",
+          "reset": true,
+          "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/duo-ling-guo.json",
+          "style": {}
+        },
+        "x-designable-id": "wuqaowyupn7",
+        "x-index": 4
+      },
       "q4fx318cgcc": {
         "type": "void",
         "x-component": "Card",
@@ -406,7 +419,7 @@
           }
         },
         "x-designable-id": "q4fx318cgcc",
-        "x-index": 4,
+        "x-index": 5,
         "properties": {
           "2su76jd3ydl": {
             "type": "array",
@@ -550,7 +563,7 @@
           }
         },
         "x-designable-id": "f513ch3scns",
-        "x-index": 5,
+        "x-index": 6,
         "properties": {
           "jw4tfln4pab": {
             "type": "array",
@@ -697,7 +710,7 @@
           }
         },
         "x-designable-id": "ho98j7lccnm",
-        "x-index": 6,
+        "x-index": 7,
         "properties": {
           "wjlg19hsd91": {
             "type": "array",
@@ -822,7 +835,7 @@
             "run": "// TODO 改为你个人的远程书签配置链接\nconst configUrl = \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/personalBookmarkConfig.json\"\n\n\n\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
           }
         },
-        "x-index": 7,
+        "x-index": 8,
         "items": {
           "type": "object",
           "x-validator": [],
@@ -939,7 +952,7 @@
             "run": "// TODO 改为你们小组的远程书签配置链接\nconst configUrl =\n  \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/groupBookmarkConfig.json\"\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
           }
         },
-        "x-index": 8,
+        "x-index": 9,
         "items": {
           "type": "object",
           "x-validator": [],
@@ -1035,6 +1048,6 @@
         }
       }
     },
-    "x-designable-id": "qmdhowx71z2"
+    "x-designable-id": "iaul6v069hr"
   }
 }
