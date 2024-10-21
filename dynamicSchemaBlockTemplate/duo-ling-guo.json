@@ -1,0 +1,191 @@
+{
+  "type": "void",
+  "x-component": "Div",
+  "x-component-props": {
+    "style": {
+      "margin": "16px 16px 16px 16px",
+      "backgroundColor": "rgba(255,255,255,1)",
+      "borderRadius": "20px 20px 20px 20px"
+    }
+  },
+  "properties": {
+    "2coklg7gl9n": {
+      "type": "void",
+      "x-component": "Div",
+      "x-component-props": {
+        "style": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "margin": "0px 0px 0px 0px",
+          "padding": "8px 10px 8px 10px",
+          "justifyContent": "space-between"
+        }
+      },
+      "x-designable-id": "2coklg7gl9n",
+      "x-index": 0,
+      "properties": {
+        "sl3b3xclo47": {
+          "type": "void",
+          "x-component": "Div",
+          "x-component-props": {
+            "style": {
+              "display": "flex",
+              "flexDirection": "row",
+              "alignItems": "center",
+              "margin": "0px 0px 0px 0px",
+              "padding": "0px 0px 0px 0px",
+              "justifyContent": "flex-start"
+            }
+          },
+          "x-designable-id": "sl3b3xclo47",
+          "x-index": 0,
+          "properties": {
+            "grc32ahl3kd": {
+              "type": "string",
+              "x-component": "Img",
+              "x-validator": [],
+              "x-component-props": {
+                "src": "https://d35aaqx5ub95lt.cloudfront.net/images/pathCharacters/guidebook/939ebad747027f1a9d365e15fda3a4e1.svg",
+                "style": {
+                  "width": "40px",
+                  "height": "50px"
+                }
+              },
+              "x-designable-id": "grc32ahl3kd",
+              "x-index": 0
+            },
+            "pzyhxqvfy28": {
+              "type": "string",
+              "x-component": "Text",
+              "x-validator": [],
+              "x-component-props": {
+                "content": "第 3 阶段，第 20 部分指南",
+                "style": {
+                  "fontSize": "16px",
+                  "fontWeight": 700,
+                  "margin": "0px 0px 0px 4px"
+                }
+              },
+              "x-designable-id": "pzyhxqvfy28",
+              "x-index": 1
+            }
+          }
+        },
+        "rmtx5m9758q": {
+          "type": "string",
+          "x-component": "Button",
+          "x-reactions": {
+            "fulfill": {
+              "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 待实现\")\n  },\n})\n"
+            },
+            "dependencies": [
+              {
+                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                "property": "value",
+                "type": "any"
+              }
+            ]
+          },
+          "x-validator": [],
+          "x-component-props": {
+            "children": "",
+            "target": "_blank",
+            "icon": "SettingOutlined",
+            "type": "default"
+          },
+          "x-designable-id": "rmtx5m9758q",
+          "x-index": 1
+        }
+      }
+    },
+    "lgbktuqucjj": {
+      "type": "string",
+      "x-component": "Divider",
+      "x-validator": [],
+      "x-component-props": {
+        "children": "",
+        "style": {
+          "margin": "4px 0px 4px 0px"
+        }
+      },
+      "x-designable-id": "lgbktuqucjj",
+      "x-index": 1
+    },
+    "z9aqp5onkte": {
+      "type": "array",
+      "x-decorator": "FormItem",
+      "x-component": "ArrayTable",
+      "x-validator": [],
+      "x-component-props": {
+        "bordered": false,
+        "showHeader": true,
+        "tableLayout": "fixed",
+        "style": {
+          "margin": "0px 10px 0px 10px"
+        }
+      },
+      "x-decorator-props": {},
+      "x-reactions": {
+        "dependencies": [
+          {
+            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+            "property": "value",
+            "type": "any"
+          }
+        ],
+        "fulfill": {
+          "run": "// https://d1btvuu4dwu627.cloudfront.net/guidebook\n\nconst sendNotification = (item) => {\n  $message.success(`${item.study} ${item.my}`)\n\n  // 创建系统通知\n  $chrome.notifications.create(\n    null,\n    {\n      type: \"basic\",\n      title: item.study,\n      message: item.my,\n      iconUrl:\n        \"https://d35aaqx5ub95lt.cloudfront.net/images/pathCharacters/guidebook/939ebad747027f1a9d365e15fda3a4e1.svg\",\n    },\n    $chrome.proxy((notificationId) => {\n      // 延迟 6 秒清除系统通知\n      setTimeout(() => {\n        $chrome.notifications.clear(notificationId)\n      }, 6000)\n    })\n  )\n}\n$effect(() => {\n  // const filterArr = [\"text\", \"dialogue\", \"example\"]\n  const filterArr = [\"dialogue\", \"example\"]\n\n  const url =\n    \"https://d1btvuu4dwu627.cloudfront.net/guidebook/compiled/en/zh-CN/web/1/991e75adda4612f4ccd872ad140de2eeae0c9c1f11c37f3b00047c59f256db4bb2bf2bafd3f68fd227db046fc66159b2f7be4d2072bdc9e0615e560c234d2de3/12.json\"\n\n  fetch(url)\n    .then((res) => res.json())\n    .then((res) => res.elements)\n    .then((res) => {\n      console.log(\"过滤前\", res)\n      return res.filter((item) => filterArr.includes(item.type))\n    })\n    .then((res) => {\n      return res.map((item) => {\n        const { type, element } = item\n        if (type === \"text\") {\n          return {\n            type,\n            my: element.styledString.text,\n          }\n        } else if (type === \"dialogue\") {\n          return {\n            type: type,\n            my: element.phrases[0].subtext.styledString.text,\n            study: element.phrases[0].text.styledString.text,\n            tts: element.phrases[0].ttsURL,\n          }\n        } else if (type === \"example\") {\n          return {\n            type: type,\n            my: element.subtext.styledString.text,\n            study: element.text.styledString.text,\n            tts: element.ttsURL,\n          }\n        }\n\n        return item\n      })\n    })\n    .then((res) => {\n      console.log(\"映射后\", res)\n\n      $self.value = res\n\n      const randomIndex = parseInt(Math.random() * res.length)\n      const randomItem = res[randomIndex]\n      sendNotification(randomItem)\n    })\n    .catch((e) => {\n      $logger.info(\"获取多领国信息失败\", e)\n    })\n}, [])\n"
+        }
+      },
+      "x-designable-id": "z9aqp5onkte",
+      "x-index": 2,
+      "items": {
+        "type": "object",
+        "x-designable-id": "03x1gnsukz1",
+        "properties": {
+          "a8psvpb1mad": {
+            "type": "void",
+            "x-component": "ArrayTable.Column",
+            "x-component-props": {
+              "title": "要学的语言"
+            },
+            "x-designable-id": "a8psvpb1mad",
+            "x-index": 0,
+            "properties": {
+              "study": {
+                "type": "string",
+                "x-component": "Text",
+                "x-validator": [],
+                "x-component-props": {},
+                "name": "study",
+                "x-designable-id": "x5behdpaa8s",
+                "x-index": 0
+              }
+            }
+          },
+          "6u62aukvku1": {
+            "type": "void",
+            "x-component": "ArrayTable.Column",
+            "x-component-props": {
+              "title": "我的语言"
+            },
+            "x-designable-id": "6u62aukvku1",
+            "x-index": 1,
+            "properties": {
+              "my": {
+                "type": "string",
+                "x-component": "Text",
+                "x-validator": [],
+                "x-component-props": {},
+                "name": "my",
+                "x-designable-id": "j1n1nx26sva",
+                "x-index": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
