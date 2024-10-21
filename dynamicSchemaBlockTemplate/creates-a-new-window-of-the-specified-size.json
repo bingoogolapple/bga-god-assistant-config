@@ -1,0 +1,105 @@
+{
+  "type": "void",
+  "x-component": "Div",
+  "x-component-props": {},
+  "name": "createNewWindowDiv",
+  "properties": {
+    "createNewWindowBtn": {
+      "type": "string",
+      "x-component": "Button",
+      "x-reactions": {
+        "fulfill": {
+          "run": "$props({\n  onClick: () => {\n    window.currentForm = $form\n    window.currentField = $self\n\n    // 获取弹窗\n    const dialog = $self.query(\"createNewWindowDialog\").take()\n    // 打开弹窗\n    dialog.componentProps.open = true\n  },\n})\n"
+        },
+        "dependencies": [
+          {
+            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+            "property": "value",
+            "type": "any"
+          }
+        ]
+      },
+      "x-validator": [],
+      "x-component-props": {
+        "children": "新建指定尺寸的窗口",
+        "target": "_blank",
+        "type": "primary"
+      },
+      "x-designable-id": "i17037bdnrp",
+      "x-index": 0,
+      "name": "createNewWindowBtn"
+    },
+    "createNewWindowDialog": {
+      "type": "object",
+      "x-component": "Modal",
+      "x-reactions": {
+        "fulfill": {
+          "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    // 关闭当前对话框\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self\n      .validate() // 校验\n      .then(() => {\n        // $logger.info(\"$self.value\", $self.value)\n\n        // 关闭当前对话框\n        $self.componentProps.open = false\n\n        const params = {\n          ...$self.value,\n        }\n        if (!params.url) {\n          delete params.url\n        }\n\n        // 新建指定尺寸的弹窗\n        $chrome.windows.create(params)\n      })\n      .catch((e) => {\n        $logger.info(\"表单校验失败\", e)\n      })\n  },\n})\n"
+        },
+        "dependencies": [
+          {
+            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+            "property": "value",
+            "type": "any"
+          }
+        ]
+      },
+      "x-component-props": {
+        "cancelButtonProps": {},
+        "cancelText": "取消",
+        "okButtonProps": {},
+        "okText": "确定",
+        "classNames": {},
+        "styles": {},
+        "open": false,
+        "title": "新建指定尺寸的浏览器窗口"
+      },
+      "name": "createNewWindowDialog",
+      "x-designable-id": "la17t83altj",
+      "x-index": 1,
+      "properties": {
+        "width": {
+          "type": "number",
+          "title": "窗口宽度",
+          "x-decorator": "FormItem",
+          "x-component": "NumberPicker",
+          "x-validator": [],
+          "x-component-props": {},
+          "x-decorator-props": {},
+          "name": "width",
+          "x-designable-id": "uwirjfjnjr7",
+          "x-index": 0,
+          "default": 800,
+          "required": true
+        },
+        "height": {
+          "type": "number",
+          "title": "窗口高度",
+          "x-decorator": "FormItem",
+          "x-component": "NumberPicker",
+          "x-validator": [],
+          "x-component-props": {},
+          "x-decorator-props": {},
+          "name": "height",
+          "default": 700,
+          "required": true,
+          "x-designable-id": "i3xqa6uemfo",
+          "x-index": 1
+        },
+        "url": {
+          "type": "string",
+          "title": "默认访问地址",
+          "x-decorator": "FormItem",
+          "x-component": "Input",
+          "x-validator": [],
+          "x-component-props": {},
+          "x-decorator-props": {},
+          "name": "url",
+          "x-designable-id": "f7ui2byhsse",
+          "x-index": 2,
+          "default": ""
+        }
+      }
+    }
+  }
+}
