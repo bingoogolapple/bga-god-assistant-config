@@ -33,39 +33,47 @@
       "order": -1
     },
     {
+      "key": "DynamicSchemaBlockTemplateMarket",
+      "title": "低代码区块模板市场",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/DynamicSchemaBlockTemplateMarket.json",
+      "config": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/configs/DynamicSchemaBlockTemplateMarket.json",
+      "showInOptionsMenu": true,
+      "order": 1
+    },
+    {
       "key": "LowCodePageTemplateMarket",
       "title": "低代码页面模板市场",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/LowCodePageTemplateMarket.json",
       "showInOptionsMenu": true,
-      "order": 1
+      "order": 2
     },
     {
       "key": "UserScriptMarket",
       "title": "用户脚本市场",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/UserScriptMarket.json",
       "showInOptionsMenu": true,
-      "order": 2
+      "order": 3
     },
     {
       "key": "SettingAssistant",
       "title": "扩展选项设置",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/SettingAssistant.json",
       "showInOptionsMenu": true,
-      "order": 3
+      "order": 4
     },
     {
       "key": "About",
       "title": "关于",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/About.json",
       "showInOptionsMenu": true,
-      "order": 4
+      "order": 5
     },
     {
       "key": "Privacy",
       "title": "隐私声明",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/Privacy.json",
       "showInOptionsMenu": true,
-      "order": 5
+      "order": 6
     }
   ]
 }
