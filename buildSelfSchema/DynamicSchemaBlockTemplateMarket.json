@@ -66,7 +66,7 @@
               "x-component-props": {
                 "title": "操作",
                 "style": {},
-                "width": 400
+                "width": 495
               },
               "x-designable-id": "2pq9zkxbra6",
               "x-index": 1,
@@ -76,8 +76,15 @@
                   "x-component": "Button",
                   "x-reactions": {
                     "fulfill": {
-                      "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                    }
+                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    $form.values.previewDialog.previewImages = row.images\n    $form.values.previewDialog.templateUrl = row.url\n    $form.query(\"previewDialog\").take().componentProps.open = true\n    setTimeout(() => {\n      console.log(\"1111\", $form.values)\n    }, 4000)\n  },\n})\n"
+                    },
+                    "dependencies": [
+                      {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                      }
+                    ]
                   },
                   "x-validator": [],
                   "x-component-props": {
@@ -108,7 +115,7 @@
                   },
                   "x-validator": [],
                   "x-component-props": {
-                    "children": "复制区块模板链接去使用",
+                    "children": "复制区块模板链接去低代码编辑器中使用",
                     "target": "_blank",
                     "type": "primary"
                   },
@@ -116,6 +123,135 @@
                   "x-index": 1
                 }
               }
+            }
+          }
+        }
+      },
+      "previewDialog": {
+        "type": "object",
+        "x-component": "Modal",
+        "x-reactions": {
+          "fulfill": {
+            "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self.componentProps.open = false\n    const templateUrl = $self.value.templateUrl\n    $utils.copyTextToClipboard(templateUrl)\n  },\n})\n"
+          },
+          "dependencies": [
+            {
+              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+              "property": "value",
+              "type": "any"
+            }
+          ]
+        },
+        "x-component-props": {
+          "cancelButtonProps": {},
+          "cancelText": "关闭",
+          "okButtonProps": {},
+          "okText": "复制区块模板链接去低代码编辑器中使用",
+          "classNames": {},
+          "styles": {
+            "body": {
+              "height": "70vh",
+              "overflow-y": "scroll"
+            }
+          },
+          "title": "预览区块模板",
+          "width": null,
+          "style": {
+            "height": "300px"
+          }
+        },
+        "name": "previewDialog",
+        "x-designable-id": "hohxbf5ls3l",
+        "x-index": 1,
+        "properties": {
+          "previewImages": {
+            "type": "array",
+            "x-component": "IteratorLayout",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "gridTemplateColumns": "repeat(auto-fill, 120px)",
+                "justifyContent": "space-between",
+                "gap": "10px",
+                "flexDirection": "column"
+              }
+            },
+            "default": [
+              {
+                "title": "React",
+                "url": "https://zh-hans.react.dev/learn"
+              },
+              {
+                "title": "ReactRouter",
+                "url": "https://reactrouter.com/en/main/start/tutorial"
+              },
+              {
+                "title": "Zustand",
+                "url": "https://docs.pmnd.rs/zustand/getting-started/introduction"
+              },
+              {
+                "title": "Redux",
+                "url": "https://redux.js.org/introduction/getting-started"
+              },
+              {
+                "title": "Redux-Toolkit",
+                "url": "https://redux-toolkit.js.org/introduction/getting-started"
+              },
+              {
+                "title": "Next.js",
+                "url": "https://www.nextjs.cn"
+              },
+              {
+                "title": "Vue",
+                "url": "https://cn.vuejs.org/v2/guide/index.html"
+              },
+              {
+                "title": "VueRouter",
+                "url": "https://router.vuejs.org/zh/guide"
+              },
+              {
+                "title": "Vuex",
+                "url": "https://vuex.vuejs.org/zh/guide"
+              },
+              {
+                "title": "Pinia",
+                "url": "https://pinia.vuejs.org/zh/introduction.html"
+              },
+              {
+                "title": "Nuxt",
+                "url": "https://nuxt.com/docs/getting-started/installation"
+              },
+              {
+                "title": "Electron",
+                "url": "https://www.electronjs.org/zh/docs/latest/tutorial/quick-start"
+              },
+              {
+                "title": "Tauri",
+                "url": "https://tauri.app/zh-cn/v1/guides/"
+              }
+            ],
+            "x-validator": [],
+            "name": "previewImages",
+            "x-designable-id": "6tfqxi9nko7",
+            "x-index": 0,
+            "items": {
+              "type": "string",
+              "x-component": "Img",
+              "x-component-props": {
+                "style": {
+                  "width": "100%",
+                  "height": "inherit"
+                },
+                "objectFit": "contain"
+              },
+              "name": "icon",
+              "x-reactions": {
+                "fulfill": {
+                  "run": "$effect(() => {\n  // 获取迭代器布局中当前点击的条目数据\n  const row = $utils.getArrayFieldRow($self)\n  // 获取书签的图标地址\n  $utils.getBookmarkIconUrl(row.url, row.icon).then((iconUrl) => {\n    $props({\n      src: iconUrl,\n    })\n  })\n}, [])\n"
+                }
+              },
+              "x-validator": [],
+              "x-designable-id": "ve0jw466cqx"
             }
           }
         }
