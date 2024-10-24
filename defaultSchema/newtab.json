@@ -403,7 +403,7 @@
           "schema": {},
           "valueType": "unfold",
           "reset": true,
-          "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/duo-ling-guo.json",
+          "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/duo-ling-guo/index.json",
           "style": {}
         },
         "x-designable-id": "wuqaowyupn7",
@@ -1048,6 +1048,6 @@
         }
       }
     },
-    "x-designable-id": "iaul6v069hr"
+    "x-designable-id": "hi9p5ux3zzn"
   }
 }
