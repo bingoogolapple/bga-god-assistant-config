@@ -76,7 +76,7 @@
                   "x-component": "Button",
                   "x-reactions": {
                     "fulfill": {
-                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    $form.values.previewDialog.previewImages = row.images\n    $form.values.previewDialog.templateUrl = row.url\n    $form.query(\"previewDialog\").take().componentProps.open = true\n    setTimeout(() => {\n      console.log(\"1111\", $form.values)\n    }, 4000)\n  },\n})\n"
+                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    $form.values.previewDialog.previewImages = row.images\n    $form.values.previewDialog.templateUrl = row.url\n    $form.query(\"previewDialog\").take().componentProps.open = true\n  },\n})\n"
                     },
                     "dependencies": [
                       {
