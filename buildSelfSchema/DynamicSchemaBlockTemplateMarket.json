@@ -143,7 +143,7 @@
                   "x-component": "Button",
                   "x-reactions": {
                     "fulfill": {
-                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    $utils.copyTextToClipboard(row.url)\n  },\n})\n"
+                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    $utils.copyTextToClipboard(row.url)\n\n    $modal.confirm({\n      title:\n        \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后在动态 schema 区块中粘贴使用区块模板吗？\",\n      icon: null,\n      okText: \"现在就去\",\n      cancelText: \"稍后再去\",\n      onOk: () => {\n        $utils.openUrlInCurrentTab(\"/options.html#/LowCodePageManage\")\n      },\n    })\n  },\n})\n"
                     },
                     "dependencies": [
                       {
@@ -172,7 +172,7 @@
         "x-component": "Modal",
         "x-reactions": {
           "fulfill": {
-            "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self.componentProps.open = false\n    const templateUrl = $self.value.templateUrl\n    $utils.copyTextToClipboard(templateUrl)\n  },\n})\n"
+            "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self.componentProps.open = false\n    const templateUrl = $self.value.templateUrl\n    $utils.copyTextToClipboard(templateUrl)\n\n    $modal.confirm({\n      title:\n        \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后在动态 schema 区块中粘贴使用区块模板吗？\",\n      icon: null,\n      okText: \"现在就去\",\n      cancelText: \"稍后再去\",\n      onOk: () => {\n        $utils.openUrlInCurrentTab(\"/options.html#/LowCodePageManage\")\n      },\n    })\n  },\n})\n"
           },
           "dependencies": [
             {
@@ -391,6 +391,6 @@
         }
       }
     },
-    "x-designable-id": "p1a71l2z9mr"
+    "x-designable-id": "zw6t3hce82e"
   }
 }
