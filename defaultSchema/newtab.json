@@ -234,6 +234,60 @@
             "x-index": 2,
             "x-validator": []
           },
+          "s89afxjqzwi": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "搜狗",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.sogou.com/web?query=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "s89afxjqzwi",
+            "x-index": 3,
+            "x-validator": []
+          },
+          "auwpbjskzgf": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "360",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.so.com/s?q=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "auwpbjskzgf",
+            "x-index": 4,
+            "x-validator": []
+          },
           "w77t7yadgaz": {
             "type": "string",
             "x-component": "Button",
@@ -258,7 +312,7 @@
               }
             },
             "x-designable-id": "w77t7yadgaz",
-            "x-index": 3,
+            "x-index": 5,
             "x-validator": []
           },
           "erg6gyy9yor": {
@@ -285,7 +339,7 @@
               }
             },
             "x-designable-id": "erg6gyy9yor",
-            "x-index": 4,
+            "x-index": 6,
             "x-validator": []
           },
           "amu7medcqyl": {
@@ -312,7 +366,7 @@
               }
             },
             "x-designable-id": "amu7medcqyl",
-            "x-index": 5,
+            "x-index": 7,
             "x-validator": []
           },
           "wrtny56mfwr": {
@@ -339,7 +393,7 @@
               }
             },
             "x-designable-id": "wrtny56mfwr",
-            "x-index": 6,
+            "x-index": 8,
             "x-validator": []
           },
           "5dh2ihtj1ky": {
@@ -366,7 +420,7 @@
               }
             },
             "x-designable-id": "5dh2ihtj1ky",
-            "x-index": 7,
+            "x-index": 9,
             "x-validator": []
           },
           "wgj161v9vws": {
@@ -393,7 +447,7 @@
               }
             },
             "x-designable-id": "wgj161v9vws",
-            "x-index": 8,
+            "x-index": 10,
             "x-validator": []
           },
           "6osrda7sw6i": {
@@ -420,7 +474,7 @@
               }
             },
             "x-designable-id": "6osrda7sw6i",
-            "x-index": 9,
+            "x-index": 11,
             "x-validator": []
           },
           "hk2saak17bp": {
@@ -447,7 +501,7 @@
               }
             },
             "x-designable-id": "hk2saak17bp",
-            "x-index": 10,
+            "x-index": 12,
             "x-validator": []
           },
           "jsqc1tbianz": {
@@ -474,7 +528,7 @@
               }
             },
             "x-designable-id": "jsqc1tbianz",
-            "x-index": 11,
+            "x-index": 13,
             "x-validator": []
           },
           "7n4ywikzf4u": {
@@ -501,7 +555,7 @@
               }
             },
             "x-designable-id": "7n4ywikzf4u",
-            "x-index": 12,
+            "x-index": 14,
             "x-validator": []
           },
           "7h1hcvxliyt": {
@@ -528,7 +582,7 @@
               }
             },
             "x-designable-id": "7h1hcvxliyt",
-            "x-index": 13,
+            "x-index": 15,
             "x-validator": []
           }
         }
@@ -1185,6 +1239,6 @@
         }
       }
     },
-    "x-designable-id": "9i714v1gydn"
+    "x-designable-id": "3n8couatmwt"
   }
 }
