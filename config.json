@@ -44,6 +44,7 @@
       "key": "LowCodePageTemplateMarket",
       "title": "低代码页面模板市场",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/LowCodePageTemplateMarket.json",
+      "config": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/configs/LowCodePageTemplateMarket.json",
       "showInOptionsMenu": true,
       "order": 2
     },
