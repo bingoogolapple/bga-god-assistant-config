@@ -143,7 +143,7 @@
                   "x-component": "Button",
                   "x-reactions": {
                     "fulfill": {
-                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    $utils.openUrlInNewTab(\n      `/lowcode.html?lowCodeType=preview&remoteSchemaUrl=${row.url}`\n    )\n  },\n})\n"
+                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    $utils.openUrlInNewTab(\n      `/lowcode.html?lowCodeType=preview&remoteSchemaUrl=${row.url}&lowCodeTitle=预览页面模板-${row.name}`\n    )\n  },\n})\n"
                     },
                     "dependencies": [
                       {
@@ -170,7 +170,7 @@
                   "x-component": "Button",
                   "x-reactions": {
                     "fulfill": {
-                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    fetch(row.url)\n      .then((res) => res.text())\n      .then((text) => {\n        $utils.copyTextToClipboard(text)\n\n        $modal.confirm({\n          title:\n            \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后粘贴使用页面模板吗？\",\n          icon: null,\n          okText: \"现在就去\",\n          cancelText: \"稍后再去\",\n          onOk: () => {\n            $utils.openUrlInCurrentTab(\"/options.html#/LowCodePageManage\")\n          },\n        })\n      })\n      .catch((e) => {\n        $logger.error(\"获取页面模板内容失败\", e)\n        $message.error(\"获取页面模板内容失败，请稍后再试\")\n      })\n  },\n})\n"
+                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    fetch(row.url)\n      .then((res) => res.text())\n      .then((text) => {\n        $utils.copyTextToClipboard(text)\n\n        $modal.confirm({\n          title:\n            \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后粘贴使用页面模板吗？\",\n          icon: null,\n          okText: \"现在就去\",\n          cancelText: \"稍后再去\",\n          onOk: () => {\n            $utils.openUrlInNewTab(\"/options.html#/LowCodePageManage\")\n          },\n        })\n      })\n      .catch((e) => {\n        $logger.error(\"获取页面模板内容失败\", e)\n        $message.error(\"获取页面模板内容失败，请稍后再试\")\n      })\n  },\n})\n"
                     },
                     "dependencies": [
                       {
@@ -199,7 +199,7 @@
         "x-component": "Modal",
         "x-reactions": {
           "fulfill": {
-            "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    const templateUrl = $self.value.templateUrl\n    fetch(templateUrl)\n      .then((res) => res.text())\n      .then((text) => {\n        $self.componentProps.open = false\n        $utils.copyTextToClipboard(text)\n\n        $modal.confirm({\n          title:\n            \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后粘贴使用页面模板吗？\",\n          icon: null,\n          okText: \"现在就去\",\n          cancelText: \"稍后再去\",\n          onOk: () => {\n            $utils.openUrlInCurrentTab(\"/options.html#/LowCodePageManage\")\n          },\n        })\n      })\n      .catch((e) => {\n        $logger.error(\"获取页面模板内容失败\", e)\n        $message.error(\"获取页面模板内容失败，请稍后再试\")\n      })\n  },\n})\n"
+            "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    const templateUrl = $self.value.templateUrl\n    fetch(templateUrl)\n      .then((res) => res.text())\n      .then((text) => {\n        $self.componentProps.open = false\n        $utils.copyTextToClipboard(text)\n\n        $modal.confirm({\n          title:\n            \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后粘贴使用页面模板吗？\",\n          icon: null,\n          okText: \"现在就去\",\n          cancelText: \"稍后再去\",\n          onOk: () => {\n            $utils.openUrlInNewTab(\"/options.html#/LowCodePageManage\")\n          },\n        })\n      })\n      .catch((e) => {\n        $logger.error(\"获取页面模板内容失败\", e)\n        $message.error(\"获取页面模板内容失败，请稍后再试\")\n      })\n  },\n})\n"
           },
           "dependencies": [
             {
@@ -418,6 +418,6 @@
         }
       }
     },
-    "x-designable-id": "ig8xtpeoejn"
+    "x-designable-id": "hug5551ksyn"
   }
 }
