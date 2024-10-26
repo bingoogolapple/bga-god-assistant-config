@@ -106,7 +106,7 @@
               "x-component-props": {
                 "title": "操作",
                 "style": {},
-                "width": 495
+                "width": 625
               },
               "x-designable-id": "2pq9zkxbra6",
               "x-index": 1,
@@ -138,6 +138,33 @@
                   "x-designable-id": "uhru1qwo5yb",
                   "x-index": 0
                 },
+                "139uxa2b1df": {
+                  "type": "string",
+                  "x-component": "Button",
+                  "x-reactions": {
+                    "fulfill": {
+                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    $utils.openUrlInNewTab(\n      `/lowcode.html?lowCodeType=preview&remoteSchemaUrl=${row.url}`\n    )\n  },\n})\n"
+                    },
+                    "dependencies": [
+                      {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                      }
+                    ]
+                  },
+                  "x-validator": [],
+                  "x-component-props": {
+                    "children": "预览页面模板",
+                    "target": "_blank",
+                    "type": "default",
+                    "style": {
+                      "margin": "0px 16px 0px 0px"
+                    }
+                  },
+                  "x-designable-id": "139uxa2b1df",
+                  "x-index": 1
+                },
                 "xf934tyh35f": {
                   "type": "string",
                   "x-component": "Button",
@@ -160,7 +187,7 @@
                     "type": "primary"
                   },
                   "x-designable-id": "xf934tyh35f",
-                  "x-index": 1
+                  "x-index": 2
                 }
               }
             }
@@ -391,6 +418,6 @@
         }
       }
     },
-    "x-designable-id": "p1a71l2z9mr"
+    "x-designable-id": "3c3fql5gmsp"
   }
 }
