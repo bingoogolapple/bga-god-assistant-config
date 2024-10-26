@@ -587,17 +587,64 @@
           }
         }
       },
-      "wuqaowyupn7": {
+      "khhftitma81": {
         "type": "void",
-        "x-component": "DynamicSchemaBlock",
+        "x-component": "FormGrid",
+        "x-validator": [],
         "x-component-props": {
-          "schema": {},
-          "valueType": "unfold",
-          "reset": true,
-          "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/duo-ling-guo/index.json",
-          "style": {}
+          "columnGap": 16,
+          "rowGap": 16,
+          "minColumns": 2,
+          "maxColumns": 2,
+          "style": {
+            "margin": "16px 16px 16px 16px"
+          }
         },
-        "x-designable-id": "wuqaowyupn7",
+        "x-designable-id": "khhftitma81",
+        "properties": {
+          "de7xqyabrw6": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-designable-id": "de7xqyabrw6",
+            "properties": {
+              "81ggn79rn1h": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "valueType": "unfold",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/duo-ling-guo/index.json"
+                },
+                "x-designable-id": "81ggn79rn1h",
+                "x-index": 0
+              }
+            },
+            "x-index": 0
+          },
+          "7lww9d1ufcx": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {},
+            "x-designable-id": "7lww9d1ufcx",
+            "properties": {
+              "zqbhftzs1vr": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "valueType": "unfold",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/custom-word/index.json"
+                },
+                "x-designable-id": "zqbhftzs1vr",
+                "x-index": 0
+              }
+            },
+            "x-index": 1
+          }
+        },
         "x-index": 4
       },
       "q4fx318cgcc": {
@@ -606,7 +653,7 @@
         "x-component-props": {
           "title": "前端常用链接-图文版-纵向",
           "style": {
-            "margin": "18px 18px 18px 18px"
+            "margin": "16px 16px 16px 16px"
           }
         },
         "x-designable-id": "q4fx318cgcc",
@@ -750,7 +797,7 @@
         "x-component-props": {
           "title": "前端常用链接-图文版-横向",
           "style": {
-            "margin": "18px 18px 18px 18px"
+            "margin": "16px 16px 16px 16px"
           }
         },
         "x-designable-id": "f513ch3scns",
@@ -897,7 +944,7 @@
         "x-component-props": {
           "title": "前端常用链接-文字版",
           "style": {
-            "margin": "18px 18px 18px 18px"
+            "margin": "16px 16px 16px 16px"
           }
         },
         "x-designable-id": "ho98j7lccnm",
@@ -1239,6 +1286,6 @@
         }
       }
     },
-    "x-designable-id": "3n8couatmwt"
+    "x-designable-id": "2p13t20wmkl"
   }
 }
