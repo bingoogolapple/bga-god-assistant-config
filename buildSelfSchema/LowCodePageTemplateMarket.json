@@ -382,7 +382,7 @@
               }
             },
             "default": [
-              "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/Tutorial/DynamicSchemaBlockTemplateMarket1.png"
+              "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/Tutorial/LowCodePageTemplateMarket1.png"
             ],
             "x-validator": [],
             "name": "tutorialImages",
