@@ -144,7 +144,9 @@
             "display": "flex",
             "flexDirection": "row",
             "justifyContent": "center",
-            "margin": "0px 0px 36px 0px"
+            "margin": "0px 0px 36px 0px",
+            "flexWrap": "wrap",
+            "padding": "0px 20px 0px 20px"
           },
           "size": 16
         },
@@ -306,19 +308,19 @@
                 }
               ],
               "fulfill": {
-                "run": "$props({\n  onClick: async () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      await $utils.copyTextToClipboard(\"abcdefgh\")\n      const aa = await $utils.readTextFromClipboard()\n      $message.info(`复制内容为：${aa}`)\n\n      $utils.copyImageToClipboard(\n        \"https://p0.meituan.net/travelcube/54d950bb348f35f1151440f71e6e055b1960.png\"\n      )\n      return\n    }\n\n    $utils.openUrl(`https://search.bilibili.com/all?keyword=${$deps.keyword}`)\n  },\n})\n"
+                "run": "$props({\n  onClick: async () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://search.bilibili.com/all?keyword=${$deps.keyword}`)\n  },\n})\n"
               }
             },
             "x-designable-id": "amu7medcqyl",
             "x-index": 5,
             "x-validator": []
           },
-          "6osrda7sw6i": {
+          "wrtny56mfwr": {
             "type": "string",
             "x-component": "Button",
             "x-component-props": {
               "target": "_blank",
-              "children": "小红书",
+              "children": "YouTube",
               "type": "primary",
               "size": "large"
             },
@@ -333,10 +335,10 @@
                 }
               ],
               "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(\n      `https://www.xiaohongshu.com/search_result?keyword=${$deps.keyword}`\n    )\n  },\n})\n"
+                "run": "$props({\n  onClick: async () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.youtube.com/results?search_query=${$deps.keyword}`)\n  },\n})\n"
               }
             },
-            "x-designable-id": "6osrda7sw6i",
+            "x-designable-id": "wrtny56mfwr",
             "x-index": 6,
             "x-validator": []
           },
@@ -392,6 +394,141 @@
             },
             "x-designable-id": "wgj161v9vws",
             "x-index": 8,
+            "x-validator": []
+          },
+          "6osrda7sw6i": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "小红书",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(\n      `https://www.xiaohongshu.com/search_result?keyword=${$deps.keyword}`\n    )\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "6osrda7sw6i",
+            "x-index": 9,
+            "x-validator": []
+          },
+          "hk2saak17bp": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "知乎",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(\n      `https://www.zhihu.com/search?type=content&q=${$deps.keyword}`\n    )\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "hk2saak17bp",
+            "x-index": 10,
+            "x-validator": []
+          },
+          "jsqc1tbianz": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "微博",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://s.weibo.com/weibo?q=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "jsqc1tbianz",
+            "x-index": 11,
+            "x-validator": []
+          },
+          "7n4ywikzf4u": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "Facebook",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.facebook.com/search/top/?q=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "7n4ywikzf4u",
+            "x-index": 12,
+            "x-validator": []
+          },
+          "7h1hcvxliyt": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "X",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://x.com/search?q=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "7h1hcvxliyt",
+            "x-index": 13,
             "x-validator": []
           }
         }
@@ -1048,6 +1185,6 @@
         }
       }
     },
-    "x-designable-id": "hi9p5ux3zzn"
+    "x-designable-id": "9i714v1gydn"
   }
 }
