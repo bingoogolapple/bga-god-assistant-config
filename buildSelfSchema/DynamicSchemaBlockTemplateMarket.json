@@ -106,7 +106,7 @@
               "x-component-props": {
                 "title": "操作",
                 "style": {},
-                "width": 495
+                "width": 820
               },
               "x-designable-id": "2pq9zkxbra6",
               "x-index": 1,
@@ -143,7 +143,7 @@
                   "x-component": "Button",
                   "x-reactions": {
                     "fulfill": {
-                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    $utils.copyTextToClipboard(row.url)\n\n    $modal.confirm({\n      title:\n        \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后在动态 schema 区块中粘贴使用区块模板吗？\",\n      icon: null,\n      okText: \"现在就去\",\n      cancelText: \"稍后再去\",\n      onOk: () => {\n        $utils.openUrlInNewTab(\"/options.html#/LowCodePageManage\")\n      },\n    })\n  },\n})\n"
+                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    fetch(row.url)\n      .then((res) => res.text())\n      .then((text) => {\n        $utils.copyTextToClipboard(text)\n\n        $modal.confirm({\n          title:\n            \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后在「动态 schema 区块」组件的「本地动态 schema」配置项中粘贴来使用区块模板吗？\",\n          icon: null,\n          okText: \"现在就去\",\n          cancelText: \"稍后再去\",\n          onOk: () => {\n            $utils.openUrlInNewTab(\"/options.html#/LowCodePageManage\")\n          },\n        })\n      })\n      .catch((e) => {\n        $logger.error(\"获取区块模板 schema 失败\", e)\n        $message.error(\"获取区块模板 schema 失败，请稍后再试\")\n      })\n  },\n})\n"
                     },
                     "dependencies": [
                       {
@@ -155,12 +155,39 @@
                   },
                   "x-validator": [],
                   "x-component-props": {
-                    "children": "复制区块模板链接去低代码编辑器中使用",
+                    "children": "复制区块模板 schema 去低代码编辑器中使用",
                     "target": "_blank",
-                    "type": "primary"
+                    "type": "default",
+                    "style": {
+                      "margin": "0px 16px 0px 0px"
+                    }
                   },
                   "x-designable-id": "xf934tyh35f",
                   "x-index": 1
+                },
+                "pvttxy2spih": {
+                  "type": "string",
+                  "x-component": "Button",
+                  "x-reactions": {
+                    "fulfill": {
+                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    $utils.copyTextToClipboard(row.url)\n\n    $modal.confirm({\n      title:\n        \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后在「动态 schema 区块」组件的「远程 schema url」配置项中粘贴来使用区块模板吗？\",\n      icon: null,\n      okText: \"现在就去\",\n      cancelText: \"稍后再去\",\n      onOk: () => {\n        $utils.openUrlInNewTab(\"/options.html#/LowCodePageManage\")\n      },\n    })\n  },\n})\n"
+                    },
+                    "dependencies": [
+                      {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                      }
+                    ]
+                  },
+                  "x-validator": [],
+                  "x-component-props": {
+                    "children": "复制区块模板 url 去低代码编辑器中使用",
+                    "target": "_blank",
+                    "type": "primary"
+                  },
+                  "x-designable-id": "pvttxy2spih",
+                  "x-index": 2
                 }
               }
             }
@@ -172,7 +199,7 @@
         "x-component": "Modal",
         "x-reactions": {
           "fulfill": {
-            "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self.componentProps.open = false\n    const templateUrl = $self.value.templateUrl\n    $utils.copyTextToClipboard(templateUrl)\n\n    $modal.confirm({\n      title:\n        \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后在动态 schema 区块中粘贴使用区块模板吗？\",\n      icon: null,\n      okText: \"现在就去\",\n      cancelText: \"稍后再去\",\n      onOk: () => {\n        $utils.openUrlInNewTab(\"/options.html#/LowCodePageManage\")\n      },\n    })\n  },\n})\n"
+            "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self.componentProps.open = false\n    const templateUrl = $self.value.templateUrl\n    $utils.copyTextToClipboard(templateUrl)\n\n    $modal.confirm({\n      title:\n        \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后在「动态 schema 区块」组件的「远程 schema url」配置项中粘贴来使用区块模板吗？\",\n      icon: null,\n      okText: \"现在就去\",\n      cancelText: \"稍后再去\",\n      onOk: () => {\n        $utils.openUrlInNewTab(\"/options.html#/LowCodePageManage\")\n      },\n    })\n  },\n})\n"
           },
           "dependencies": [
             {
@@ -186,7 +213,7 @@
           "cancelButtonProps": {},
           "cancelText": "关闭",
           "okButtonProps": {},
-          "okText": "复制区块模板链接去低代码编辑器中使用",
+          "okText": "复制区块模板 url 去低代码编辑器中使用",
           "classNames": {},
           "styles": {
             "body": {
@@ -391,6 +418,6 @@
         }
       }
     },
-    "x-designable-id": "0tnoptyf7z7"
+    "x-designable-id": "70zcdbjpg82"
   }
 }
