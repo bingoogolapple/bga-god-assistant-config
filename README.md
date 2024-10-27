@@ -64,7 +64,7 @@
 
 ### 2.1-安装扩展
 
-1、下载 [god-assistant-0.1.6.zip](https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/god-assistant-0.1.6.zip) 文件到本地，并解压
+1、下载 [god-assistant-0.1.7.zip](https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/god-assistant-0.1.7.zip) 文件到本地，并解压
 
 2、在 Chrome 或 Microsoft Edge 中打开「chrome://extensions/」
 
