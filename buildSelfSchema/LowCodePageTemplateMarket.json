@@ -106,7 +106,7 @@
               "x-component-props": {
                 "title": "操作",
                 "style": {},
-                "width": 625
+                "width": 655
               },
               "x-designable-id": "2pq9zkxbra6",
               "x-index": 1,
@@ -182,7 +182,7 @@
                   },
                   "x-validator": [],
                   "x-component-props": {
-                    "children": "复制页面模板内容去低代码编辑器中使用",
+                    "children": "复制页面模板 schema 去低代码编辑器中使用",
                     "target": "_blank",
                     "type": "primary"
                   },
@@ -213,7 +213,7 @@
           "cancelButtonProps": {},
           "cancelText": "关闭",
           "okButtonProps": {},
-          "okText": "复制页面模板内容去低代码编辑器中使用",
+          "okText": "复制页面模板 schema 去低代码编辑器中使用",
           "classNames": {},
           "styles": {
             "body": {
@@ -418,6 +418,6 @@
         }
       }
     },
-    "x-designable-id": "hug5551ksyn"
+    "x-designable-id": "70zcdbjpg82"
   }
 }
