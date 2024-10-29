@@ -7,8 +7,9 @@
   - [1.1-低码搭建插件页面](#11-低代码搭建插件页面)
   - [1.2-用户脚本管理](#12-用户脚本管理)
 - [2-安装和更新扩展](#2-安装和更新扩展)
-  - [2.1-安装扩展](#21-安装扩展)
-  - [2.2-更新扩展](#22-更新扩展)
+  - [2.1-从应用商店安装扩展](#21-从应用商店安装扩展)
+  - [2.2-通过 zip 包安装扩展](#22-通过-zip-包安装扩展)
+  - [2.3-更新扩展](#23-更新扩展)
 - [3-功能说明](#3-功能说明)
   - [3.1-使用低码搭建页面](#31-使用低码搭建页面)
   - [3.2-本扩展对外暴露的浏览器接口](#32-本扩展对外暴露的浏览器接口)
@@ -62,7 +63,12 @@
 
 ## 2-安装和更新扩展
 
-### 2.1-安装扩展
+### 2.1-从应用商店安装扩展
+
+- Chrome 浏览器请 [从 Chrome 应用商店安装](https://chromewebstore.google.com/detail/%E4%B8%8A%E5%B8%9D%E5%B0%8F%E5%8A%A9%E6%89%8B/lgidjfclkbjgbjfbebecgapobjddolbd)
+- Edge 浏览器请 [从 Edge 应用商店安装](https://microsoftedge.microsoft.com/addons/detail/%E4%B8%8A%E5%B8%9D%E5%B0%8F%E5%8A%A9%E6%89%8B/badfbconebmibddbkhlnmljjagcfkgdo)
+
+### 2.2-通过 zip 包安装扩展
 
 1、下载 [god-assistant-0.1.7.zip](https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/god-assistant-0.1.7.zip) 文件到本地，并解压
 
@@ -82,7 +88,7 @@
 
 <img width="200" src="./images/ga-fixed.png">
 
-### 2.2-更新扩展
+### 2.3-更新扩展
 
 1、当扩展发布新版本后，用户在打开当前扩展的任意页面时，都会展示如下所示的升级提示弹窗，用户只需选择之前安装扩展时选择的安装目录即可升级扩展来使用最新功能
 
