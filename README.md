@@ -65,8 +65,9 @@
 
 ### 2.1-从应用商店安装扩展
 
-- Chrome 浏览器请 [从 Chrome 应用商店安装](https://chromewebstore.google.com/detail/%E4%B8%8A%E5%B8%9D%E5%B0%8F%E5%8A%A9%E6%89%8B/lgidjfclkbjgbjfbebecgapobjddolbd)
-- Edge 浏览器请 [从 Edge 应用商店安装](https://microsoftedge.microsoft.com/addons/detail/%E4%B8%8A%E5%B8%9D%E5%B0%8F%E5%8A%A9%E6%89%8B/badfbconebmibddbkhlnmljjagcfkgdo)
+- Chrome 浏览器请 [从 Chrome 应用商店安装](https://chromewebstore.google.com/detail/lgidjfclkbjgbjfbebecgapobjddolbd)
+  - Chrome 应用商店里最新版本为阉割版，很多功能无法使用，非阉割版还在审核中，推荐先下载 [god-assistant-chrome-0.1.7.crx](https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/god-assistant-chrome-0.1.7.crx) 这个非阉割版进行安装，方便后续审核通过后也能自动更新到应用商店最新版本
+- Edge 浏览器请 [从 Edge 应用商店安装](https://microsoftedge.microsoft.com/addons/detail/badfbconebmibddbkhlnmljjagcfkgdo)
 
 ### 2.2-通过 zip 包安装扩展
 
