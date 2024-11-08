@@ -9,7 +9,7 @@
 - [2-安装和更新扩展](#2-安装和更新扩展)
   - [2.1-从应用商店安装扩展](#21-从应用商店安装扩展)
   - [2.2-通过 zip 包安装扩展](#22-通过-zip-包安装扩展)
-  - [2.3-更新扩展](#23-更新扩展)
+  - [2.3-通过 zip 包更新扩展](#23-通过-zip-包更新扩展)
 - [3-功能说明](#3-功能说明)
   - [3.1-使用低码搭建页面](#31-使用低码搭建页面)
   - [3.2-本扩展对外暴露的浏览器接口](#32-本扩展对外暴露的浏览器接口)
@@ -66,9 +66,6 @@
 ### 2.1-从应用商店安装扩展
 
 - Chrome 浏览器请 [从 Chrome 应用商店安装](https://chromewebstore.google.com/detail/lgidjfclkbjgbjfbebecgapobjddolbd)
-  - Chrome 应用商店里最新版本为阉割版，很多功能无法使用，非阉割版还在审核中，推荐先下载 [god-assistant-chrome-0.1.7.crx](https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/god-assistant-chrome-0.1.7.crx) 这个非阉割版进行安装，方便后续审核通过后也能自动更新到应用商店最新版本
-  - 在 Chrome 中打开「chrome://extensions/」
-  - 拖拽 god-assistant-chrome-0.1.7.crx 文件到扩展程序页面即可完成安装
 - Edge 浏览器请 [从 Edge 应用商店安装](https://microsoftedge.microsoft.com/addons/detail/badfbconebmibddbkhlnmljjagcfkgdo)
 
 ### 2.2-通过 zip 包安装扩展
@@ -91,7 +88,7 @@
 
 <img width="200" src="./images/ga-fixed.png">
 
-### 2.3-更新扩展
+### 2.3-通过 zip 包更新扩展
 
 1、当扩展发布新版本后，用户在打开当前扩展的任意页面时，都会展示如下所示的升级提示弹窗，用户只需选择之前安装扩展时选择的安装目录即可升级扩展来使用最新功能
 
