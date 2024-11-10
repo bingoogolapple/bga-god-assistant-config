@@ -15,9 +15,16 @@
     },
     {
         "name": "新标签页-搜索（拖拽各个搜索按钮）+多邻国学习",
-        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/lowCodePageTemplate/newtab-duo-lin-guo/index.json",
+        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/lowCodePageTemplate/newtab-search-drag-duo-lin-guo/index.json",
         "images": [
-            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/lowCodePageTemplate/newtab-duo-lin-guo/1.png"
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/lowCodePageTemplate/newtab-search-drag-duo-lin-guo/1.png"
+        ]
+    },
+    {
+        "name": "新标签页-搜索（拖拽各个搜索按钮）+多邻国学习+书签卡片",
+        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/lowCodePageTemplate/newtab-search-drag-duo-lin-guo-bookmark-card/index.json",
+        "images": [
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/lowCodePageTemplate/newtab-search-drag-duo-lin-guo-bookmark-card/1.png"
         ]
     }
 ]
