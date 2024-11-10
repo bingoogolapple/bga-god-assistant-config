@@ -584,6 +584,7 @@
         },
         "name": "studyGrid",
         "x-designable-id": "gruadd846ex",
+        "x-index": 3,
         "properties": {
           "de7xqyabrw6": {
             "type": "void",
@@ -593,7 +594,7 @@
             "x-validator": [],
             "x-component-props": {},
             "properties": {
-              "duoLinGuoCard": {
+              "duoLinGuoCardDiv": {
                 "type": "void",
                 "x-component": "Div",
                 "x-component-props": {
@@ -603,7 +604,7 @@
                     "borderRadius": "20px 20px 20px 20px"
                   }
                 },
-                "name": "duoLinGuoCard",
+                "name": "duoLinGuoCardDiv",
                 "x-designable-id": "44veb277kyt",
                 "x-index": 0,
                 "properties": {
@@ -874,7 +875,7 @@
             "x-designable-id": "7lww9d1ufcx",
             "x-index": 1,
             "properties": {
-              "customWordCard": {
+              "customWordCardDiv": {
                 "type": "void",
                 "x-component": "Div",
                 "x-component-props": {
@@ -884,7 +885,7 @@
                     "borderRadius": "20px 20px 20px 20px"
                   }
                 },
-                "name": "customWordCard",
+                "name": "customWordCardDiv",
                 "x-designable-id": "0gwibpjhtb4",
                 "x-index": 0,
                 "properties": {
@@ -1240,8 +1241,7 @@
               }
             }
           }
-        },
-        "x-index": 3
+        }
       },
       "bookmark1": {
         "type": "object",
