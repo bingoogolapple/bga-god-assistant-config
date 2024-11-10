@@ -1260,11 +1260,10 @@
         }
       },
       "bookmark1": {
-        "type": "void",
-        "x-component": "Div",
-        "x-component-props": {},
+        "type": "object",
+        "x-validator": [],
         "name": "bookmark1",
-        "x-designable-id": "zhtrygb4ie4",
+        "x-designable-id": "fvkxme8ttq0",
         "x-index": 5,
         "properties": {
           "bookmarkCardDiv": {
@@ -1553,7 +1552,7 @@
                           "display": "flex",
                           "flexDirection": "row",
                           "alignItems": "center",
-                          "padding": "8px 8px 8px 8px"
+                          "padding": "8px 10px 8px 10px"
                         }
                       },
                       "x-reactions": {
