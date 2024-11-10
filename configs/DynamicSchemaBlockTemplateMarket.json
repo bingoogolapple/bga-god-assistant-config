@@ -1,5 +1,13 @@
 [
     {
+        "name": "书签卡片",
+        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/bookmark-card/index.json",
+        "images": [
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/bookmark-card/1.png",
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/bookmark-card/2.png"
+        ]
+    },
+    {
         "name": "多邻国单元指南学习卡片",
         "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/duo-ling-guo/index.json",
         "images": [
