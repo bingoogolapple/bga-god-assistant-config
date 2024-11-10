@@ -4,7 +4,7 @@
     "wrapperCol": 12,
     "style": {
       "height": "100vh",
-      "backgroundImage": "url(https://images.pexels.com/photos/957085/milky-way-starry-sky-night-sky-star-957085.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)",
+      "backgroundImage": "url(https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/lowCodePageBackground/1.jpg)",
       "backgroundRepeat": "no-repeat",
       "backgroundSize": "cover",
       "backgroundPosition": "center",
