@@ -635,19 +635,31 @@
             "x-designable-id": "7lww9d1ufcx",
             "x-index": 1,
             "properties": {
-              "zqbhftzs1vr": {
+              "customWordCardDiv": {
                 "type": "void",
                 "x-component": "Div",
                 "x-component-props": {
+                  "className": "customWordCardDiv",
                   "style": {
-                    "margin": "0px 0px 0px 0px",
                     "backgroundColor": "rgba(255,255,255,1)",
                     "borderRadius": "20px 20px 20px 20px"
                   }
                 },
-                "name": "zqbhftzs1vr",
+                "name": "customWordCardDiv",
                 "x-designable-id": "0gwibpjhtb4",
                 "x-index": 0,
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "$effect(() => {\n  const rootNode = document.querySelector(\".customWordCardDiv\")\n  if (rootNode) {\n    const element = rootNode.querySelector(\n      \".ant-formily-item-feedback-layout-loose\"\n    )\n    if (element) {\n      element.style.marginBottom = 0\n    }\n  }\n}, [])\n"
+                  }
+                },
                 "properties": {
                   "customWordCardTitleDiv": {
                     "type": "void",
@@ -1000,34 +1012,75 @@
                 }
               }
             }
+          },
+          "ri1936nll8k": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-designable-id": "ri1936nll8k",
+            "x-index": 2,
+            "properties": {
+              "jgzds7nxf5e": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
+                },
+                "x-designable-id": "jgzds7nxf5e",
+                "x-index": 0
+              }
+            }
+          },
+          "dnppxc90old": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-designable-id": "dnppxc90old",
+            "x-index": 3,
+            "properties": {
+              "xa7mzkr6lpw": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
+                },
+                "x-designable-id": "xa7mzkr6lpw",
+                "x-index": 0
+              }
+            }
+          },
+          "lp3qa6qs3pa": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 2
+            },
+            "x-designable-id": "lp3qa6qs3pa",
+            "x-index": 4,
+            "properties": {
+              "3qq9fccw5ga": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
+                },
+                "x-designable-id": "3qq9fccw5ga",
+                "x-index": 0
+              }
+            }
           }
         }
-      },
-      "jgzds7nxf5e": {
-        "type": "void",
-        "x-component": "DynamicSchemaBlock",
-        "x-component-props": {
-          "schema": {},
-          "cacheRemoteSchema": true,
-          "valueType": "object",
-          "reset": true,
-          "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
-        },
-        "x-designable-id": "jgzds7nxf5e",
-        "x-index": 5
-      },
-      "xa7mzkr6lpw": {
-        "type": "void",
-        "x-component": "DynamicSchemaBlock",
-        "x-component-props": {
-          "schema": {},
-          "cacheRemoteSchema": true,
-          "valueType": "object",
-          "reset": true,
-          "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
-        },
-        "x-designable-id": "xa7mzkr6lpw",
-        "x-index": 6
       },
       "personalBookmarkList": {
         "type": "array",
@@ -1051,7 +1104,7 @@
             "run": "// TODO 改为你个人的远程书签配置链接\nconst configUrl = \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/personalBookmarkConfig.json\"\n\n\n\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
           }
         },
-        "x-index": 7,
+        "x-index": 5,
         "items": {
           "type": "object",
           "x-validator": [],
@@ -1168,7 +1221,7 @@
             "run": "// TODO 改为你们小组的远程书签配置链接\nconst configUrl =\n  \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/groupBookmarkConfig.json\"\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
           }
         },
-        "x-index": 8,
+        "x-index": 6,
         "items": {
           "type": "object",
           "x-validator": [],
@@ -1266,6 +1319,6 @@
         }
       }
     },
-    "x-designable-id": "hsc1upk1vk0"
+    "x-designable-id": "kkjmfq2z9b3"
   }
 }
