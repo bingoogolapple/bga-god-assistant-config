@@ -1,329 +1,44 @@
 {
-  "type": "void",
-  "x-component": "Div",
-  "x-component-props": {
+  "form": {
+    "labelCol": 6,
+    "wrapperCol": 12,
     "style": {
-      "backgroundColor": "rgba(255,255,255,1)",
-      "borderRadius": "20px 20px 20px 20px"
+      "height": "100vh",
+      "backgroundImage": "url(https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/lowCodePageBackground/1.jpg)",
+      "backgroundRepeat": "no-repeat",
+      "backgroundSize": "cover",
+      "backgroundPosition": "center",
+      "backgroundAttachment": "fixed",
+      "overflow": "scroll"
     }
   },
-  "name": "bookmarkCardDiv",
-  "x-reactions": {
-    "dependencies": [
-      {
-        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-        "property": "value",
-        "type": "any"
-      }
-    ],
-    "fulfill": {
-      "run": "const rootEntire = $self.address.entire\n// 书签列表持久化缓存的 key\nconst cacheKeyBookmarkList = `${rootEntire}BookmarkList`\n// 书签样式持久化缓存的 key\nconst cacheKeyBookmarkStyle = `${rootEntire}BookmarkStyle`\n// 默认书签样式\nconst defaultBookmarkStyle = \"verticalImgAndText\"\n\n$self.state = $observable({\n  bookmarkStyle: \"\",\n})\n\n// 默认书签列表\nconst defualtList = [\n  {\n    id: Date.now(),\n    title: \"React\",\n    url: \"https://zh-hans.react.dev/learn\",\n  },\n  {\n    id: Date.now() + 1,\n    title: \"Vue\",\n    url: \"https://cn.vuejs.org/v2/guide/index.html\",\n  },\n]\n\n// 获取书签样式\n$self.getBookmarkStyle = async () => {\n  if ($self.state.bookmarkStyle) {\n    // 返回内存缓存的书签样式\n    return $self.state.bookmarkStyle\n  }\n\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeyBookmarkStyle)\n  } catch (e) {\n    $logger.info(\"获取书签样式失败\", e)\n  }\n\n  $self.state.bookmarkStyle = res || defaultBookmarkStyle\n  return $self.state.bookmarkStyle\n}\n\n// 修改书签样式\n$self.updateBookmarkStyle = async (bookmarkStyle) => {\n  try {\n    await $chrome.localStorage.setItem(cacheKeyBookmarkStyle, bookmarkStyle)\n\n    $self.state.bookmarkStyle = bookmarkStyle\n\n    // $self.refreshBookmarkListAndTable()\n  } catch (e) {\n    $logger.info(\"修改书签数据失败\", e)\n  }\n}\n\n// 展示书签管理对话框\n$self.showBookmarkManageDialog = () => {\n  const bookmarkManageDialog = $self\n    .query(`${rootEntire}.bookmarkManageDialog`)\n    .take()\n  bookmarkManageDialog.setComponentProps({\n    open: true,\n  })\n}\n\n// 展示添加或书签对话框\n$self.showAddOrUpdateBookmarkDialog = (bookmark) => {\n  const addBookmarkDialog = $self\n    .query(`${rootEntire}.addBookmarkDialog`)\n    .take()\n  addBookmarkDialog.value = {\n    ...(bookmark || {}),\n  }\n  addBookmarkDialog.setComponentProps({\n    open: true,\n    title: `${bookmark ? \"修改\" : \"添加\"}书签`,\n  })\n}\n\n// 添加或修改书签\n$self.addOrUpdateBookmark = async (bookmark) => {\n  const list = await $self.fetchBookmarkList()\n\n  if (bookmark.id) {\n    // 修改\n    const index = list.findIndex((item) => item.id === bookmark.id)\n    list[index] = bookmark\n  } else {\n    // 添加\n    bookmark.id = Date.now()\n    list.push(bookmark)\n  }\n\n  try {\n    await $chrome.localStorage.setItem(\n      cacheKeyBookmarkList,\n      JSON.stringify(list)\n    )\n\n    $self.refreshBookmarkListAndTable()\n  } catch (e) {\n    $logger.info(`${bookmark.id ? \"修改\" : \"添加\"}书签数据失败`, e)\n  }\n}\n\n// 删除书签\n$self.deleteBookmark = async (bookmark) => {\n  let list = await $self.fetchBookmarkList()\n  list = list.filter((item) => item.id !== bookmark.id)\n  $self.saveBookmarkList(list)\n}\n\n// 往前移动书签\n$self.moveUpBookmark = async (bookmark) => {\n  let list = await $self.fetchBookmarkList()\n\n  const index = list.findIndex((item) => item.id === bookmark.id)\n  let preIndex = index - 1\n  if (preIndex === -1) {\n    // 已经是第一条，则和最后一条互换\n    preIndex = list.length - 1\n  }\n\n  const other = list[preIndex]\n  list[preIndex] = bookmark\n  list[index] = other\n  $self.saveBookmarkList(list)\n}\n\n// 往后移动书签\n$self.moveDownBookmark = async (bookmark) => {\n  let list = await $self.fetchBookmarkList()\n\n  const index = list.findIndex((item) => item.id === bookmark.id)\n  let nextIndex = index + 1\n  if (nextIndex === list.length) {\n    // 已经是最后一条，则和第一条互换\n    nextIndex = 0\n  }\n\n  const other = list[nextIndex]\n  list[nextIndex] = bookmark\n  list[index] = other\n\n  $self.saveBookmarkList(list)\n}\n\n// 保存书签列表数据\n$self.saveBookmarkList = async (bookmarkList) => {\n  try {\n    await $chrome.localStorage.setItem(\n      cacheKeyBookmarkList,\n      JSON.stringify(bookmarkList)\n    )\n\n    $self.refreshBookmarkListAndTable()\n  } catch (e) {\n    $logger.info(`保存书签列表数据失败`, e)\n  }\n}\n\n// 获取书签列表\n$self.fetchBookmarkList = async () => {\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeyBookmarkList)\n  } catch (e) {\n    $logger.info(\"获取书签列表失败\", e)\n    return []\n  }\n\n  if (!res) {\n    $self.saveBookmarkList(defualtList)\n    return defualtList\n  }\n\n  try {\n    const bookmarkCardData = JSON.parse(res) || []\n    console.log(\"bookmarkCardData\", bookmarkCardData)\n    return bookmarkCardData\n  } catch (e) {\n    $logger.info(\"解析书签列表数据失败\", e)\n    return []\n  }\n}\n\n// 刷新书签列表和管理表格\n$self.refreshBookmarkListAndTable = async () => {\n  const bookmarkCardData = await $self.fetchBookmarkList()\n\n  const bookmarkIteratorLayout = $self\n    .query(`${rootEntire}.bookmarkIteratorLayout`)\n    .take()\n  if (bookmarkIteratorLayout) {\n    // 先清空再重新赋值，负责书签图标不会更新\n    bookmarkIteratorLayout.value = []\n    bookmarkIteratorLayout.value = bookmarkCardData\n  }\n  window.bookmarkIteratorLayout = bookmarkIteratorLayout\n\n  const bookmarkTable = $self.query(`${rootEntire}.*.bookmarkTable`).take()\n  if (bookmarkTable) {\n    bookmarkTable.value = bookmarkCardData\n  }\n}\n\n// 先调用下获取书签样式方法，获取成功后再展示列表，方便后续快速获取\n$self.getBookmarkStyle().then(() => {\n  $self.refreshBookmarkListAndTable()\n})\n"
-    }
-  },
-  "properties": {
-    "bookmarkCardTitleDiv": {
-      "type": "void",
-      "x-component": "Div",
-      "x-component-props": {
-        "style": {
-          "display": "flex",
-          "flexDirection": "row",
-          "alignItems": "center",
-          "margin": "0px 0px 0px 0px",
-          "padding": "8px 10px 8px 10px",
-          "justifyContent": "space-between"
-        }
-      },
-      "x-designable-id": "ef8rd8lx2ae",
-      "x-index": 0,
-      "name": "bookmarkCardTitleDiv",
-      "properties": {
-        "bookmarkCardTitleLeftDiv": {
-          "type": "void",
-          "x-component": "Div",
-          "x-component-props": {
-            "style": {
-              "display": "flex",
-              "flexDirection": "row",
-              "alignItems": "center",
-              "margin": "0px 0px 0px 0px",
-              "padding": "0px 0px 0px 0px",
-              "justifyContent": "flex-start"
-            }
-          },
-          "x-designable-id": "7xpai0xh2by",
-          "x-index": 0,
-          "name": "bookmarkCardTitleLeftDiv",
-          "properties": {
-            "bookmarkCardTitle": {
-              "type": "string",
-              "x-component": "Text",
-              "x-validator": [],
-              "x-component-props": {
-                "content": "书签卡片",
-                "style": {
-                  "fontSize": "16px",
-                  "fontWeight": 700,
-                  "margin": "0px 0px 0px 0px"
-                }
-              },
-              "x-designable-id": "ct4vu8tgtt9",
-              "x-index": 0,
-              "name": "bookmarkCardTitle"
-            }
-          }
+  "schema": {
+    "type": "object",
+    "properties": {
+      "oiiql0q7pb0": {
+        "type": "void",
+        "x-component": "FloatButtonGroup",
+        "x-component-props": {
+          "icon": "MoreOutlined",
+          "type": "primary",
+          "trigger": "hover",
+          "insetInlineEnd": 48,
+          "insetBlockEnd": 48,
+          "badge": {}
         },
-        "bookmarkCardTitleRightDiv": {
-          "type": "void",
-          "x-component": "Div",
-          "x-component-props": {
-            "style": {
-              "display": "flex",
-              "flexDirection": "row"
-            }
-          },
-          "x-designable-id": "fl7mda7cb57",
-          "x-index": 1,
-          "name": "bookmarkCardTitleRightDiv",
-          "properties": {
-            "bookmarkManageBtn": {
-              "type": "string",
-              "x-component": "Button",
-              "x-reactions": {
-                "fulfill": {
-                  "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    rootField.showBookmarkManageDialog()\n  },\n})\n"
-                },
-                "dependencies": [
-                  {
-                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                    "property": "value",
-                    "type": "any"
-                  }
-                ]
-              },
-              "x-validator": [],
-              "x-component-props": {
-                "children": "",
-                "target": "_blank",
-                "icon": "SettingOutlined",
-                "type": "default",
-                "style": {
-                  "margin": "0px 0px 0px 12px"
-                }
-              },
-              "x-designable-id": "n37r496ojuf",
-              "x-index": 0,
-              "name": "bookmarkManageBtn"
-            },
-            "addBookmarkBtn": {
-              "type": "string",
-              "x-component": "Button",
-              "x-reactions": {
-                "fulfill": {
-                  "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    rootField.showAddOrUpdateBookmarkDialog(null)\n  },\n})\n"
-                },
-                "dependencies": [
-                  {
-                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                    "property": "value",
-                    "type": "any"
-                  }
-                ]
-              },
-              "x-validator": [],
-              "x-component-props": {
-                "children": "",
-                "target": "_blank",
-                "icon": "PlusCircleOutlined",
-                "type": "default",
-                "style": {
-                  "margin": "0px 0px 0px 12px"
-                }
-              },
-              "x-designable-id": "mxdoh90e2ns",
-              "x-index": 1,
-              "name": "addBookmarkBtn"
-            }
-          }
-        }
-      }
-    },
-    "669y7jb5ewz": {
-      "type": "string",
-      "x-component": "Divider",
-      "x-validator": [],
-      "x-component-props": {
-        "children": "",
-        "style": {
-          "margin": "4px 0px 4px 0px"
-        }
-      },
-      "x-designable-id": "669y7jb5ewz",
-      "x-index": 1
-    },
-    "bookmarkIteratorLayout": {
-      "type": "array",
-      "x-component": "IteratorLayout",
-      "x-component-props": {
-        "style": {
-          "display": "grid",
-          "gridTemplateColumns": "repeat(auto-fill, 120px)",
-          "justifyContent": "space-between",
-          "gap": "10px"
-        }
-      },
-      "default": [],
-      "x-validator": [],
-      "x-designable-id": "1vtkmhkh12h",
-      "x-index": 2,
-      "name": "bookmarkIteratorLayout",
-      "items": {
-        "type": "object",
-        "x-designable-id": "4emwz2uvq26",
-        "x-validator": [],
+        "x-designable-id": "oiiql0q7pb0",
+        "x-index": 0,
         "properties": {
-          "verticalImgAndText": {
-            "type": "void",
-            "x-component": "Div",
+          "utvm3pcabbi": {
+            "x-component": "FloatButton",
             "x-component-props": {
-              "style": {
-                "cursor": "pointer",
-                "display": "flex",
-                "flexDirection": "column",
-                "alignItems": "center",
-                "padding": "8px 0px 8px 0px"
-              }
-            },
-            "x-reactions": {
-              "fulfill": {
-                "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  $self.hidden = rootField.state.bookmarkStyle !== \"verticalImgAndText\"\n}, [rootField.state.bookmarkStyle])\n\n$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n})\n"
-              },
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "any"
-                }
-              ]
-            },
-            "x-designable-id": "4vj5d7ctp68",
-            "x-index": 0,
-            "name": "verticalImgAndText",
-            "properties": {
-              "icon": {
-                "type": "string",
-                "x-component": "Img",
-                "x-component-props": {
-                  "style": {
-                    "width": "40px",
-                    "height": "40px"
-                  },
-                  "objectFit": "contain"
-                },
-                "name": "icon",
-                "x-reactions": {
-                  "dependencies": [
-                    {
-                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                      "property": "value",
-                      "type": "any"
-                    }
-                  ],
-                  "fulfill": {
-                    "run": "$effect(() => {\n  // 获取迭代器布局中当前点击的条目数据\n  const row = $utils.getArrayFieldRow($self)\n  // 获取书签的图标地址\n  $utils.getBookmarkIconUrl(row.url, row.icon).then((iconUrl) => {\n    $props({\n      src: iconUrl,\n    })\n  })\n}, [])\n"
-                  }
-                },
-                "x-designable-id": "hko4p5bgxab",
-                "x-index": 0,
-                "x-validator": []
-              },
-              "title": {
-                "type": "string",
-                "x-component": "Text",
-                "name": "title",
-                "x-designable-id": "yvvkq8wv9sb",
-                "x-index": 1,
-                "x-validator": [],
-                "x-component-props": {}
-              }
-            }
-          },
-          "horizontalImgAndText": {
-            "type": "void",
-            "x-component": "Div",
-            "x-component-props": {
-              "style": {
-                "cursor": "pointer",
-                "display": "flex",
-                "flexDirection": "row",
-                "alignItems": "center",
-                "padding": "8px 10px 8px 10px"
-              }
-            },
-            "x-reactions": {
-              "fulfill": {
-                "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  $self.hidden = rootField.state.bookmarkStyle !== \"horizontalImgAndText\"\n}, [rootField.state.bookmarkStyle])\n\n$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n})\n"
-              },
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "any"
-                }
-              ]
-            },
-            "x-designable-id": "bt24ujfisqw",
-            "x-index": 1,
-            "name": "horizontalImgAndText",
-            "properties": {
-              "icon": {
-                "type": "string",
-                "x-component": "Img",
-                "x-component-props": {
-                  "style": {
-                    "width": "30px",
-                    "height": "30px",
-                    "margin": "0px 8px 0px 0px"
-                  },
-                  "objectFit": "contain"
-                },
-                "name": "icon",
-                "x-reactions": {
-                  "dependencies": [
-                    {
-                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                      "property": "value",
-                      "type": "any"
-                    }
-                  ],
-                  "fulfill": {
-                    "run": "$effect(() => {\n  // 获取迭代器布局中当前点击的条目数据\n  const row = $utils.getArrayFieldRow($self)\n  // 获取书签的图标地址\n  $utils.getBookmarkIconUrl(row.url, row.icon).then((iconUrl) => {\n    $props({\n      src: iconUrl,\n    })\n  })\n}, [])\n"
-                  }
-                },
-                "x-validator": [],
-                "x-designable-id": "f92u9kxq4nr",
-                "x-index": 0
-              },
-              "title": {
-                "type": "string",
-                "x-component": "Text",
-                "name": "title",
-                "x-component-props": {},
-                "x-designable-id": "3ry52koycu3",
-                "x-index": 1,
-                "x-validator": []
-              }
-            }
-          },
-          "title": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
+              "description": "",
+              "type": "primary",
+              "badge": {},
               "target": "_blank",
-              "type": "link",
-              "children": "超链接"
+              "icon": "EditFilled",
+              "tooltip": "编辑当前页面"
             },
-            "name": "title",
             "x-reactions": {
               "dependencies": [
                 {
@@ -333,281 +48,1256 @@
                 }
               ],
               "fulfill": {
-                "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  $self.hidden = rootField.state.bookmarkStyle !== \"onlyText\"\n}, [rootField.state.bookmarkStyle])\n\n$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n})\n"
+                "run": "$props({\n  onClick: () => {\n    // 编辑当前页面\n    $ga.editCurrentPage()\n  },\n})\n"
               }
             },
-            "x-designable-id": "8puit0com2w",
+            "x-designable-id": "utvm3pcabbi",
+            "x-index": 0
+          },
+          "3ce4pdz0w31": {
+            "x-component": "FloatButton",
+            "x-component-props": {
+              "description": "",
+              "type": "primary",
+              "insetInlineEnd": 24,
+              "insetBlockEnd": 48,
+              "badge": {},
+              "target": "_blank",
+              "icon": "SettingOutlined",
+              "tooltip": "低代码页面管理"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "any"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    // 低代码页面管理\n    $ga.lowCodePageManage()\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "3ce4pdz0w31",
+            "x-index": 1
+          }
+        }
+      },
+      "kicoo77eci2": {
+        "type": "string",
+        "x-component": "Text",
+        "x-component-props": {
+          "content": "使用上帝小助手，低代码搭建你的专属新标签页",
+          "mode": "normal",
+          "style": {
+            "display": "flex",
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "padding": "50px 0px 0px 0px",
+            "color": "rgba(255,255,255,1)",
+            "fontSize": "25px"
+          }
+        },
+        "x-designable-id": "kicoo77eci2",
+        "x-index": 1,
+        "x-validator": []
+      },
+      "keyword": {
+        "type": "string",
+        "title": "",
+        "x-decorator": "FormItem",
+        "x-component": "Input",
+        "x-validator": [],
+        "x-component-props": {
+          "placeholder": "请输入搜索内容，回车键默认必应搜索",
+          "style": {
+            "borderRadius": "100px 100px 100px 100px",
+            "height": "50px",
+            "padding": "0px 24px 0px 24px"
+          }
+        },
+        "x-decorator-props": {
+          "style": {
+            "margin": "50px 200px 24px 200px"
+          }
+        },
+        "name": "keyword",
+        "x-designable-id": "rxg79wd5801",
+        "x-index": 2,
+        "x-reactions": {
+          "dependencies": [
+            {
+              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+              "property": "value",
+              "type": "any"
+            }
+          ],
+          "fulfill": {
+            "run": "/**\n * 监听输入框回车事件\n **/\n$props({\n  onPressEnter: (e) => {\n    const keyword = e.target.value\n    if (!keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.bing.com/search?q=${keyword}`)\n  },\n})\n"
+          }
+        }
+      },
+      "u32x8afe7ch": {
+        "type": "void",
+        "x-component": "Space",
+        "x-component-props": {
+          "style": {
+            "display": "flex",
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "margin": "0px 0px 36px 0px",
+            "flexWrap": "wrap",
+            "padding": "0px 20px 0px 20px"
+          },
+          "size": 16
+        },
+        "x-designable-id": "u32x8afe7ch",
+        "x-index": 3,
+        "properties": {
+          "tboibt6om8a": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "百度",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.baidu.com/s?wd=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "tboibt6om8a",
+            "x-index": 0,
+            "x-validator": []
+          },
+          "fm6udn1cnac": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "必应",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.bing.com/search?q=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "fm6udn1cnac",
+            "x-index": 1,
+            "x-validator": []
+          },
+          "imvwv4bmyhp": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "谷歌",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    // 这种方式会被谷歌屏蔽\n    // window.open(`https://www.google.com/search?q=${$deps.keyword}`)\n\n    // 这种方式不会被谷歌屏蔽\n    $utils.openUrl(`https://www.google.com/search?q=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "imvwv4bmyhp",
             "x-index": 2,
+            "x-validator": []
+          },
+          "s89afxjqzwi": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "搜狗",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.sogou.com/web?query=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "s89afxjqzwi",
+            "x-index": 3,
+            "x-validator": []
+          },
+          "auwpbjskzgf": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "360",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.so.com/s?q=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "auwpbjskzgf",
+            "x-index": 4,
+            "x-validator": []
+          },
+          "w77t7yadgaz": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "掘金",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://juejin.cn/search?query=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "w77t7yadgaz",
+            "x-index": 5,
+            "x-validator": []
+          },
+          "erg6gyy9yor": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "npm",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.npmjs.com/search?q=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "erg6gyy9yor",
+            "x-index": 6,
+            "x-validator": []
+          },
+          "amu7medcqyl": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "bilibili",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: async () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://search.bilibili.com/all?keyword=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "amu7medcqyl",
+            "x-index": 7,
+            "x-validator": []
+          },
+          "wrtny56mfwr": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "YouTube",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: async () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.youtube.com/results?search_query=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "wrtny56mfwr",
+            "x-index": 8,
+            "x-validator": []
+          },
+          "5dh2ihtj1ky": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "抖音",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.douyin.com/search/${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "5dh2ihtj1ky",
+            "x-index": 9,
+            "x-validator": []
+          },
+          "wgj161v9vws": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "快手",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(\n      `https://www.kuaishou.com/search/video?searchKey=${$deps.keyword}`\n    )\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "wgj161v9vws",
+            "x-index": 10,
+            "x-validator": []
+          },
+          "6osrda7sw6i": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "小红书",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(\n      `https://www.xiaohongshu.com/search_result?keyword=${$deps.keyword}`\n    )\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "6osrda7sw6i",
+            "x-index": 11,
+            "x-validator": []
+          },
+          "hk2saak17bp": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "知乎",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(\n      `https://www.zhihu.com/search?type=content&q=${$deps.keyword}`\n    )\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "hk2saak17bp",
+            "x-index": 12,
+            "x-validator": []
+          },
+          "jsqc1tbianz": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "微博",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://s.weibo.com/weibo?q=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "jsqc1tbianz",
+            "x-index": 13,
+            "x-validator": []
+          },
+          "7n4ywikzf4u": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "Facebook",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.facebook.com/search/top/?q=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "7n4ywikzf4u",
+            "x-index": 14,
+            "x-validator": []
+          },
+          "7h1hcvxliyt": {
+            "type": "string",
+            "x-component": "Button",
+            "x-component-props": {
+              "target": "_blank",
+              "children": "X",
+              "type": "primary",
+              "size": "large"
+            },
+            "x-reactions": {
+              "dependencies": [
+                {
+                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                  "property": "value",
+                  "type": "string",
+                  "source": "keyword",
+                  "name": "keyword"
+                }
+              ],
+              "fulfill": {
+                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://x.com/search?q=${$deps.keyword}`)\n  },\n})\n"
+              }
+            },
+            "x-designable-id": "7h1hcvxliyt",
+            "x-index": 15,
             "x-validator": []
           }
         }
-      }
-    },
-    "bookmarkManageDialog": {
-      "type": "object",
-      "x-component": "Modal",
-      "x-reactions": {
-        "fulfill": {
-          "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self.componentProps.open = false\n  },\n})\n"
+      },
+      "khhftitma81": {
+        "type": "void",
+        "x-component": "FormGrid",
+        "x-validator": [],
+        "x-component-props": {
+          "columnGap": 16,
+          "rowGap": 16,
+          "minColumns": 2,
+          "maxColumns": 2,
+          "style": {
+            "margin": "16px 16px 16px 16px"
+          }
+        },
+        "x-designable-id": "khhftitma81",
+        "x-index": 4,
+        "properties": {
+          "de7xqyabrw6": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-designable-id": "de7xqyabrw6",
+            "x-index": 0,
+            "x-validator": [],
+            "x-component-props": {},
+            "properties": {
+              "6y2a1mo2amk": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/duo-ling-guo/index.json"
+                },
+                "x-designable-id": "6y2a1mo2amk",
+                "x-index": 0
+              }
+            }
+          },
+          "7lww9d1ufcx": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {},
+            "x-designable-id": "7lww9d1ufcx",
+            "x-index": 1,
+            "properties": {
+              "customWordCardDiv": {
+                "type": "void",
+                "x-component": "Div",
+                "x-component-props": {
+                  "style": {
+                    "backgroundColor": "rgba(255,255,255,1)",
+                    "borderRadius": "20px 20px 20px 20px"
+                  }
+                },
+                "name": "customWordCardDiv",
+                "x-designable-id": "0gwibpjhtb4",
+                "x-index": 0,
+                "properties": {
+                  "customWordCardTitleDiv": {
+                    "type": "void",
+                    "x-component": "Div",
+                    "x-component-props": {
+                      "style": {
+                        "display": "flex",
+                        "flexDirection": "row",
+                        "alignItems": "center",
+                        "margin": "0px 0px 0px 0px",
+                        "padding": "8px 10px 8px 10px",
+                        "justifyContent": "space-between"
+                      }
+                    },
+                    "x-designable-id": "rbzdiyic885",
+                    "x-index": 0,
+                    "name": "customWordCardTitleDiv",
+                    "properties": {
+                      "5s32ao6hsy3": {
+                        "type": "void",
+                        "x-component": "Div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "flexDirection": "row",
+                            "alignItems": "center",
+                            "margin": "0px 0px 0px 0px",
+                            "padding": "0px 0px 0px 0px",
+                            "justifyContent": "flex-start"
+                          }
+                        },
+                        "x-designable-id": "5s32ao6hsy3",
+                        "x-index": 0,
+                        "properties": {
+                          "3cpgoly1zjb": {
+                            "type": "string",
+                            "x-component": "Img",
+                            "x-validator": [],
+                            "x-component-props": {
+                              "src": "https://d35aaqx5ub95lt.cloudfront.net/images/pathCharacters/guidebook/939ebad747027f1a9d365e15fda3a4e1.svg",
+                              "style": {
+                                "width": "40px",
+                                "height": "50px"
+                              }
+                            },
+                            "x-designable-id": "3cpgoly1zjb",
+                            "x-index": 0
+                          },
+                          "customWordCardTitle": {
+                            "type": "string",
+                            "x-component": "Text",
+                            "x-validator": [],
+                            "x-component-props": {
+                              "content": "自定义单词卡片",
+                              "style": {
+                                "fontSize": "16px",
+                                "fontWeight": 700,
+                                "margin": "0px 0px 0px 4px"
+                              }
+                            },
+                            "x-designable-id": "iu5nkp6jf1q",
+                            "x-index": 1,
+                            "x-reactions": {
+                              "dependencies": [
+                                {
+                                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                  "property": "value",
+                                  "type": "any"
+                                }
+                              ],
+                              "fulfill": {
+                                "run": ""
+                              }
+                            },
+                            "name": "customWordCardTitle"
+                          }
+                        }
+                      },
+                      "addCustomWordBtn": {
+                        "type": "string",
+                        "x-component": "Button",
+                        "x-reactions": {
+                          "fulfill": {
+                            "run": "$props({\n  onClick: () => {\n    const addCustomWordDialog = $self.query(\"addCustomWordDialog\").take()\n    addCustomWordDialog.value = {}\n    addCustomWordDialog.setComponentProps({\n      open: true,\n      title: \"添加自定义单词\",\n    })\n  },\n})\n"
+                          },
+                          "dependencies": [
+                            {
+                              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                              "property": "value",
+                              "type": "any"
+                            }
+                          ]
+                        },
+                        "x-validator": [],
+                        "x-component-props": {
+                          "children": "",
+                          "target": "_blank",
+                          "icon": "PlusCircleOutlined",
+                          "type": "default"
+                        },
+                        "x-designable-id": "ip73usf50ot",
+                        "x-index": 1,
+                        "name": "addCustomWordBtn"
+                      }
+                    }
+                  },
+                  "thsg0ktdovs": {
+                    "type": "string",
+                    "x-component": "Divider",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "",
+                      "style": {
+                        "margin": "4px 0px 4px 0px"
+                      }
+                    },
+                    "x-designable-id": "thsg0ktdovs",
+                    "x-index": 1
+                  },
+                  "customWordTable": {
+                    "type": "array",
+                    "x-decorator": "FormItem",
+                    "x-component": "ArrayTable",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "bordered": false,
+                      "showHeader": true,
+                      "tableLayout": "fixed",
+                      "style": {
+                        "margin": "0px 10px 0px 10px"
+                      }
+                    },
+                    "x-decorator-props": {},
+                    "x-reactions": {
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ],
+                      "fulfill": {
+                        "run": "const cacheKeyCustomWordCardData = \"customWordCardData\"\n\n// 展示页面内通知和系统通知\nconst sendNotification = (item) => {\n  $message.success(`${item.learningLanguage} ${item.fromLanguage}`)\n\n  // 创建系统通知\n  $chrome.notifications.create(\n    null,\n    {\n      type: \"basic\",\n      title: item.learningLanguage,\n      message: item.fromLanguage,\n      iconUrl:\n        \"https://d35aaqx5ub95lt.cloudfront.net/images/pathCharacters/guidebook/939ebad747027f1a9d365e15fda3a4e1.svg\",\n    },\n    $chrome.proxy((notificationId) => {\n      // 延迟 6 秒清除系统通知\n      setTimeout(() => {\n        $chrome.notifications.clear(notificationId)\n      }, 6000)\n    })\n  )\n}\n\n// 添加或修改自定义单词\n$self.addOrUpdateCustomWord = async (data) => {\n  const list = [...$self.value]\n\n  if (data.id) {\n    // 修改\n    const index = list.findIndex((item) => item.id === data.id)\n    list[index] = data\n  } else {\n    // 添加\n    data.id = Date.now()\n    list.push(data)\n  }\n\n  try {\n    await $chrome.localStorage.setItem(\n      cacheKeyCustomWordCardData,\n      JSON.stringify(list)\n    )\n\n    $self.refreshCustomWordTable()\n  } catch (e) {\n    $logger.info(`${data.id ? \"修改\" : \"添加\"}自定义单词数据失败`, e)\n  }\n}\n\n// 获取自定义单词列表\n$self.fetchCustomWordList = async () => {\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeyCustomWordCardData)\n  } catch (e) {\n    $logger.info(\"获取自定义单词列表失败\", e)\n    return []\n  }\n\n  if (!res) {\n    return []\n  }\n\n  try {\n    const customWordCardData = JSON.parse(res) || []\n    return customWordCardData\n  } catch (e) {\n    $logger.info(\"解析自定义单词列表数据失败\", e)\n    return []\n  }\n}\n\n// 保存自定义单词列表数据\n$self.saveCustomWordList = async () => {\n  const list = $self.value\n  try {\n    await $chrome.localStorage.setItem(\n      cacheKeyCustomWordCardData,\n      JSON.stringify(list)\n    )\n  } catch (e) {\n    $logger.info(`保存自定义单词列表数据失败`, e)\n  }\n}\n\n// 刷新自定义单词列表\n$self.refreshCustomWordTable = async () => {\n  const customWordCardData = await $self.fetchCustomWordList()\n  $self.value = customWordCardData\n\n  if (customWordCardData.length > 0) {\n    const randomIndex = parseInt(Math.random() * customWordCardData.length)\n    const randomItem = customWordCardData[randomIndex]\n    sendNotification(randomItem)\n  }\n}\n\n$self.refreshCustomWordTable()\n"
+                      }
+                    },
+                    "x-designable-id": "fgoj0jwud2k",
+                    "x-index": 2,
+                    "name": "customWordTable",
+                    "items": {
+                      "type": "object",
+                      "x-designable-id": "101atc56jq0",
+                      "x-validator": [],
+                      "properties": {
+                        "e7o9x7nsodu": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "学的语言"
+                          },
+                          "x-designable-id": "e7o9x7nsodu",
+                          "x-index": 0,
+                          "properties": {
+                            "learningLanguage": {
+                              "type": "string",
+                              "x-component": "Text",
+                              "x-validator": [],
+                              "x-component-props": {},
+                              "name": "learningLanguage",
+                              "x-designable-id": "gnt5jlp82b4",
+                              "x-index": 0
+                            }
+                          }
+                        },
+                        "grmu00lg07i": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "我的语言"
+                          },
+                          "x-designable-id": "grmu00lg07i",
+                          "x-index": 1,
+                          "properties": {
+                            "fromLanguage": {
+                              "type": "string",
+                              "x-component": "Text",
+                              "x-validator": [],
+                              "x-component-props": {},
+                              "name": "fromLanguage",
+                              "x-designable-id": "t5u6hns1eit",
+                              "x-index": 0
+                            }
+                          }
+                        },
+                        "spznivuol6h": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "操作",
+                            "width": 140
+                          },
+                          "x-designable-id": "spznivuol6h",
+                          "x-index": 2,
+                          "properties": {
+                            "2qgf0wuqszm": {
+                              "type": "void",
+                              "x-component": "ArrayTable.Remove",
+                              "x-designable-id": "2qgf0wuqszm",
+                              "x-index": 0,
+                              "x-reactions": {
+                                "dependencies": [
+                                  {
+                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                    "property": "value",
+                                    "type": "any"
+                                  }
+                                ],
+                                "fulfill": {
+                                  "run": "$props({\n  onClick: () => {\n    setTimeout(() => {\n      $self.query(\"customWordTable\").take().saveCustomWordList()\n    }, 1000)\n  },\n})\n"
+                                }
+                              }
+                            },
+                            "5jlo6godtyh": {
+                              "type": "void",
+                              "x-component": "ArrayTable.MoveDown",
+                              "x-designable-id": "5jlo6godtyh",
+                              "x-index": 1,
+                              "x-reactions": {
+                                "dependencies": [
+                                  {
+                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                    "property": "value",
+                                    "type": "any"
+                                  }
+                                ],
+                                "fulfill": {
+                                  "run": "$props({\n  onClick: () => {\n    setTimeout(() => {\n      $self.query(\"customWordTable\").take().saveCustomWordList()\n    }, 1000)\n  },\n})\n"
+                                }
+                              }
+                            },
+                            "9gmudf0wapd": {
+                              "type": "void",
+                              "x-component": "ArrayTable.MoveUp",
+                              "x-designable-id": "9gmudf0wapd",
+                              "x-index": 2,
+                              "x-reactions": {
+                                "dependencies": [
+                                  {
+                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                    "property": "value",
+                                    "type": "any"
+                                  }
+                                ],
+                                "fulfill": {
+                                  "run": "$props({\n  onClick: () => {\n    setTimeout(() => {\n      $self.query(\"customWordTable\").take().saveCustomWordList()\n    }, 1000)\n  },\n})\n"
+                                }
+                              }
+                            },
+                            "rgozpm5z924": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    const addCustomWordDialog = $self.query(\"addCustomWordDialog\").take()\n    addCustomWordDialog.value = {\n      ...row,\n    }\n    addCustomWordDialog.setComponentProps({\n      open: true,\n      title: \"修改自定义单词\",\n    })\n  },\n})\n"
+                                },
+                                "dependencies": [
+                                  {
+                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                    "property": "value",
+                                    "type": "any"
+                                  }
+                                ]
+                              },
+                              "x-validator": [],
+                              "x-component-props": {
+                                "children": "",
+                                "target": "_blank",
+                                "icon": "EditOutlined",
+                                "style": {
+                                  "margin": "0px 0px 0px 6px"
+                                }
+                              },
+                              "x-designable-id": "rgozpm5z924",
+                              "x-index": 3
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "addCustomWordDialog": {
+                    "type": "object",
+                    "x-component": "Modal",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self\n      .validate() // 校验\n      .then(async () => {\n        const customWordForm = $self.value\n        $logger.info(\"$self.value\", customWordForm)\n\n        $self\n          .query(\"customWordTable\")\n          .take()\n          .addOrUpdateCustomWord({\n            ...customWordForm,\n          })\n\n        // 关闭当前对话框\n        $self.componentProps.open = false\n      })\n      .catch((e) => {\n        $logger.info(\"表单校验失败\", e)\n      })\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
+                    },
+                    "x-component-props": {
+                      "cancelButtonProps": {},
+                      "cancelText": "取消",
+                      "okButtonProps": {},
+                      "okText": "确定",
+                      "classNames": {},
+                      "styles": {},
+                      "title": "添加自定义单词"
+                    },
+                    "name": "addCustomWordDialog",
+                    "x-designable-id": "zh91a19h98u",
+                    "x-index": 3,
+                    "properties": {
+                      "learningLanguage": {
+                        "type": "string",
+                        "title": "学的语言",
+                        "x-decorator": "FormItem",
+                        "x-component": "Input",
+                        "x-validator": [],
+                        "x-component-props": {
+                          "placeholder": "请输入所学语言的单词"
+                        },
+                        "x-decorator-props": {},
+                        "name": "learningLanguage",
+                        "required": true,
+                        "x-designable-id": "ivvx1q89d4o",
+                        "x-index": 0
+                      },
+                      "fromLanguage": {
+                        "type": "string",
+                        "title": "我的语言",
+                        "x-decorator": "FormItem",
+                        "x-component": "Input",
+                        "x-validator": [],
+                        "x-component-props": {
+                          "placeholder": "请输入单词对应的我的语言"
+                        },
+                        "x-decorator-props": {},
+                        "required": true,
+                        "name": "fromLanguage",
+                        "x-designable-id": "syaa2ij9lre",
+                        "x-index": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "ri1936nll8k": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-designable-id": "ri1936nll8k",
+            "x-index": 2,
+            "properties": {
+              "jgzds7nxf5e": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
+                },
+                "x-designable-id": "jgzds7nxf5e",
+                "x-index": 0
+              }
+            }
+          },
+          "dnppxc90old": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-designable-id": "dnppxc90old",
+            "x-index": 3,
+            "properties": {
+              "xa7mzkr6lpw": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
+                },
+                "x-designable-id": "xa7mzkr6lpw",
+                "x-index": 0
+              }
+            }
+          },
+          "lp3qa6qs3pa": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 2
+            },
+            "x-designable-id": "lp3qa6qs3pa",
+            "x-index": 4,
+            "properties": {
+              "3qq9fccw5ga": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
+                },
+                "x-designable-id": "3qq9fccw5ga",
+                "x-index": 0
+              }
+            }
+          }
         }
       },
-      "x-component-props": {
-        "cancelButtonProps": {
-          "hidden": true
+      "personalBookmarkList": {
+        "type": "array",
+        "x-component": "IteratorLayout",
+        "x-component-props": {
+          "style": {}
         },
-        "cancelText": "取消",
-        "okButtonProps": {},
-        "okText": "确定",
-        "classNames": {},
-        "styles": {},
-        "title": "书签管理",
-        "width": 700
-      },
-      "name": "bookmarkManageDialog",
-      "x-designable-id": "ou6trmuiigb",
-      "x-index": 3,
-      "properties": {
-        "bookmarkStyle": {
-          "title": "书签样式",
-          "x-decorator": "FormItem",
-          "x-component": "Select",
-          "x-validator": [],
-          "x-component-props": {},
-          "x-decorator-props": {},
-          "name": "bookmarkStyle",
-          "enum": [
+        "default": [],
+        "x-validator": [],
+        "name": "personalBookmarkList",
+        "x-designable-id": "kkv73tvdfet",
+        "x-reactions": {
+          "dependencies": [
             {
-              "children": [],
-              "label": "纵向图文",
-              "value": "verticalImgAndText"
-            },
-            {
-              "children": [],
-              "label": "横向图文",
-              "value": "horizontalImgAndText"
-            },
-            {
-              "children": [],
-              "label": "纯文本",
-              "value": "onlyText"
+              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+              "property": "value",
+              "type": "any"
             }
           ],
-          "x-reactions": {
-            "dependencies": [
-              {
-                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                "property": "value",
-                "type": "any"
-              }
-            ],
-            "fulfill": {
-              "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n// 回填数据\n$self.value = rootField.state.bookmarkStyle\n\n$props({\n  // 监听到书签样式变更\n  onChange: async (bookmarkStyle) => {\n    // 更新书签样式\n    await rootField.updateBookmarkStyle(bookmarkStyle)\n  },\n})\n"
-            }
-          },
-          "x-designable-id": "uw3sr5huolc",
-          "x-index": 0
+          "fulfill": {
+            "run": "// TODO 改为你个人的远程书签配置链接\nconst configUrl = \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/personalBookmarkConfig.json\"\n\n\n\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
+          }
         },
-        "bookmarkTable": {
-          "type": "array",
-          "x-decorator": "FormItem",
-          "x-component": "ArrayTable",
+        "x-index": 5,
+        "items": {
+          "type": "object",
           "x-validator": [],
-          "x-component-props": {
-            "bordered": false,
-            "showHeader": true,
-            "tableLayout": "fixed",
-            "style": {
-              "margin": "0px 10px 0px 10px"
-            }
-          },
-          "x-decorator-props": {},
-          "x-reactions": {
-            "dependencies": [
-              {
-                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                "property": "value",
-                "type": "any"
+          "name": "",
+          "x-designable-id": "8k6a3k1i88b",
+          "properties": {
+            "v0vzpxxa1ch": {
+              "type": "void",
+              "x-component": "Card",
+              "x-component-props": {
+                "title": "个人链接分组名称",
+                "style": {
+                  "margin": "16px 16px 16px 16px"
+                }
+              },
+              "x-designable-id": "v0vzpxxa1ch",
+              "x-index": 0,
+              "x-reactions": {
+                "dependencies": [
+                  {
+                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                    "property": "value",
+                    "type": "any"
+                  }
+                ],
+                "fulfill": {
+                  "state": {},
+                  "run": "$props({\n  title: $utils.getArrayFieldRowAndIndex($self, \"IteratorLayout\").row.title,\n})"
+                }
+              },
+              "properties": {
+                "list": {
+                  "type": "array",
+                  "x-component": "IteratorLayout",
+                  "x-component-props": {
+                    "style": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "flexWrap": "wrap"
+                    }
+                  },
+                  "x-validator": [],
+                  "x-designable-id": "7wsr7ntu5hd",
+                  "x-index": 0,
+                  "default": [],
+                  "name": "list",
+                  "x-reactions": {
+                    "dependencies": [
+                      {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                      }
+                    ],
+                    "fulfill": {
+                      "run": ""
+                    }
+                  },
+                  "items": {
+                    "type": "object",
+                    "x-designable-id": "k1l0c196bpp",
+                    "x-validator": [],
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "x-component": "Button",
+                        "x-component-props": {
+                          "target": "_blank",
+                          "type": "link"
+                        },
+                        "name": "title",
+                        "x-designable-id": "pqtwpvyxsiw",
+                        "x-index": 0,
+                        "x-reactions": {
+                          "dependencies": [
+                            {
+                              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                              "property": "value",
+                              "type": "any"
+                            }
+                          ],
+                          "fulfill": {
+                            "run": "$props({\n  onClick: () => {\n    // 获取迭代器布局中当前点击的条目数据和索引\n    const { row } = $utils.getArrayFieldRowAndIndex($self, \"IteratorLayout\")\n    $chrome.tabs.create({\n      url: row.url,\n    })\n  },\n})\n"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
-            ],
-            "fulfill": {
-              "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\nrootField.refreshBookmarkListAndTable()\n"
             }
-          },
-          "x-designable-id": "iw0eqd0q2w3",
-          "x-index": 1,
-          "name": "bookmarkTable",
-          "items": {
-            "type": "object",
-            "x-designable-id": "1b9rl4quqgn",
-            "x-validator": [],
-            "properties": {
-              "titleColumn": {
-                "type": "void",
-                "x-component": "ArrayTable.Column",
-                "x-component-props": {
-                  "title": "书签名称",
-                  "width": 150
-                },
-                "x-designable-id": "wm1kqkje7fq",
-                "x-index": 0,
-                "name": "titleColumn",
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "x-component": "Text",
-                    "x-validator": [],
-                    "x-component-props": {},
-                    "name": "title",
-                    "x-designable-id": "nwo3ybeyi8w",
-                    "x-index": 0
-                  }
+          }
+        }
+      },
+      "groupBookmarkList": {
+        "type": "array",
+        "x-component": "IteratorLayout",
+        "x-component-props": {
+          "style": {}
+        },
+        "default": [],
+        "x-validator": [],
+        "name": "groupBookmarkList",
+        "x-designable-id": "z7kw9egmx2o",
+        "x-reactions": {
+          "dependencies": [
+            {
+              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+              "property": "value",
+              "type": "any"
+            }
+          ],
+          "fulfill": {
+            "run": "// TODO 改为你们小组的远程书签配置链接\nconst configUrl =\n  \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/groupBookmarkConfig.json\"\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
+          }
+        },
+        "x-index": 6,
+        "items": {
+          "type": "object",
+          "x-validator": [],
+          "name": "",
+          "x-designable-id": "5k38nm56cbo",
+          "properties": {
+            "65bixtu67ww": {
+              "type": "void",
+              "x-component": "Card",
+              "x-component-props": {
+                "title": "小组链接分组名称",
+                "style": {
+                  "margin": "16px 16px 16px 16px"
                 }
               },
-              "urlColumn": {
-                "type": "void",
-                "x-component": "ArrayTable.Column",
-                "x-component-props": {
-                  "title": "书签地址"
-                },
-                "x-designable-id": "hcs0cj2130y",
-                "x-index": 1,
-                "name": "urlColumn",
-                "properties": {
-                  "url": {
-                    "type": "string",
-                    "x-component": "Text",
-                    "x-validator": [],
-                    "x-component-props": {
-                      "content": ""
-                    },
-                    "name": "url",
-                    "x-designable-id": "cqegu75zshy",
-                    "x-index": 0
+              "x-designable-id": "65bixtu67ww",
+              "x-index": 0,
+              "x-reactions": {
+                "dependencies": [
+                  {
+                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                    "property": "value",
+                    "type": "any"
                   }
+                ],
+                "fulfill": {
+                  "state": {},
+                  "run": "$props({\n  title: $utils.getArrayFieldRowAndIndex($self, \"IteratorLayout\").row.title,\n})"
                 }
               },
-              "operateColumn": {
-                "type": "void",
-                "x-component": "ArrayTable.Column",
-                "x-component-props": {
-                  "title": "操作",
-                  "width": 170
-                },
-                "x-designable-id": "kmov0p5frh4",
-                "x-index": 2,
-                "name": "operateColumn",
-                "properties": {
-                  "deleteBookmarkBtn": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    rootField.deleteBookmark(row)\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "",
-                      "target": "_blank",
-                      "icon": "DeleteOutlined",
-                      "style": {
-                        "margin": "0px 0px 0px 0px"
-                      }
-                    },
-                    "x-designable-id": "lm9jp7lirla",
-                    "x-index": 0,
-                    "name": "deleteBookmarkBtn"
+              "properties": {
+                "list": {
+                  "type": "array",
+                  "x-component": "IteratorLayout",
+                  "x-component-props": {
+                    "style": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "flexWrap": "wrap"
+                    }
                   },
-                  "moveUpBookmarkBtn": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    rootField.moveUpBookmark(row)\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "",
-                      "target": "_blank",
-                      "icon": "ArrowUpOutlined",
-                      "style": {
-                        "margin": "0px 0px 0px 6px"
+                  "x-validator": [],
+                  "x-designable-id": "jkt9jqras7u",
+                  "x-index": 0,
+                  "default": [],
+                  "name": "list",
+                  "x-reactions": {
+                    "dependencies": [
+                      {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
                       }
-                    },
-                    "x-designable-id": "asytmyipxsx",
-                    "x-index": 1,
-                    "name": "moveUpBookmarkBtn"
+                    ],
+                    "fulfill": {
+                      "run": ""
+                    }
                   },
-                  "moveDownBookmarkBtn": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    rootField.moveDownBookmark(row)\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
+                  "items": {
+                    "type": "object",
+                    "x-designable-id": "vpt8y8zgp7u",
                     "x-validator": [],
-                    "x-component-props": {
-                      "children": "",
-                      "target": "_blank",
-                      "icon": "ArrowDownOutlined",
-                      "style": {
-                        "margin": "0px 0px 0px 6px"
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "x-component": "Button",
+                        "x-component-props": {
+                          "target": "_blank",
+                          "type": "link",
+                          "children": "按钮"
+                        },
+                        "name": "title",
+                        "x-designable-id": "xatnue4f93j",
+                        "x-index": 0,
+                        "x-reactions": {
+                          "dependencies": [
+                            {
+                              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                              "property": "value",
+                              "type": "any"
+                            }
+                          ],
+                          "fulfill": {
+                            "run": "$props({\n  onClick: () => {\n    // 获取迭代器布局中当前点击的条目数据和索引\n    const { row } = $utils.getArrayFieldRowAndIndex($self, \"IteratorLayout\")\n    $chrome.tabs.create({\n      url: row.url,\n    })\n  },\n})\n"
+                          }
+                        },
+                        "x-validator": []
                       }
-                    },
-                    "x-designable-id": "zxi80mizvjy",
-                    "x-index": 2,
-                    "name": "moveDownBookmarkBtn"
-                  },
-                  "editBookmarkBtn": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    rootField.showAddOrUpdateBookmarkDialog(row)\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "",
-                      "target": "_blank",
-                      "icon": "EditOutlined",
-                      "style": {
-                        "margin": "0px 0px 0px 6px"
-                      }
-                    },
-                    "x-designable-id": "s0uci4fi3f6",
-                    "x-index": 3,
-                    "name": "editBookmarkBtn"
+                    }
                   }
                 }
               }
@@ -616,66 +1306,6 @@
         }
       }
     },
-    "addBookmarkDialog": {
-      "type": "object",
-      "x-component": "Modal",
-      "x-reactions": {
-        "fulfill": {
-          "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.indexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self\n      .validate() // 校验\n      .then(async () => {\n        const bookmarkForm = $self.value\n        $logger.info(\"$self.value\", bookmarkForm)\n\n        // 添加或更新书签\n        await rootField.addOrUpdateBookmark({\n          ...bookmarkForm,\n        })\n\n        // 关闭当前对话框\n        $self.componentProps.open = false\n      })\n      .catch((e) => {\n        $logger.info(\"表单校验失败\", e)\n      })\n  },\n})\n"
-        },
-        "dependencies": [
-          {
-            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-            "property": "value",
-            "type": "any"
-          }
-        ]
-      },
-      "x-component-props": {
-        "cancelButtonProps": {},
-        "cancelText": "取消",
-        "okButtonProps": {},
-        "okText": "确定",
-        "classNames": {},
-        "styles": {},
-        "title": "添加书签",
-        "zIndex": 1001
-      },
-      "name": "addBookmarkDialog",
-      "x-designable-id": "ic32qip89qq",
-      "x-index": 4,
-      "properties": {
-        "title": {
-          "type": "string",
-          "title": "书签名称",
-          "x-decorator": "FormItem",
-          "x-component": "Input",
-          "x-validator": [],
-          "x-component-props": {
-            "placeholder": "请输入书签名称"
-          },
-          "x-decorator-props": {},
-          "name": "title",
-          "required": true,
-          "x-designable-id": "obav5t0jz55",
-          "x-index": 0
-        },
-        "url": {
-          "type": "string",
-          "title": "书签地址",
-          "x-decorator": "FormItem",
-          "x-component": "Input",
-          "x-validator": [],
-          "x-component-props": {
-            "placeholder": "请输入书签地址"
-          },
-          "x-decorator-props": {},
-          "required": true,
-          "name": "url",
-          "x-designable-id": "iyil440qupg",
-          "x-index": 1
-        }
-      }
-    }
+    "x-designable-id": "hy49g7plcql"
   }
 }
