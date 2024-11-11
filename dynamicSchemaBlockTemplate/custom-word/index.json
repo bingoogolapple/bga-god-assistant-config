@@ -2,6 +2,7 @@
   "type": "void",
   "x-component": "Div",
   "x-component-props": {
+    "className": "customWordCardDiv",
     "style": {
       "margin": "0px 0px 0px 0px",
       "backgroundColor": "rgba(255,255,255,1)",
@@ -9,6 +10,18 @@
     }
   },
   "name": "customWordCardDiv",
+  "x-reactions": {
+    "dependencies": [
+      {
+        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+        "property": "value",
+        "type": "any"
+      }
+    ],
+    "fulfill": {
+      "run": "$effect(() => {\n  const rootNode = document.querySelector(\".customWordCardDiv\")\n  if (rootNode) {\n    const element = rootNode.querySelector(\n      \".ant-formily-item-feedback-layout-loose\"\n    )\n    if (element) {\n      element.style.marginBottom = 0\n    }\n  }\n}, [])\n"
+    }
+  },
   "properties": {
     "customWordCardTitleDiv": {
       "type": "void",
@@ -71,18 +84,6 @@
               },
               "x-designable-id": "iu5nkp6jf1q",
               "x-index": 1,
-              "x-reactions": {
-                "dependencies": [
-                  {
-                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                    "property": "value",
-                    "type": "any"
-                  }
-                ],
-                "fulfill": {
-                  "run": ""
-                }
-              },
               "name": "customWordCardTitle"
             }
           }
