@@ -145,18 +145,6 @@
         }
       },
       "x-decorator-props": {},
-      "x-reactions": {
-        "dependencies": [
-          {
-            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-            "property": "value",
-            "type": "any"
-          }
-        ],
-        "fulfill": {
-          "run": ""
-        }
-      },
       "x-designable-id": "fgoj0jwud2k",
       "x-index": 2,
       "name": "customWordTable",
