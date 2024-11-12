@@ -117,7 +117,7 @@
         }
       }
     },
-    "lgbktuqucjj": {
+    "divider": {
       "type": "string",
       "x-component": "Divider",
       "x-validator": [],
@@ -128,7 +128,8 @@
         }
       },
       "x-designable-id": "lgbktuqucjj",
-      "x-index": 1
+      "x-index": 1,
+      "name": "divider"
     },
     "guidebookTable": {
       "type": "array",
