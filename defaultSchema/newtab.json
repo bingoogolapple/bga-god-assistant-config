@@ -612,7 +612,7 @@
             "x-validator": [],
             "x-component-props": {},
             "properties": {
-              "6y2a1mo2amk": {
+              "duoLinGuo": {
                 "type": "void",
                 "x-component": "DynamicSchemaBlock",
                 "x-component-props": {
@@ -623,7 +623,8 @@
                   "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/duo-ling-guo/index.json"
                 },
                 "x-designable-id": "6y2a1mo2amk",
-                "x-index": 0
+                "x-index": 0,
+                "name": "duoLinGuo"
               }
             }
           },
@@ -1019,7 +1020,7 @@
             "x-designable-id": "ri1936nll8k",
             "x-index": 2,
             "properties": {
-              "jgzds7nxf5e": {
+              "bookmark1": {
                 "type": "void",
                 "x-component": "DynamicSchemaBlock",
                 "x-component-props": {
@@ -1030,7 +1031,8 @@
                   "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
                 },
                 "x-designable-id": "jgzds7nxf5e",
-                "x-index": 0
+                "x-index": 0,
+                "name": "bookmark1"
               }
             }
           },
@@ -1040,7 +1042,7 @@
             "x-designable-id": "dnppxc90old",
             "x-index": 3,
             "properties": {
-              "xa7mzkr6lpw": {
+              "bookmark2": {
                 "type": "void",
                 "x-component": "DynamicSchemaBlock",
                 "x-component-props": {
@@ -1051,7 +1053,8 @@
                   "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
                 },
                 "x-designable-id": "xa7mzkr6lpw",
-                "x-index": 0
+                "x-index": 0,
+                "name": "bookmark2"
               }
             }
           },
@@ -1065,7 +1068,7 @@
             "x-designable-id": "lp3qa6qs3pa",
             "x-index": 4,
             "properties": {
-              "3qq9fccw5ga": {
+              "bookmark3": {
                 "type": "void",
                 "x-component": "DynamicSchemaBlock",
                 "x-component-props": {
@@ -1076,7 +1079,8 @@
                   "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
                 },
                 "x-designable-id": "3qq9fccw5ga",
-                "x-index": 0
+                "x-index": 0,
+                "name": "bookmark3"
               }
             }
           }
@@ -1319,6 +1323,6 @@
         }
       }
     },
-    "x-designable-id": "kkjmfq2z9b3"
+    "x-designable-id": "6p2x2t0y9nb"
   }
 }
