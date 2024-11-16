@@ -106,7 +106,7 @@
               "x-component-props": {
                 "title": "操作",
                 "style": {},
-                "width": 820
+                "width": 400
               },
               "x-designable-id": "2pq9zkxbra6",
               "x-index": 1,
@@ -143,6 +143,33 @@
                   "x-component": "Button",
                   "x-reactions": {
                     "fulfill": {
+                      "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    $utils.openUrlInNewTab(\n      `/lowcode.html?lowCodeType=preview&remoteDynamicSchemaBlockUrl=${row.url}&lowCodeTitle=预览区块模板-${row.name}`\n    )\n  },\n})\n\n$effect(() => {\n  $chrome.runtime\n    .getManifest()\n    .then((res) => {\n      $logger.info(\"版本\", res.version)\n      const currentVersion = res.version\n      const minVersion = \"0.1.9\"\n      if (\n        parseInt(currentVersion.replaceAll(\".\", \"\")) <\n        parseInt(minVersion.replaceAll(\".\", \"\"))\n      ) {\n        $self.visible = false\n      }\n    })\n    .catch((e) => {\n      $logger.info(\"获取版本失败\", e)\n    })\n}, [])\n"
+                    },
+                    "dependencies": [
+                      {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                      }
+                    ]
+                  },
+                  "x-validator": [],
+                  "x-component-props": {
+                    "children": "预览区块模板",
+                    "target": "_blank",
+                    "type": "default",
+                    "style": {
+                      "margin": "0px 16px 0px 0px"
+                    }
+                  },
+                  "x-designable-id": "xf934tyh35f",
+                  "x-index": 1
+                },
+                "dd6sb766crw": {
+                  "type": "string",
+                  "x-component": "Button",
+                  "x-reactions": {
+                    "fulfill": {
                       "run": "$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    fetch(row.url)\n      .then((res) => res.text())\n      .then((text) => {\n        $utils.copyTextToClipboard(text)\n\n        $modal.confirm({\n          title:\n            \"现在就去低码页面管理选中要编辑的页面的「编辑页面」按钮，然后在「动态 schema 区块」组件的「本地动态 schema」配置项中粘贴来使用区块模板吗？\",\n          icon: null,\n          okText: \"现在就去\",\n          cancelText: \"稍后再去\",\n          onOk: () => {\n            $utils.openUrlInNewTab(\"/options.html#/LowCodePageManage\")\n          },\n        })\n      })\n      .catch((e) => {\n        $logger.error(\"获取区块模板 schema 失败\", e)\n        $message.error(\"获取区块模板 schema 失败，请稍后再试\")\n      })\n  },\n})\n"
                     },
                     "dependencies": [
@@ -159,11 +186,11 @@
                     "target": "_blank",
                     "type": "default",
                     "style": {
-                      "margin": "0px 16px 0px 0px"
+                      "margin": "16px 0px 16px 0px"
                     }
                   },
-                  "x-designable-id": "xf934tyh35f",
-                  "x-index": 1
+                  "x-designable-id": "dd6sb766crw",
+                  "x-index": 2
                 },
                 "pvttxy2spih": {
                   "type": "string",
@@ -187,7 +214,7 @@
                     "type": "primary"
                   },
                   "x-designable-id": "pvttxy2spih",
-                  "x-index": 2
+                  "x-index": 3
                 }
               }
             }
@@ -243,60 +270,7 @@
                 "flexDirection": "column"
               }
             },
-            "default": [
-              {
-                "title": "React",
-                "url": "https://zh-hans.react.dev/learn"
-              },
-              {
-                "title": "ReactRouter",
-                "url": "https://reactrouter.com/en/main/start/tutorial"
-              },
-              {
-                "title": "Zustand",
-                "url": "https://docs.pmnd.rs/zustand/getting-started/introduction"
-              },
-              {
-                "title": "Redux",
-                "url": "https://redux.js.org/introduction/getting-started"
-              },
-              {
-                "title": "Redux-Toolkit",
-                "url": "https://redux-toolkit.js.org/introduction/getting-started"
-              },
-              {
-                "title": "Next.js",
-                "url": "https://www.nextjs.cn"
-              },
-              {
-                "title": "Vue",
-                "url": "https://cn.vuejs.org/v2/guide/index.html"
-              },
-              {
-                "title": "VueRouter",
-                "url": "https://router.vuejs.org/zh/guide"
-              },
-              {
-                "title": "Vuex",
-                "url": "https://vuex.vuejs.org/zh/guide"
-              },
-              {
-                "title": "Pinia",
-                "url": "https://pinia.vuejs.org/zh/introduction.html"
-              },
-              {
-                "title": "Nuxt",
-                "url": "https://nuxt.com/docs/getting-started/installation"
-              },
-              {
-                "title": "Electron",
-                "url": "https://www.electronjs.org/zh/docs/latest/tutorial/quick-start"
-              },
-              {
-                "title": "Tauri",
-                "url": "https://tauri.app/zh-cn/v1/guides/"
-              }
-            ],
+            "default": [],
             "x-validator": [],
             "name": "previewImages",
             "x-designable-id": "6tfqxi9nko7",
@@ -312,18 +286,6 @@
                 "objectFit": "contain"
               },
               "name": "icon",
-              "x-reactions": {
-                "fulfill": {
-                  "run": ""
-                },
-                "dependencies": [
-                  {
-                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                    "property": "value",
-                    "type": "any"
-                  }
-                ]
-              },
               "x-validator": [],
               "x-designable-id": "ve0jw466cqx"
             }
@@ -399,18 +361,6 @@
                 "objectFit": "contain"
               },
               "name": "icon",
-              "x-reactions": {
-                "fulfill": {
-                  "run": ""
-                },
-                "dependencies": [
-                  {
-                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                    "property": "value",
-                    "type": "any"
-                  }
-                ]
-              },
               "x-validator": [],
               "x-designable-id": "7vo02fw8hwd"
             }
@@ -418,6 +368,6 @@
         }
       }
     },
-    "x-designable-id": "70zcdbjpg82"
+    "x-designable-id": "e7c330gtrvn"
   }
 }
