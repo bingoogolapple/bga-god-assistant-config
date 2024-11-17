@@ -9,7 +9,7 @@
       "x-component": "Button",
       "x-reactions": {
         "fulfill": {
-          "run": "$props({\n  onClick: () => {\n    // 获取弹窗\n    const dialog = $self.parent.query(\"createNewWindowDialog\").take()\n    // 打开弹窗\n    dialog.componentProps.open = true\n  },\n})\n"
+          "run": "$props({\n  onClick: () => {\n    // 获取弹窗\n    const dialog = $self\n      .query(`${$self.parent.address.entire}.createNewWindowDialog`)\n      .take()\n    // 打开弹窗\n    dialog.componentProps.open = true\n  },\n})\n"
         },
         "dependencies": [
           {
