@@ -118,7 +118,7 @@
                         }
                       ],
                       "fulfill": {
-                        "run": "$utils\n  .getAssistantConfig()\n  .then((config) => {\n    $self.value = `最新版本：${config.version}`\n  })\n  .catch((e) => {\n    $self.value = `最新版本：获取失败`\n  })\n"
+                        "run": "$utils\n  .getAssistantConfig()\n  .then((config) => {\n    $self.value = `最新版本：${config.zipVersion || config.version}`\n  })\n  .catch((e) => {\n    $self.value = `最新版本：获取失败`\n  })\n"
                       }
                     }
                   }
