@@ -1,0 +1,66 @@
+{
+    "form": {
+      "labelCol": 6,
+      "wrapperCol": 12,
+      "style": {
+        "height": "100vh",
+        "backgroundImage": "url()",
+        "backgroundRepeat": "no-repeat",
+        "backgroundSize": "cover",
+        "backgroundPosition": "center",
+        "backgroundAttachment": "fixed",
+        "overflow": "scroll"
+      }
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "systemNotificationDialog": {
+          "type": "object",
+          "x-component": "Modal",
+          "x-reactions": {
+            "fulfill": {
+              "run": "const showSystemNotification = async () => {\n  $props({\n    open: true,\n  })\n}\n\nconst init = async () => {\n  try {\n    const startOfToday = $dayjs().startOf(\"day\")\n    const startOfTodayFormat = startOfToday.format(\"YYYY-MM-DD HH:mm:ss\")\n\n    const cacheKey = \"presetDynamicSchemaBlockShowDay\"\n    const presetDynamicSchemaBlockShowDay = await $chrome.localStorage.getItem(\n      cacheKey\n    )\n\n    $logger.info(\"startOfTodayFormat\", {\n      presetDynamicSchemaBlockShowDay,\n      startOfTodayFormat,\n    })\n\n    if (presetDynamicSchemaBlockShowDay != startOfTodayFormat) {\n      $logger.info(\"presetDynamicSchemaBlockShowDay 未展示过，展示系统通知\")\n      await $chrome.localStorage.setItem(cacheKey, startOfTodayFormat)\n\n      showSystemNotification()\n    } else {\n      $logger.info(\"presetDynamicSchemaBlockShowDay 已展示过，不展示系统通知\")\n    }\n  } catch (e) {\n    $logger.info(\"presetDynamicSchemaBlockShowDay error\", e)\n  }\n}\n\n$effect(() => {\n  // init()\n}, [])\n\n$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self.componentProps.open = false\n  },\n})\n"
+            },
+            "dependencies": [
+              {
+                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                "property": "value",
+                "type": "any"
+              }
+            ]
+          },
+          "x-component-props": {
+            "cancelButtonProps": {
+              "style": {
+                "display": "none"
+              }
+            },
+            "cancelText": "取消",
+            "okButtonProps": {},
+            "okText": "我知道了",
+            "classNames": {},
+            "styles": {},
+            "title": "系统通知",
+            "open": false
+          },
+          "x-designable-id": "z8l3mtm203s",
+          "x-index": 0,
+          "name": "systemNotificationDialog",
+          "properties": {
+            "8nltj3tz58v": {
+              "type": "string",
+              "x-component": "Text",
+              "x-validator": [],
+              "x-component-props": {
+                "content": "我是系统通知"
+              },
+              "x-designable-id": "8nltj3tz58v",
+              "x-index": 0
+            }
+          }
+        }
+      },
+      "x-designable-id": "v7rzoqin24f"
+    }
+  }
