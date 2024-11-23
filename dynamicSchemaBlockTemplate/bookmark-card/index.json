@@ -165,18 +165,25 @@
       "type": "array",
       "x-component": "IteratorLayout",
       "x-component-props": {
-        "style": {
-          "display": "grid",
-          "gridTemplateColumns": "repeat(auto-fill, 120px)",
-          "justifyContent": "space-between",
-          "gap": "10px"
-        }
+        "style": {}
       },
       "default": [],
       "x-validator": [],
       "x-designable-id": "1vtkmhkh12h",
       "x-index": 2,
       "name": "bookmarkIteratorLayout",
+      "x-reactions": {
+        "dependencies": [
+          {
+            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+            "property": "value",
+            "type": "any"
+          }
+        ],
+        "fulfill": {
+          "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  if (rootField.state.bookmarkStyle === \"onlyText\") {\n    $props({\n      style: {\n        display: \"flex\",\n        flexDirection: \"row\",\n        flexWrap: \"wrap\",\n      },\n    })\n  } else {\n    let itemWidth = 120\n    if (rootField.state.bookmarkStyle === \"horizontalImgAndText\") {\n      itemWidth = 150\n    }\n    $props({\n      style: {\n        display: \"grid\",\n        gridTemplateColumns: `repeat(auto-fill, ${itemWidth}px)`,\n        justifyContent: \"space-between\",\n        gap: \"10px\",\n      },\n    })\n  }\n}, [rootField.state.bookmarkStyle])\n"
+        }
+      },
       "items": {
         "type": "object",
         "x-designable-id": "4emwz2uvq26",
