@@ -5,7 +5,7 @@
     "style": {
       "margin": "0px 0px 0px 0px",
       "backgroundColor": "rgba(255,255,255,1)",
-      "borderRadius": "20px 20px 20px 20px"
+      "borderRadius": "8px 8px 8px 8px"
     }
   },
   "name": "duoLinGuoCardDiv",

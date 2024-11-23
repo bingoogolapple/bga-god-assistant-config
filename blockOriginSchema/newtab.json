@@ -617,7 +617,7 @@
                                     "style": {
                                         "margin": "0px 0px 0px 0px",
                                         "backgroundColor": "rgba(255,255,255,1)",
-                                        "borderRadius": "20px 20px 20px 20px"
+                                        "borderRadius": "8px 8px 8px 8px"
                                     }
                                 },
                                 "name": "duoLinGuoCardDiv",
@@ -889,7 +889,7 @@
                                     "style": {
                                         "margin": "0px 0px 0px 0px",
                                         "backgroundColor": "rgba(255,255,255,1)",
-                                        "borderRadius": "20px 20px 20px 20px"
+                                        "borderRadius": "8px 8px 8px 8px"
                                     }
                                 },
                                 "name": "customWordCardDiv",
@@ -1285,7 +1285,7 @@
                         "x-component-props": {
                             "style": {
                                 "backgroundColor": "rgba(255,255,255,1)",
-                                "borderRadius": "20px 20px 20px 20px"
+                                "borderRadius": "8px 8px 8px 8px"
                             }
                         },
                         "name": "bookmarkCardDiv",
@@ -1464,7 +1464,7 @@
                                         }
                                     ],
                                     "fulfill": {
-                                        "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  if (rootField.state.bookmarkStyle === \"onlyText\") {\n    $props({\n      style: {\n        display: \"flex\",\n        flexDirection: \"row\",\n        flexWrap: \"wrap\",\n        paddingBottom: \"4px\",\n      },\n    })\n  } else {\n    let itemWidth = 120\n    if (rootField.state.bookmarkStyle === \"horizontalImgAndText\") {\n      itemWidth = 150\n    }\n    $props({\n      style: {\n        display: \"grid\",\n        gridTemplateColumns: `repeat(auto-fill, ${itemWidth}px)`,\n        justifyContent: \"space-between\",\n        gap: \"10px\",\n      },\n    })\n  }\n}, [rootField.state.bookmarkStyle])\n"
+                                        "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  if (rootField.state.bookmarkStyle === \"onlyText\") {\n    $props({\n      style: {\n        display: \"flex\",\n        flexDirection: \"row\",\n        flexWrap: \"wrap\",\n        padding: \"0 4px 4px 4px\",\n      },\n    })\n  } else {\n    let itemWidth = 120\n    if (rootField.state.bookmarkStyle === \"horizontalImgAndText\") {\n      itemWidth = 155\n    }\n    $props({\n      style: {\n        display: \"grid\",\n        gridTemplateColumns: `repeat(auto-fill, ${itemWidth}px)`,\n        justifyContent: \"space-between\",\n        gap: \"10px\",\n        padding: \"0 4px 4px 4px\",\n      },\n    })\n  }\n}, [rootField.state.bookmarkStyle])\n"
                                     }
                                 },
                                 "items": {
@@ -1486,7 +1486,7 @@
                                             },
                                             "x-reactions": {
                                                 "fulfill": {
-                                                    "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  $self.hidden = rootField.state.bookmarkStyle !== \"verticalImgAndText\"\n}, [rootField.state.bookmarkStyle])\n\n$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n})\n"
+                                                    "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  $self.hidden = rootField.state.bookmarkStyle !== \"verticalImgAndText\"\n}, [rootField.state.bookmarkStyle])\n\n$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n  onMouseEnter: () => {\n    $props({\n      style: {\n        ...$self.componentProps.style,\n        transition: \"0.2s\",\n        boxShadow: \"0 4px 8px 0 rgba(0, 0, 0, 0.2)\",\n        borderRadius: \"8px\",\n      },\n    })\n  },\n  onMouseLeave: () => {\n    $props({\n      style: {\n        ...$self.componentProps.style,\n        transition: \"0.2s\",\n        boxShadow: \"none\",\n        borderRadius: \"0px\",\n      },\n    })\n  },\n})\n"
                                                 },
                                                 "dependencies": [
                                                     {
@@ -1547,12 +1547,13 @@
                                                     "display": "flex",
                                                     "flexDirection": "row",
                                                     "alignItems": "center",
+                                                    "justifyContent": "center",
                                                     "padding": "8px 10px 8px 10px"
                                                 }
                                             },
                                             "x-reactions": {
                                                 "fulfill": {
-                                                    "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  $self.hidden = rootField.state.bookmarkStyle !== \"horizontalImgAndText\"\n}, [rootField.state.bookmarkStyle])\n\n$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n})\n"
+                                                    "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  $self.hidden = rootField.state.bookmarkStyle !== \"horizontalImgAndText\"\n}, [rootField.state.bookmarkStyle])\n\n$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n  onMouseEnter: () => {\n    $props({\n      style: {\n        ...$self.componentProps.style,\n        transition: \"0.2s\",\n        boxShadow: \"0 4px 8px 0 rgba(0, 0, 0, 0.2)\",\n        borderRadius: \"8px\",\n      },\n    })\n  },\n  onMouseLeave: () => {\n    $props({\n      style: {\n        ...$self.componentProps.style,\n        transition: \"0.2s\",\n        boxShadow: \"none\",\n        borderRadius: \"0px\",\n      },\n    })\n  },\n})\n"
                                                 },
                                                 "dependencies": [
                                                     {
@@ -1623,7 +1624,7 @@
                                                     }
                                                 ],
                                                 "fulfill": {
-                                                    "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  $self.hidden = rootField.state.bookmarkStyle !== \"onlyText\"\n}, [rootField.state.bookmarkStyle])\n\n$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n})\n"
+                                                    "run": "const rootName = \"bookmarkCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  $self.hidden = rootField.state.bookmarkStyle !== \"onlyText\"\n}, [rootField.state.bookmarkStyle])\n\n$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n  onMouseEnter: () => {\n    $props({\n      style: {\n        ...$self.componentProps.style,\n        boxShadow: \"0 4px 8px 0 rgba(0, 0, 0, 0.2)\",\n        transition: \"0.2s\",\n        borderRadius: \"8px\",\n      },\n    })\n  },\n  onMouseLeave: () => {\n    $props({\n      style: {\n        ...$self.componentProps.style,\n        transition: \"0.2s\",\n        boxShadow: \"none\",\n        borderRadius: \"0px\",\n      },\n    })\n  },\n})\n"
                                                 }
                                             },
                                             "x-designable-id": "8puit0com2w",
