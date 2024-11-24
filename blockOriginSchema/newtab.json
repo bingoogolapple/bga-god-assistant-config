@@ -675,7 +675,7 @@
                                                         "x-component": "Img",
                                                         "x-validator": [],
                                                         "x-component-props": {
-                                                            "src": "https://d35aaqx5ub95lt.cloudfront.net/images/pathCharacters/guidebook/939ebad747027f1a9d365e15fda3a4e1.svg",
+                                                            "src": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/duo-ling-guo/icon.svg",
                                                             "style": {
                                                                 "width": "40px",
                                                                 "height": "50px"
@@ -947,7 +947,7 @@
                                                         "x-component": "Img",
                                                         "x-validator": [],
                                                         "x-component-props": {
-                                                            "src": "https://d35aaqx5ub95lt.cloudfront.net/images/pathCharacters/guidebook/939ebad747027f1a9d365e15fda3a4e1.svg",
+                                                            "src": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/custom-word/icon.svg",
                                                             "style": {
                                                                 "width": "40px",
                                                                 "height": "50px"
