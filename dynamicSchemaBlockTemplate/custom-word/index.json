@@ -64,7 +64,7 @@
                 "src": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/custom-word/icon.svg",
                 "style": {
                   "width": "40px",
-                  "height": "50px"
+                  "height": "40px"
                 }
               },
               "x-designable-id": "3cpgoly1zjb",
@@ -198,7 +198,8 @@
             "x-component": "ArrayTable.Column",
             "x-component-props": {
               "title": "操作",
-              "width": 165
+              "width": 165,
+              "align": "center"
             },
             "x-designable-id": "spznivuol6h",
             "x-index": 2,
