@@ -1,0 +1,69 @@
+{
+    "type": "void",
+    "x-component": "FloatButtonGroup",
+    "x-component-props": {
+        "icon": "MoreOutlined",
+        "type": "primary",
+        "trigger": "hover",
+        "insetInlineEnd": 48,
+        "insetBlockEnd": 48,
+        "badge": {}
+    },
+    "name": "bottomRightFbg",
+    "properties": {
+        "editCurrentPageFb": {
+            "x-component": "FloatButton",
+            "x-component-props": {
+                "description": "",
+                "type": "primary",
+                "badge": {},
+                "target": "_blank",
+                "icon": "EditFilled",
+                "tooltip": "编辑当前页面"
+            },
+            "x-reactions": {
+                "dependencies": [
+                    {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                    }
+                ],
+                "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    // 编辑当前页面\n    $ga.editCurrentPage()\n  },\n})\n"
+                }
+            },
+            "x-designable-id": "xwo67yypp2v",
+            "x-index": 0,
+            "name": "editCurrentPageFb"
+        },
+        "settingsFb": {
+            "x-component": "FloatButton",
+            "x-component-props": {
+                "description": "",
+                "type": "primary",
+                "insetInlineEnd": 24,
+                "insetBlockEnd": 48,
+                "badge": {},
+                "target": "_blank",
+                "icon": "SettingOutlined",
+                "tooltip": "低代码页面管理"
+            },
+            "x-reactions": {
+                "dependencies": [
+                    {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                    }
+                ],
+                "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    // 低代码页面管理\n    $ga.lowCodePageManage()\n  },\n})\n"
+                }
+            },
+            "x-designable-id": "3ce4pdz0w31",
+            "x-index": 1,
+            "name": "settingsFb"
+        }
+    }
+}

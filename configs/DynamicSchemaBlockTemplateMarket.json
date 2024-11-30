@@ -29,6 +29,13 @@
         ]
     },
     {
+        "name": "右下角浮动按钮",
+        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/bottom-right-float-menu/index.json",
+        "images": [
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/bottom-right-float-menu/1.png"
+        ]
+    },
+    {
         "name": "新建指定尺寸的窗口",
         "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/creates-a-new-window-of-the-specified-size/index.json",
         "images": [
