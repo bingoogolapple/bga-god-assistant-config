@@ -15,7 +15,7 @@
     "schema": {
         "type": "object",
         "properties": {
-            "oiiql0q7pb0": {
+            "bottomRightFbg": {
                 "type": "void",
                 "x-component": "FloatButtonGroup",
                 "x-component-props": {
@@ -28,8 +28,9 @@
                 },
                 "x-designable-id": "oiiql0q7pb0",
                 "x-index": 0,
+                "name": "bottomRightFbg",
                 "properties": {
-                    "utvm3pcabbi": {
+                    "editCurrentPageFb": {
                         "x-component": "FloatButton",
                         "x-component-props": {
                             "description": "",
@@ -51,10 +52,11 @@
                                 "run": "$props({\n  onClick: () => {\n    // 编辑当前页面\n    $ga.editCurrentPage()\n  },\n})\n"
                             }
                         },
-                        "x-designable-id": "utvm3pcabbi",
-                        "x-index": 0
+                        "x-designable-id": "xwo67yypp2v",
+                        "x-index": 0,
+                        "name": "editCurrentPageFb"
                     },
-                    "3ce4pdz0w31": {
+                    "settingsFb": {
                         "x-component": "FloatButton",
                         "x-component-props": {
                             "description": "",
@@ -79,7 +81,8 @@
                             }
                         },
                         "x-designable-id": "3ce4pdz0w31",
-                        "x-index": 1
+                        "x-index": 1,
+                        "name": "settingsFb"
                     }
                 }
             },
@@ -2618,6 +2621,6 @@
                 }
             }
         },
-        "x-designable-id": "uxt8ei7c3p5"
+        "x-designable-id": "dgd0gnqe15l"
     }
 }

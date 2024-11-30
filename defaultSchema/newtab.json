@@ -15,74 +15,6 @@
   "schema": {
     "type": "object",
     "properties": {
-      "oiiql0q7pb0": {
-        "type": "void",
-        "x-component": "FloatButtonGroup",
-        "x-component-props": {
-          "icon": "MoreOutlined",
-          "type": "primary",
-          "trigger": "hover",
-          "insetInlineEnd": 48,
-          "insetBlockEnd": 48,
-          "badge": {}
-        },
-        "x-designable-id": "oiiql0q7pb0",
-        "x-index": 0,
-        "properties": {
-          "utvm3pcabbi": {
-            "x-component": "FloatButton",
-            "x-component-props": {
-              "description": "",
-              "type": "primary",
-              "badge": {},
-              "target": "_blank",
-              "icon": "EditFilled",
-              "tooltip": "编辑当前页面"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "any"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    // 编辑当前页面\n    $ga.editCurrentPage()\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "utvm3pcabbi",
-            "x-index": 0
-          },
-          "3ce4pdz0w31": {
-            "x-component": "FloatButton",
-            "x-component-props": {
-              "description": "",
-              "type": "primary",
-              "insetInlineEnd": 24,
-              "insetBlockEnd": 48,
-              "badge": {},
-              "target": "_blank",
-              "icon": "SettingOutlined",
-              "tooltip": "低代码页面管理"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "any"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    // 低代码页面管理\n    $ga.lowCodePageManage()\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "3ce4pdz0w31",
-            "x-index": 1
-          }
-        }
-      },
       "kicoo77eci2": {
         "type": "string",
         "x-component": "Text",
@@ -99,7 +31,7 @@
           }
         },
         "x-designable-id": "kicoo77eci2",
-        "x-index": 1,
+        "x-index": 0,
         "x-validator": []
       },
       "keyword": {
@@ -123,7 +55,7 @@
         },
         "name": "keyword",
         "x-designable-id": "rxg79wd5801",
-        "x-index": 2,
+        "x-index": 1,
         "x-reactions": {
           "dependencies": [
             {
@@ -152,7 +84,7 @@
           "size": 16
         },
         "x-designable-id": "u32x8afe7ch",
-        "x-index": 3,
+        "x-index": 2,
         "properties": {
           "tboibt6om8a": {
             "type": "string",
@@ -602,13 +534,60 @@
           }
         },
         "x-designable-id": "khhftitma81",
-        "x-index": 4,
+        "x-index": 3,
         "properties": {
+          "z2y0idpsk5o": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {},
+            "x-designable-id": "z2y0idpsk5o",
+            "x-index": 0,
+            "properties": {
+              "frequentlyBookmark": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
+                },
+                "name": "frequentlyBookmark",
+                "x-designable-id": "d2ji3rersh2",
+                "x-index": 0
+              }
+            }
+          },
+          "pqsmpbvig8q": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {},
+            "x-designable-id": "pqsmpbvig8q",
+            "x-index": 1,
+            "properties": {
+              "kcisuk0gj4y": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/todo-list/index.json"
+                },
+                "x-designable-id": "kcisuk0gj4y",
+                "x-index": 0
+              }
+            }
+          },
           "de7xqyabrw6": {
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-designable-id": "de7xqyabrw6",
-            "x-index": 0,
+            "x-index": 2,
             "x-validator": [],
             "x-component-props": {},
             "properties": {
@@ -634,7 +613,7 @@
             "x-validator": [],
             "x-component-props": {},
             "x-designable-id": "7lww9d1ufcx",
-            "x-index": 1,
+            "x-index": 3,
             "properties": {
               "customWord": {
                 "type": "void",
@@ -656,7 +635,7 @@
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-designable-id": "ri1936nll8k",
-            "x-index": 2,
+            "x-index": 4,
             "properties": {
               "bookmark1": {
                 "type": "void",
@@ -678,7 +657,7 @@
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-designable-id": "dnppxc90old",
-            "x-index": 3,
+            "x-index": 5,
             "properties": {
               "bookmark2": {
                 "type": "void",
@@ -704,7 +683,7 @@
               "gridSpan": 2
             },
             "x-designable-id": "lp3qa6qs3pa",
-            "x-index": 4,
+            "x-index": 6,
             "properties": {
               "bookmark3": {
                 "type": "void",
@@ -746,7 +725,7 @@
             "run": "// TODO 改为你个人的远程书签配置链接\nconst configUrl = \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/personalBookmarkConfig.json\"\n\n\n\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
           }
         },
-        "x-index": 5,
+        "x-index": 4,
         "items": {
           "type": "object",
           "x-validator": [],
@@ -863,7 +842,7 @@
             "run": "// TODO 改为你们小组的远程书签配置链接\nconst configUrl =\n  \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/groupBookmarkConfig.json\"\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
           }
         },
-        "x-index": 6,
+        "x-index": 5,
         "items": {
           "type": "object",
           "x-validator": [],
@@ -959,8 +938,22 @@
             }
           }
         }
+      },
+      "bottomRightFloatMenu": {
+        "type": "void",
+        "x-component": "DynamicSchemaBlock",
+        "x-component-props": {
+          "schema": {},
+          "cacheRemoteSchema": true,
+          "valueType": "object",
+          "reset": true,
+          "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bottom-right-float-menu/index.json"
+        },
+        "name": "bottomRightFloatMenu",
+        "x-designable-id": "t3xxq7r5zus",
+        "x-index": 6
       }
     },
-    "x-designable-id": "6p2x2t0y9nb"
+    "x-designable-id": "i306i7jaoyd"
   }
 }
