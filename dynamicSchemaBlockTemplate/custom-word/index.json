@@ -76,7 +76,7 @@
               "x-component": "Text",
               "x-validator": [],
               "x-component-props": {
-                "content": "自定义单词卡片",
+                "content": "自定义单词",
                 "style": {
                   "fontSize": "16px",
                   "fontWeight": 700,
