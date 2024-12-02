@@ -1,7 +1,12 @@
 {
   "form": {
     "labelCol": 6,
-    "wrapperCol": 12
+    "wrapperCol": 12,
+    "className": "size-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]",
+    "style": {
+      "height": "100vh",
+      "overflow": "scroll"
+    }
   },
   "schema": {
     "type": "object",
@@ -10,7 +15,6 @@
         "type": "void",
         "x-component": "Div",
         "x-component-props": {
-          "className": "absolute inset-0 size-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]",
           "style": {
             "display": "flex",
             "flexDirection": "column",
@@ -445,6 +449,6 @@
         }
       }
     },
-    "x-designable-id": "x8yzvezyhx5"
+    "x-designable-id": "ki5pn4qu2or"
   }
 }

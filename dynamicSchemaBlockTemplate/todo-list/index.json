@@ -3,9 +3,9 @@
     "x-component": "Div",
     "x-component-props": {
         "style": {
-            "margin": "0px 0px 0px 0px",
             "backgroundColor": "rgba(255,255,255,1)",
-            "borderRadius": "8px 8px 8px 8px"
+            "borderRadius": "8px 8px 8px 8px",
+            "border": "1px solid #f0f0f0"
         }
     },
     "name": "todoAppCardDiv",
@@ -200,7 +200,7 @@
                         "x-component": "ArrayTable.Column",
                         "x-component-props": {
                             "title": "状态",
-                            "width": 85,
+                            "width": 90,
                             "align": "center"
                         },
                         "x-designable-id": "jojumsms5ki",

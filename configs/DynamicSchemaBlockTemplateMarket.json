@@ -1,5 +1,12 @@
 [
     {
+        "name": "搜索卡片",
+        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/search-card/index.json",
+        "images": [
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/search-card/1.png"
+        ]
+    },
+    {
         "name": "书签卡片",
         "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/bookmark-card/index.json",
         "images": [

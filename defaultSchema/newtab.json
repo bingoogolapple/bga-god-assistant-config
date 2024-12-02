@@ -4,522 +4,12 @@
     "wrapperCol": 12,
     "style": {
       "height": "100vh",
-      "backgroundImage": "url(https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/lowCodePageBackground/1.jpg)",
-      "backgroundRepeat": "no-repeat",
-      "backgroundSize": "cover",
-      "backgroundPosition": "center",
-      "backgroundAttachment": "fixed",
       "overflow": "scroll"
     }
   },
   "schema": {
     "type": "object",
     "properties": {
-      "kicoo77eci2": {
-        "type": "string",
-        "x-component": "Text",
-        "x-component-props": {
-          "content": "使用上帝小助手，低代码搭建你的专属新标签页",
-          "mode": "normal",
-          "style": {
-            "display": "flex",
-            "flexDirection": "row",
-            "justifyContent": "center",
-            "padding": "50px 0px 0px 0px",
-            "color": "rgba(255,255,255,1)",
-            "fontSize": "25px"
-          }
-        },
-        "x-designable-id": "kicoo77eci2",
-        "x-index": 0,
-        "x-validator": []
-      },
-      "keyword": {
-        "type": "string",
-        "title": "",
-        "x-decorator": "FormItem",
-        "x-component": "Input",
-        "x-validator": [],
-        "x-component-props": {
-          "placeholder": "请输入搜索内容，回车键默认必应搜索",
-          "style": {
-            "borderRadius": "100px 100px 100px 100px",
-            "height": "50px",
-            "padding": "0px 24px 0px 24px"
-          }
-        },
-        "x-decorator-props": {
-          "style": {
-            "margin": "50px 200px 24px 200px"
-          }
-        },
-        "name": "keyword",
-        "x-designable-id": "rxg79wd5801",
-        "x-index": 1,
-        "x-reactions": {
-          "dependencies": [
-            {
-              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-              "property": "value",
-              "type": "any"
-            }
-          ],
-          "fulfill": {
-            "run": "/**\n * 监听输入框回车事件\n **/\n$props({\n  onPressEnter: (e) => {\n    const keyword = e.target.value\n    if (!keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.bing.com/search?q=${keyword}`)\n  },\n})\n"
-          }
-        }
-      },
-      "u32x8afe7ch": {
-        "type": "void",
-        "x-component": "Space",
-        "x-component-props": {
-          "style": {
-            "display": "flex",
-            "flexDirection": "row",
-            "justifyContent": "center",
-            "margin": "0px 0px 36px 0px",
-            "flexWrap": "wrap",
-            "padding": "0px 20px 0px 20px"
-          },
-          "size": 16
-        },
-        "x-designable-id": "u32x8afe7ch",
-        "x-index": 2,
-        "properties": {
-          "tboibt6om8a": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "百度",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.baidu.com/s?wd=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "tboibt6om8a",
-            "x-index": 0,
-            "x-validator": []
-          },
-          "fm6udn1cnac": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "必应",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.bing.com/search?q=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "fm6udn1cnac",
-            "x-index": 1,
-            "x-validator": []
-          },
-          "imvwv4bmyhp": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "谷歌",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    // 这种方式会被谷歌屏蔽\n    // window.open(`https://www.google.com/search?q=${$deps.keyword}`)\n\n    // 这种方式不会被谷歌屏蔽\n    $utils.openUrl(`https://www.google.com/search?q=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "imvwv4bmyhp",
-            "x-index": 2,
-            "x-validator": []
-          },
-          "s89afxjqzwi": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "搜狗",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.sogou.com/web?query=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "s89afxjqzwi",
-            "x-index": 3,
-            "x-validator": []
-          },
-          "auwpbjskzgf": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "360",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.so.com/s?q=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "auwpbjskzgf",
-            "x-index": 4,
-            "x-validator": []
-          },
-          "w77t7yadgaz": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "掘金",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://juejin.cn/search?query=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "w77t7yadgaz",
-            "x-index": 5,
-            "x-validator": []
-          },
-          "erg6gyy9yor": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "npm",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.npmjs.com/search?q=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "erg6gyy9yor",
-            "x-index": 6,
-            "x-validator": []
-          },
-          "amu7medcqyl": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "bilibili",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: async () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://search.bilibili.com/all?keyword=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "amu7medcqyl",
-            "x-index": 7,
-            "x-validator": []
-          },
-          "wrtny56mfwr": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "YouTube",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: async () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.youtube.com/results?search_query=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "wrtny56mfwr",
-            "x-index": 8,
-            "x-validator": []
-          },
-          "5dh2ihtj1ky": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "抖音",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.douyin.com/search/${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "5dh2ihtj1ky",
-            "x-index": 9,
-            "x-validator": []
-          },
-          "wgj161v9vws": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "快手",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(\n      `https://www.kuaishou.com/search/video?searchKey=${$deps.keyword}`\n    )\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "wgj161v9vws",
-            "x-index": 10,
-            "x-validator": []
-          },
-          "6osrda7sw6i": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "小红书",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(\n      `https://www.xiaohongshu.com/search_result?keyword=${$deps.keyword}`\n    )\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "6osrda7sw6i",
-            "x-index": 11,
-            "x-validator": []
-          },
-          "hk2saak17bp": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "知乎",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(\n      `https://www.zhihu.com/search?type=content&q=${$deps.keyword}`\n    )\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "hk2saak17bp",
-            "x-index": 12,
-            "x-validator": []
-          },
-          "jsqc1tbianz": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "微博",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://s.weibo.com/weibo?q=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "jsqc1tbianz",
-            "x-index": 13,
-            "x-validator": []
-          },
-          "7n4ywikzf4u": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "Facebook",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://www.facebook.com/search/top/?q=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "7n4ywikzf4u",
-            "x-index": 14,
-            "x-validator": []
-          },
-          "7h1hcvxliyt": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "X",
-              "type": "primary",
-              "size": "large"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      $message.info(\"请输入搜索内容\")\n      return\n    }\n\n    $utils.openUrl(`https://x.com/search?q=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "7h1hcvxliyt",
-            "x-index": 15,
-            "x-validator": []
-          }
-        }
-      },
       "khhftitma81": {
         "type": "void",
         "x-component": "FormGrid",
@@ -534,15 +24,42 @@
           }
         },
         "x-designable-id": "khhftitma81",
-        "x-index": 3,
+        "x-index": 0,
         "properties": {
+          "eeh5qoam66z": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 2
+            },
+            "name": "",
+            "x-designable-id": "eeh5qoam66z",
+            "properties": {
+              "searchCard": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/search-card/index.json"
+                },
+                "x-designable-id": "w04jbupvfbp",
+                "x-index": 0,
+                "name": "searchCard"
+              }
+            },
+            "x-index": 0
+          },
           "z2y0idpsk5o": {
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-validator": [],
             "x-component-props": {},
             "x-designable-id": "z2y0idpsk5o",
-            "x-index": 0,
+            "x-index": 1,
             "properties": {
               "frequentlyBookmark": {
                 "type": "void",
@@ -566,7 +83,7 @@
             "x-validator": [],
             "x-component-props": {},
             "x-designable-id": "pqsmpbvig8q",
-            "x-index": 1,
+            "x-index": 2,
             "properties": {
               "kcisuk0gj4y": {
                 "type": "void",
@@ -587,7 +104,7 @@
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-designable-id": "de7xqyabrw6",
-            "x-index": 2,
+            "x-index": 3,
             "x-validator": [],
             "x-component-props": {},
             "properties": {
@@ -613,7 +130,7 @@
             "x-validator": [],
             "x-component-props": {},
             "x-designable-id": "7lww9d1ufcx",
-            "x-index": 3,
+            "x-index": 4,
             "properties": {
               "customWord": {
                 "type": "void",
@@ -635,7 +152,7 @@
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-designable-id": "ri1936nll8k",
-            "x-index": 4,
+            "x-index": 5,
             "properties": {
               "bookmark1": {
                 "type": "void",
@@ -657,7 +174,7 @@
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-designable-id": "dnppxc90old",
-            "x-index": 5,
+            "x-index": 6,
             "properties": {
               "bookmark2": {
                 "type": "void",
@@ -683,7 +200,7 @@
               "gridSpan": 2
             },
             "x-designable-id": "lp3qa6qs3pa",
-            "x-index": 6,
+            "x-index": 7,
             "properties": {
               "bookmark3": {
                 "type": "void",
@@ -702,6 +219,20 @@
             }
           }
         }
+      },
+      "bottomRightFloatMenu": {
+        "type": "void",
+        "x-component": "DynamicSchemaBlock",
+        "x-component-props": {
+          "schema": {},
+          "cacheRemoteSchema": true,
+          "valueType": "object",
+          "reset": true,
+          "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bottom-right-float-menu/index.json"
+        },
+        "name": "bottomRightFloatMenu",
+        "x-designable-id": "t3xxq7r5zus",
+        "x-index": 1
       },
       "personalBookmarkList": {
         "type": "array",
@@ -725,7 +256,7 @@
             "run": "// TODO 改为你个人的远程书签配置链接\nconst configUrl = \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/personalBookmarkConfig.json\"\n\n\n\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
           }
         },
-        "x-index": 4,
+        "x-index": 2,
         "items": {
           "type": "object",
           "x-validator": [],
@@ -842,7 +373,7 @@
             "run": "// TODO 改为你们小组的远程书签配置链接\nconst configUrl =\n  \"https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/bookmarkConfigDemo/groupBookmarkConfig.json\"\n\nconst fetchBookmarkConfig = async () => {\n  const bookmarkList = await fetch(configUrl).then((res) => res.json())\n  $self.value = bookmarkList\n}\n\n$effect(() => {\n  fetchBookmarkConfig()\n}, [])\n"
           }
         },
-        "x-index": 5,
+        "x-index": 3,
         "items": {
           "type": "object",
           "x-validator": [],
@@ -938,22 +469,8 @@
             }
           }
         }
-      },
-      "bottomRightFloatMenu": {
-        "type": "void",
-        "x-component": "DynamicSchemaBlock",
-        "x-component-props": {
-          "schema": {},
-          "cacheRemoteSchema": true,
-          "valueType": "object",
-          "reset": true,
-          "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bottom-right-float-menu/index.json"
-        },
-        "name": "bottomRightFloatMenu",
-        "x-designable-id": "t3xxq7r5zus",
-        "x-index": 6
       }
     },
-    "x-designable-id": "i306i7jaoyd"
+    "x-designable-id": "6ch8eseaxdb"
   }
 }

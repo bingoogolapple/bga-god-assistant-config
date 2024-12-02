@@ -1,0 +1,604 @@
+{
+    "type": "void",
+    "x-component": "Div",
+    "x-component-props": {
+        "style": {
+            "backgroundColor": "rgba(255,255,255,1)",
+            "borderRadius": "8px 8px 8px 8px",
+            "border": "1px solid #f0f0f0"
+        }
+    },
+    "name": "searchCardDiv",
+    "x-reactions": {
+        "dependencies": [
+            {
+                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                "property": "value",
+                "type": "any"
+            }
+        ],
+        "fulfill": {
+            "run": "const rootEntire = $self.address.entire\n// 只截取自己和父节点，避免拖动位置后数据丢失\nconst cacheKeyPrefix = $self.address.segments.slice(-2).join(\".\")\n// 搜索列表持久化缓存的 key\nconst cacheKeySearchList = `${cacheKeyPrefix}SearchList`\n// 默认搜索持久化缓存的 key\nconst cacheKeyDefaultSearch = `${cacheKeyPrefix}DefaultSearch`\n\n// 修复样式问题\n$props({\n  className: $self.props.name,\n})\n$effect(() => {\n  const rootNode = document.querySelector(`.${$self.props.name}`)\n  if (rootNode) {\n    const element = rootNode.querySelector(\n      \".ant-formily-item-feedback-layout-loose\"\n    )\n    if (element) {\n      element.style.marginBottom = 0\n    }\n  }\n}, [])\n\n$self.state = $observable({\n  defaultSearch: null,\n  searchList: null,\n})\n\n// 默认搜索列表\nconst defualtList = [\n  {\n    title: \"百度\",\n    url: \"https://www.baidu.com/s?wd=%s\",\n  },\n  {\n    title: \"必应\",\n    url: \"https://www.bing.com/search?q=%s\",\n  },\n  {\n    title: \"Google\",\n    url: \"https://www.google.com/search?q=%s\",\n  },\n  {\n    title: \"搜狗\",\n    url: \"https://www.sogou.com/web?query=%s\",\n  },\n  {\n    title: \"360\",\n    url: \"https://www.so.com/s?q=%s\",\n  },\n  {\n    title: \"掘金\",\n    url: \"https://juejin.cn/search?query=%s\",\n  },\n  {\n    title: \"npm\",\n    url: \"https://www.npmjs.com/search?q=%s\",\n  },\n  {\n    title: \"Bilibili\",\n    url: \"https://search.bilibili.com/all?keyword=%s\",\n  },\n  {\n    title: \"YouTube\",\n    url: \"https://www.youtube.com/results?search_query=%s\",\n  },\n  {\n    title: \"抖音\",\n    url: \"https://www.douyin.com/search/%s\",\n  },\n  {\n    title: \"快手\",\n    url: \"https://www.kuaishou.com/search/video?searchKey=%s\",\n  },\n  {\n    title: \"小红书\",\n    url: \"https://www.xiaohongshu.com/search_result?keyword=%s\",\n  },\n  {\n    title: \"知乎\",\n    url: \"https://www.zhihu.com/search?type=content&q=%s\",\n  },\n  {\n    title: \"微博\",\n    url: \"https://s.weibo.com/weibo?q=%s\",\n  },\n  {\n    title: \"Facebook\",\n    url: \"https://www.facebook.com/search/top/?q=%s\",\n  },\n  {\n    title: \"X\",\n    url: \"https://x.com/search?q=%s\",\n  },\n].map((item, index) => {\n  return {\n    ...item,\n    id: Date.now() + index,\n  }\n})\n\n// 获取默认搜索\n$self.getDefaultSearch = async () => {\n  if ($self.state.defaultSearch) {\n    // 返回内存缓存的默认搜索\n    return $self.state.defaultSearch\n  }\n\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeyDefaultSearch)\n    if (res) {\n      res = JSON.parse(res)\n    }\n  } catch (e) {\n    $logger.info(\"获取默认搜索失败\", e)\n  }\n\n  $self.state.defaultSearch = res || $self.state.searchList[0]\n  return $self.state.defaultSearch\n}\n\n// 修改默认搜索\n$self.updateDefaultSearch = async (defaultSearch) => {\n  try {\n    await $chrome.localStorage.setItem(\n      cacheKeyDefaultSearch,\n      JSON.stringify(defaultSearch)\n    )\n\n    $self.state.defaultSearch = defaultSearch\n  } catch (e) {\n    $logger.info(\"修改默认搜索失败\", e)\n  }\n}\n\n// 展示搜索管理对话框\n$self.showSearchManageDialog = () => {\n  const searchManageDialog = $self\n    .query(`${rootEntire}.searchManageDialog`)\n    .take()\n  searchManageDialog.setComponentProps({\n    open: true,\n  })\n}\n\n// 展示添加或修改搜索方式对话框\n$self.showAddOrUpdateSearchDialog = (search) => {\n  const addOrUpdateSearchDialog = $self\n    .query(`${rootEntire}.addOrUpdateSearchDialog`)\n    .take()\n  addOrUpdateSearchDialog.value = {\n    ...(search || {}),\n  }\n  addOrUpdateSearchDialog.setComponentProps({\n    open: true,\n    title: `${search ? \"修改\" : \"添加\"}方式`,\n  })\n}\n\n// 添加或修改搜索方式\n$self.addOrUpdateSearch = async (search) => {\n  const list = await $self.fetchSearchList()\n\n  if (search.id) {\n    // 修改\n    const index = list.findIndex((item) => item.id === search.id)\n    list[index] = search\n  } else {\n    // 添加\n    search.id = Date.now()\n    list.push(search)\n  }\n\n  try {\n    await $chrome.localStorage.setItem(cacheKeySearchList, JSON.stringify(list))\n    $self.state.searchList = [...list]\n  } catch (e) {\n    $logger.info(`${search.id ? \"修改\" : \"添加\"}搜索方式失败`, e)\n  }\n}\n\n// 删除搜索方式\n$self.deleteSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n  list = list.filter((item) => item.id !== search.id)\n  $self.saveSearchList(list)\n}\n\n// 往前移动搜索方式\n$self.moveUpSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n\n  const index = list.findIndex((item) => item.id === search.id)\n  let preIndex = index - 1\n  if (preIndex === -1) {\n    // 已经是第一条，则和最后一条互换\n    preIndex = list.length - 1\n  }\n\n  const other = list[preIndex]\n  list[preIndex] = search\n  list[index] = other\n  $self.saveSearchList(list)\n}\n\n// 往后移动搜索方式\n$self.moveDownSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n\n  const index = list.findIndex((item) => item.id === search.id)\n  let nextIndex = index + 1\n  if (nextIndex === list.length) {\n    // 已经是最后一条，则和第一条互换\n    nextIndex = 0\n  }\n\n  const other = list[nextIndex]\n  list[nextIndex] = search\n  list[index] = other\n\n  $self.saveSearchList(list)\n}\n\n// 保存搜索列表数据\n$self.saveSearchList = async (list) => {\n  try {\n    await $chrome.localStorage.setItem(cacheKeySearchList, JSON.stringify(list))\n\n    $self.state.searchList = [...list]\n  } catch (e) {\n    $logger.info(`保存搜索列表数据失败`, e)\n  }\n}\n\n// 执行搜索\n$self.handleSearch = async (search) => {\n  if (!search) {\n    search = await $self.getDefaultSearch()\n  }\n\n  const searchKeyword = $self.query(`${rootEntire}.searchKeyword`).take()\n  const keyword = searchKeyword.value\n  const url = search.url.replace(\"%s\", keyword)\n  $utils.openUrl(url)\n}\n\n// 获取搜索列表\n$self.fetchSearchList = async () => {\n  if ($self.state.searchList) {\n    return $self.state.searchList\n  }\n\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeySearchList)\n  } catch (e) {\n    $logger.info(\"获取搜索列表失败\", e)\n    return []\n  }\n\n  if (!res) {\n    $self.saveSearchList(defualtList)\n    return defualtList\n  }\n\n  try {\n    const searchCardData = JSON.parse(res) || []\n    return searchCardData\n  } catch (e) {\n    $logger.info(\"解析搜索列表数据失败\", e)\n    return []\n  }\n}\n\n$effect(() => {\n  const searchIteratorLayout = $self\n    .query(`${rootEntire}.searchIteratorLayout`)\n    .take()\n  searchIteratorLayout.value = $self.state.searchList\n}, [$self.state.searchList])\n\n$effect(() => {\n  const defaultSearch = $self.state.defaultSearch || defualtList[0]\n  const searchKeyword = $self.query(`${rootEntire}.searchKeyword`).take()\n  searchKeyword.setComponentProps({\n    placeholder: `请输入搜索内容，回车键默认「${defaultSearch.title}」搜索`,\n  })\n\n  const searchCardTitle = $self.query(`${rootEntire}.searchCardTitleDiv.searchCardTitleLeftDiv.searchCardTitle`).take()\n  searchCardTitle.value = `「${defaultSearch.title}」搜索`\n}, [$self.state.defaultSearch])\n\n// 初始化\nconst init = async () => {\n  $self.state.searchList = await $self.fetchSearchList()\n\n  $self.getDefaultSearch()\n}\n\n$effect(async () => {\n  init()\n}, [])\n"
+        }
+    },
+    "properties": {
+        "searchCardTitleDiv": {
+            "type": "void",
+            "x-component": "Div",
+            "x-component-props": {
+                "style": {
+                    "display": "flex",
+                    "flexDirection": "row",
+                    "alignItems": "center",
+                    "margin": "0px 0px 0px 0px",
+                    "padding": "8px 10px 8px 10px",
+                    "justifyContent": "space-between"
+                }
+            },
+            "x-designable-id": "3g2rfhf48ik",
+            "x-index": 0,
+            "name": "searchCardTitleDiv",
+            "properties": {
+                "searchCardTitleLeftDiv": {
+                    "type": "void",
+                    "x-component": "Div",
+                    "x-component-props": {
+                        "style": {
+                            "display": "flex",
+                            "flexDirection": "row",
+                            "alignItems": "center",
+                            "margin": "0px 0px 0px 0px",
+                            "padding": "0px 0px 0px 0px",
+                            "justifyContent": "flex-start"
+                        }
+                    },
+                    "x-designable-id": "f2t7d5mty09",
+                    "x-index": 0,
+                    "name": "searchCardTitleLeftDiv",
+                    "properties": {
+                        "searchCardTitle": {
+                            "type": "string",
+                            "x-component": "Text",
+                            "x-validator": [],
+                            "x-component-props": {
+                                "content": "搜索",
+                                "style": {
+                                    "fontSize": "16px",
+                                    "fontWeight": 700,
+                                    "margin": "0px 0px 0px 0px"
+                                }
+                            },
+                            "x-designable-id": "2nldf2acokh",
+                            "x-index": 0,
+                            "name": "searchCardTitle",
+                            "x-reactions": {
+                                "dependencies": [
+                                    {
+                                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                        "property": "value",
+                                        "type": "any"
+                                    }
+                                ],
+                                "fulfill": {
+                                    "run": ""
+                                }
+                            }
+                        }
+                    }
+                },
+                "searchCardTitleRightDiv": {
+                    "type": "void",
+                    "x-component": "Div",
+                    "x-component-props": {
+                        "style": {
+                            "display": "flex",
+                            "flexDirection": "row"
+                        }
+                    },
+                    "x-designable-id": "jkuz7t8cszy",
+                    "x-index": 1,
+                    "name": "searchCardTitleRightDiv",
+                    "properties": {
+                        "searchManageBtn": {
+                            "type": "string",
+                            "x-component": "Button",
+                            "x-reactions": {
+                                "fulfill": {
+                                    "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    rootField.showSearchManageDialog()\n  },\n})\n"
+                                },
+                                "dependencies": [
+                                    {
+                                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                        "property": "value",
+                                        "type": "any"
+                                    }
+                                ]
+                            },
+                            "x-validator": [],
+                            "x-component-props": {
+                                "children": "",
+                                "target": "_blank",
+                                "icon": "SettingOutlined",
+                                "type": "default",
+                                "style": {
+                                    "margin": "0px 0px 0px 12px"
+                                }
+                            },
+                            "x-designable-id": "1bt70ow5cv7",
+                            "x-index": 0,
+                            "name": "searchManageBtn"
+                        },
+                        "addSearchBtn": {
+                            "type": "string",
+                            "x-component": "Button",
+                            "x-reactions": {
+                                "fulfill": {
+                                    "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    rootField.showAddOrUpdateSearchDialog(null)\n  },\n})\n"
+                                },
+                                "dependencies": [
+                                    {
+                                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                        "property": "value",
+                                        "type": "any"
+                                    }
+                                ]
+                            },
+                            "x-validator": [],
+                            "x-component-props": {
+                                "children": "",
+                                "target": "_blank",
+                                "icon": "PlusCircleOutlined",
+                                "type": "default",
+                                "style": {
+                                    "margin": "0px 0px 0px 12px"
+                                }
+                            },
+                            "x-designable-id": "iuyqdhe53b5",
+                            "x-index": 1,
+                            "name": "addSearchBtn"
+                        }
+                    }
+                }
+            }
+        },
+        "b05vxa9tlca": {
+            "type": "string",
+            "x-component": "Divider",
+            "x-validator": [],
+            "x-component-props": {
+                "children": "",
+                "style": {
+                    "margin": "4px 0px 4px 0px"
+                }
+            },
+            "x-designable-id": "b05vxa9tlca",
+            "x-index": 1
+        },
+        "searchKeyword": {
+            "type": "string",
+            "title": "",
+            "x-decorator": "FormItem",
+            "x-component": "Input",
+            "x-validator": [],
+            "x-component-props": {
+                "placeholder": "请输入搜索内容",
+                "styles": {
+                    "input": {
+                        "textAlign": "center"
+                    }
+                },
+                "style": {
+                    "borderRadius": "100px 100px 100px 100px",
+                    "height": "50px",
+                    "padding": "0px 24px 0px 24px"
+                }
+            },
+            "x-decorator-props": {
+                "style": {
+                    "margin": "8px auto 0px auto",
+                    "minWidth": "330px",
+                    "maxWidth": "500px"
+                }
+            },
+            "name": "searchKeyword",
+            "x-designable-id": "rxg79wd5801",
+            "x-index": 2,
+            "x-reactions": {
+                "dependencies": [
+                    {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                    }
+                ],
+                "fulfill": {
+                    "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n/**\n * 监听输入框回车事件\n **/\n$props({\n  onPressEnter: () => {\n    rootField.handleSearch(null)\n  },\n})\n"
+                }
+            }
+        },
+        "searchIteratorLayout": {
+            "type": "array",
+            "x-component": "IteratorLayout",
+            "x-component-props": {
+                "style": {
+                    "display": "flex",
+                    "flexDirection": "row",
+                    "justifyContent": "center",
+                    "flexWrap": "wrap",
+                    "padding": "16px 16px 8px 16px"
+                }
+            },
+            "default": [],
+            "x-validator": [],
+            "x-designable-id": "fylt162uhbt",
+            "x-index": 3,
+            "name": "searchIteratorLayout",
+            "x-reactions": {
+                "dependencies": [
+                    {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                    }
+                ],
+                "fulfill": {
+                    "run": ""
+                }
+            },
+            "items": {
+                "type": "object",
+                "x-designable-id": "ijzl9dx09bk",
+                "x-validator": [],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "x-component": "Button",
+                        "x-component-props": {
+                            "target": "_blank",
+                            "type": "primary",
+                            "style": {
+                                "margin": "8px 8px 8px 8px"
+                            },
+                            "children": "按钮"
+                        },
+                        "name": "title",
+                        "x-reactions": {
+                            "dependencies": [
+                                {
+                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                    "property": "value",
+                                    "type": "any"
+                                }
+                            ],
+                            "fulfill": {
+                                "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    const search = $utils.getArrayFieldRow($self)\n    rootField.handleSearch(search)\n  },\n})\n"
+                            }
+                        },
+                        "x-designable-id": "45gb3o551fu",
+                        "x-index": 0,
+                        "x-validator": []
+                    }
+                }
+            }
+        },
+        "searchManageDialog": {
+            "type": "object",
+            "x-component": "Modal",
+            "x-reactions": {
+                "fulfill": {
+                    "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self.componentProps.open = false\n  },\n})\n"
+                }
+            },
+            "x-component-props": {
+                "cancelButtonProps": {
+                    "hidden": true
+                },
+                "cancelText": "取消",
+                "okButtonProps": {},
+                "okText": "确定",
+                "classNames": {},
+                "styles": {},
+                "title": "搜索方式管理",
+                "width": 700
+            },
+            "name": "searchManageDialog",
+            "x-designable-id": "ezjkys90rxx",
+            "x-index": 4,
+            "properties": {
+                "defaultSearch": {
+                    "title": "默认搜索方式",
+                    "x-decorator": "FormItem",
+                    "x-component": "Select",
+                    "x-validator": [],
+                    "x-component-props": {},
+                    "x-decorator-props": {},
+                    "name": "defaultSearch",
+                    "enum": [],
+                    "x-reactions": {
+                        "dependencies": [
+                            {
+                                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                "property": "value",
+                                "type": "any"
+                            }
+                        ],
+                        "fulfill": {
+                            "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  const dataSource = rootField.state.searchList.map((item) => {\n    return {\n      label: item.title,\n      value: item.id,\n    }\n  })\n  $self.dataSource = dataSource\n}, [rootField.state.searchList])\n\n$effect(() => {\n  $self.value = rootField.state.defaultSearch.id\n}, [rootField.state.defaultSearch])\n\n$props({\n  // 监听到默认搜索方式变更\n  onChange: async (id) => {\n    const { title, url } = rootField.state.searchList.find(\n      (item) => (item.id === id)\n    )\n    // 更新默认搜索方式\n    await rootField.updateDefaultSearch({\n      id,\n      title,\n      url,\n    })\n  },\n})\n"
+                        }
+                    },
+                    "x-designable-id": "em6nkst3mvx",
+                    "x-index": 0
+                },
+                "searchTable": {
+                    "type": "array",
+                    "x-decorator": "FormItem",
+                    "x-component": "ArrayTable",
+                    "x-validator": [],
+                    "x-component-props": {
+                        "bordered": false,
+                        "showHeader": true,
+                        "tableLayout": "fixed",
+                        "style": {
+                            "margin": "0px 10px 0px 10px"
+                        }
+                    },
+                    "x-decorator-props": {},
+                    "x-reactions": {
+                        "dependencies": [
+                            {
+                                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                "property": "value",
+                                "type": "any"
+                            }
+                        ],
+                        "fulfill": {
+                            "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  $self.value = rootField.state.searchList\n}, [rootField.state.searchList])\n"
+                        }
+                    },
+                    "x-designable-id": "84gpllr0d35",
+                    "x-index": 1,
+                    "name": "searchTable",
+                    "items": {
+                        "type": "object",
+                        "x-designable-id": "zub4hik94ls",
+                        "x-validator": [],
+                        "properties": {
+                            "titleColumn": {
+                                "type": "void",
+                                "x-component": "ArrayTable.Column",
+                                "x-component-props": {
+                                    "title": "搜索方式名称",
+                                    "width": 150
+                                },
+                                "x-designable-id": "b7ewfa95acb",
+                                "x-index": 0,
+                                "name": "titleColumn",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "x-component": "Text",
+                                        "x-validator": [],
+                                        "x-component-props": {},
+                                        "name": "title",
+                                        "x-designable-id": "qs1bwzo34rn",
+                                        "x-index": 0
+                                    }
+                                }
+                            },
+                            "urlColumn": {
+                                "type": "void",
+                                "x-component": "ArrayTable.Column",
+                                "x-component-props": {
+                                    "title": "搜索地址"
+                                },
+                                "x-designable-id": "swmc7x31ftr",
+                                "x-index": 1,
+                                "name": "urlColumn",
+                                "properties": {
+                                    "url": {
+                                        "type": "string",
+                                        "x-component": "Text",
+                                        "x-validator": [],
+                                        "x-component-props": {
+                                            "content": ""
+                                        },
+                                        "name": "url",
+                                        "x-designable-id": "wbx527c5io9",
+                                        "x-index": 0
+                                    }
+                                }
+                            },
+                            "operateColumn": {
+                                "type": "void",
+                                "x-component": "ArrayTable.Column",
+                                "x-component-props": {
+                                    "title": "操作",
+                                    "width": 165
+                                },
+                                "x-designable-id": "wxk3yjsqja8",
+                                "x-index": 2,
+                                "name": "operateColumn",
+                                "properties": {
+                                    "deleteSearchBtn": {
+                                        "type": "string",
+                                        "x-component": "Button",
+                                        "x-reactions": {
+                                            "fulfill": {
+                                                "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    rootField.deleteSearch(row)\n  },\n})\n"
+                                            },
+                                            "dependencies": [
+                                                {
+                                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                                    "property": "value",
+                                                    "type": "any"
+                                                }
+                                            ]
+                                        },
+                                        "x-validator": [],
+                                        "x-component-props": {
+                                            "children": "",
+                                            "target": "_blank",
+                                            "icon": "DeleteOutlined",
+                                            "style": {
+                                                "margin": "0px 0px 0px 0px"
+                                            }
+                                        },
+                                        "x-designable-id": "q2utwk10jj5",
+                                        "x-index": 0,
+                                        "name": "deleteSearchBtn"
+                                    },
+                                    "moveUpSearchBtn": {
+                                        "type": "string",
+                                        "x-component": "Button",
+                                        "x-reactions": {
+                                            "fulfill": {
+                                                "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    rootField.moveUpSearch(row)\n  },\n})\n"
+                                            },
+                                            "dependencies": [
+                                                {
+                                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                                    "property": "value",
+                                                    "type": "any"
+                                                }
+                                            ]
+                                        },
+                                        "x-validator": [],
+                                        "x-component-props": {
+                                            "children": "",
+                                            "target": "_blank",
+                                            "icon": "ArrowUpOutlined",
+                                            "style": {
+                                                "margin": "0px 0px 0px 6px"
+                                            }
+                                        },
+                                        "x-designable-id": "8i97b1d89hw",
+                                        "x-index": 1,
+                                        "name": "moveUpSearchBtn"
+                                    },
+                                    "moveDownSearchBtn": {
+                                        "type": "string",
+                                        "x-component": "Button",
+                                        "x-reactions": {
+                                            "fulfill": {
+                                                "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    rootField.moveDownSearch(row)\n  },\n})\n"
+                                            },
+                                            "dependencies": [
+                                                {
+                                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                                    "property": "value",
+                                                    "type": "any"
+                                                }
+                                            ]
+                                        },
+                                        "x-validator": [],
+                                        "x-component-props": {
+                                            "children": "",
+                                            "target": "_blank",
+                                            "icon": "ArrowDownOutlined",
+                                            "style": {
+                                                "margin": "0px 0px 0px 6px"
+                                            }
+                                        },
+                                        "x-designable-id": "cc8pumo6llz",
+                                        "x-index": 2,
+                                        "name": "moveDownSearchBtn"
+                                    },
+                                    "editSearchBtn": {
+                                        "type": "string",
+                                        "x-component": "Button",
+                                        "x-reactions": {
+                                            "fulfill": {
+                                                "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, \"ArrayTable\")\n    rootField.showAddOrUpdateSearchDialog(row)\n  },\n})\n"
+                                            },
+                                            "dependencies": [
+                                                {
+                                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                                    "property": "value",
+                                                    "type": "any"
+                                                }
+                                            ]
+                                        },
+                                        "x-validator": [],
+                                        "x-component-props": {
+                                            "children": "",
+                                            "target": "_blank",
+                                            "icon": "EditOutlined",
+                                            "style": {
+                                                "margin": "0px 0px 0px 6px"
+                                            }
+                                        },
+                                        "x-designable-id": "7x72m09nrlp",
+                                        "x-index": 3,
+                                        "name": "editSearchBtn"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "addOrUpdateSearchDialog": {
+            "type": "object",
+            "x-component": "Modal",
+            "x-reactions": {
+                "fulfill": {
+                    "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self\n      .validate() // 校验\n      .then(async () => {\n        const searchForm = $self.value\n        // $logger.info(\"$self.value\", searchForm)\n\n        // 添加或更新搜索方式\n        await rootField.addOrUpdateSearch({\n          ...searchForm,\n        })\n\n        // 关闭当前对话框\n        $self.componentProps.open = false\n      })\n      .catch((e) => {\n        $logger.info(\"表单校验失败\", e)\n      })\n  },\n})\n"
+                },
+                "dependencies": [
+                    {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                    }
+                ]
+            },
+            "x-component-props": {
+                "cancelButtonProps": {},
+                "cancelText": "取消",
+                "okButtonProps": {},
+                "okText": "确定",
+                "classNames": {},
+                "styles": {},
+                "title": "添加搜索方式",
+                "zIndex": 1001
+            },
+            "name": "addOrUpdateSearchDialog",
+            "x-designable-id": "4a587y52a7r",
+            "x-index": 5,
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "title": "搜索名称",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "x-validator": [],
+                    "x-component-props": {
+                        "placeholder": "请输入搜索方式名称"
+                    },
+                    "x-decorator-props": {},
+                    "name": "title",
+                    "required": true,
+                    "x-designable-id": "fb8oy0qbire",
+                    "x-index": 0
+                },
+                "url": {
+                    "type": "string",
+                    "title": "搜索地址",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "x-validator": [],
+                    "x-component-props": {
+                        "placeholder": "请输入搜索地址"
+                    },
+                    "x-decorator-props": {},
+                    "required": true,
+                    "name": "url",
+                    "x-designable-id": "iylnsbeu5kt",
+                    "x-index": 1,
+                    "description": "使用 %s 代替搜索关键词"
+                }
+            }
+        }
+    }
+}

@@ -4,7 +4,8 @@
   "x-component-props": {
     "style": {
       "backgroundColor": "rgba(255,255,255,1)",
-      "borderRadius": "8px 8px 8px 8px"
+      "borderRadius": "8px 8px 8px 8px",
+      "border": "1px solid #f0f0f0"
     }
   },
   "name": "bookmarkCardDiv",
