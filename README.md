@@ -53,6 +53,10 @@
 
 <img width="700" src="./images/ga-preview2.jpg">
 
+还提供了各种区块模板
+
+<img width="600" src="./images/ga-block-template-market.png">
+
 ### 1.2-用户脚本管理
 
 用户可以添加各种自动化任务脚本
