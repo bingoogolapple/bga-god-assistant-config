@@ -53,7 +53,7 @@
 
 <img width="700" src="./images/ga-preview2.jpg">
 
-还提供了各种区块模板
+模板市场中还提供了丰富的区块模板给用户使用
 
 <img width="600" src="./images/ga-block-template-market.png">
 
