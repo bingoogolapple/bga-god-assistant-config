@@ -4,702 +4,97 @@
     "wrapperCol": 12,
     "style": {
       "height": "100vh",
-      "backgroundImage": "url(https://pic4.zhimg.com/80/v2-39405c286abf780d3fb6b4ea487ffbfd_1440w.webp)",
-      "backgroundRepeat": "no-repeat",
-      "backgroundSize": "cover",
-      "backgroundPosition": "center",
-      "backgroundAttachment": "fixed",
       "overflow": "scroll"
     }
   },
   "schema": {
     "type": "object",
     "properties": {
-      "keyword": {
-        "type": "string",
-        "title": "",
-        "x-decorator": "FormItem",
-        "x-component": "Input",
+      "khhftitma81": {
+        "type": "void",
+        "x-component": "FormGrid",
         "x-validator": [],
         "x-component-props": {
-          "placeholder": "请输入搜索内容，回车键默认必应搜索",
+          "columnGap": 12,
+          "rowGap": 12,
+          "minColumns": 2,
+          "maxColumns": 2,
           "style": {
-            "borderRadius": "100px 100px 100px 100px",
-            "height": "50px",
-            "padding": "0px 24px 0px 24px"
-          },
-          "size": "middle"
-        },
-        "x-decorator-props": {
-          "style": {
-            "margin": "24px 24px 24px 24px"
+            "margin": "12px 12px 12px 12px"
           }
         },
-        "name": "keyword",
-        "x-designable-id": "rxg79wd5801",
+        "x-designable-id": "khhftitma81",
         "x-index": 0,
-        "x-reactions": {
-          "dependencies": [
-            {
-              "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-              "property": "value",
-              "type": "any"
-            }
-          ],
-          "fulfill": {
-            "run": "/**\n * 监听输入框回车事件\n **/\n$props({\n  onPressEnter: (e) => {\n    const keyword = e.target.value\n    if (!keyword) {\n      return\n    }\n\n    $utils.openUrl(`https://www.bing.com/search?q=${keyword}`)\n  },\n})\n"
-          }
-        }
-      },
-      "u32x8afe7ch": {
-        "type": "void",
-        "x-component": "Space",
-        "x-component-props": {
-          "style": {
-            "display": "flex",
-            "flexDirection": "row",
-            "justifyContent": "center",
-            "margin": "0px 0px 36px 0px"
-          },
-          "size": 16
-        },
-        "x-designable-id": "u32x8afe7ch",
-        "x-index": 1,
         "properties": {
-          "tboibt6om8a": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "百度",
-              "type": "primary",
-              "size": "middle"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      return\n    }\n\n    $utils.openUrl(`https://www.baidu.com/s?wd=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "tboibt6om8a",
-            "x-index": 0
-          },
-          "fm6udn1cnac": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "必应",
-              "type": "primary",
-              "size": "middle"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      return\n    }\n\n    $utils.openUrl(`https://www.bing.com/search?q=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "fm6udn1cnac",
-            "x-index": 1
-          },
-          "imvwv4bmyhp": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "谷歌",
-              "type": "primary",
-              "size": "middle"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      return\n    }\n\n    // 这种方式会被谷歌屏蔽\n    // window.open(`https://www.google.com/search?q=${$deps.keyword}`)\n\n    // 这种方式不会被谷歌屏蔽\n    $utils.openUrl(`https://www.google.com/search?q=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "imvwv4bmyhp",
-            "x-index": 2
-          },
-          "w77t7yadgaz": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "掘金",
-              "type": "primary",
-              "size": "middle"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      return\n    }\n\n    $utils.openUrl(`https://juejin.cn/search?query=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "w77t7yadgaz",
-            "x-index": 3
-          },
-          "erg6gyy9yor": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "npm",
-              "type": "primary",
-              "size": "middle"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      return\n    }\n\n    $utils.openUrl(`https://www.npmjs.com/search?q=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "erg6gyy9yor",
-            "x-index": 4
-          },
-          "amu7medcqyl": {
-            "type": "string",
-            "x-component": "Button",
-            "x-component-props": {
-              "target": "_blank",
-              "children": "bilibili",
-              "type": "primary",
-              "size": "middle"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "string",
-                  "source": "keyword",
-                  "name": "keyword"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    if (!$deps.keyword) {\n      return\n    }\n\n    $utils.openUrl(`https://search.bilibili.com/all?keyword=${$deps.keyword}`)\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "amu7medcqyl",
-            "x-index": 5
-          }
-        }
-      },
-      "q4fx318cgcc": {
-        "type": "void",
-        "x-component": "Card",
-        "x-component-props": {
-          "title": "前端常用链接-图文版-纵向",
-          "style": {
-            "margin": "12px 12px 12px 12px"
-          },
-          "bordered": false
-        },
-        "x-designable-id": "q4fx318cgcc",
-        "x-index": 2,
-        "properties": {
-          "2su76jd3ydl": {
-            "type": "array",
-            "x-component": "IteratorLayout",
-            "x-component-props": {
-              "style": {
-                "display": "grid",
-                "gridTemplateColumns": "repeat(auto-fill, 120px)",
-                "justifyContent": "space-between",
-                "gap": "10px"
-              }
-            },
-            "default": [
-              {
-                "title": "React",
-                "url": "https://zh-hans.react.dev/learn"
-              },
-              {
-                "title": "ReactRouter",
-                "url": "https://reactrouter.com/en/main/start/tutorial"
-              },
-              {
-                "title": "Zustand",
-                "url": "https://docs.pmnd.rs/zustand/getting-started/introduction"
-              },
-              {
-                "title": "Redux",
-                "url": "https://redux.js.org/introduction/getting-started"
-              },
-              {
-                "title": "Redux-Toolkit",
-                "url": "https://redux-toolkit.js.org/introduction/getting-started"
-              },
-              {
-                "title": "Next.js",
-                "url": "https://www.nextjs.cn"
-              },
-              {
-                "title": "Vue",
-                "url": "https://cn.vuejs.org/v2/guide/index.html"
-              },
-              {
-                "title": "VueRouter",
-                "url": "https://router.vuejs.org/zh/guide"
-              },
-              {
-                "title": "Vuex",
-                "url": "https://vuex.vuejs.org/zh/guide"
-              },
-              {
-                "title": "Pinia",
-                "url": "https://pinia.vuejs.org/zh/introduction.html"
-              },
-              {
-                "title": "Nuxt",
-                "url": "https://nuxt.com/docs/getting-started/installation"
-              },
-              {
-                "title": "Electron",
-                "url": "https://www.electronjs.org/zh/docs/latest/tutorial/quick-start"
-              },
-              {
-                "title": "Tauri",
-                "url": "https://tauri.app/zh-cn/v1/guides/"
-              }
-            ],
+          "z2y0idpsk5o": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
             "x-validator": [],
-            "x-designable-id": "2su76jd3ydl",
+            "x-component-props": {
+              "gridSpan": 2
+            },
+            "x-designable-id": "z2y0idpsk5o",
             "x-index": 0,
-            "items": {
-              "type": "object",
-              "x-designable-id": "smaktz68ndl",
-              "properties": {
-                "qglpcdt93vt": {
-                  "type": "void",
-                  "x-component": "Div",
-                  "x-component-props": {
-                    "style": {
-                      "cursor": "pointer",
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center",
-                      "padding": "8px 0px 8px 0px"
-                    }
-                  },
-                  "x-reactions": {
-                    "fulfill": {
-                      "run": "$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n})\n"
-                    }
-                  },
-                  "x-designable-id": "qglpcdt93vt",
-                  "x-index": 0,
-                  "properties": {
-                    "icon": {
-                      "type": "string",
-                      "x-component": "Img",
-                      "x-component-props": {
-                        "style": {
-                          "width": "40px",
-                          "height": "40px"
-                        },
-                        "objectFit": "contain"
-                      },
-                      "name": "icon",
-                      "x-reactions": {
-                        "dependencies": [
-                          {
-                            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                            "property": "value",
-                            "type": "any"
-                          }
-                        ],
-                        "fulfill": {
-                          "run": "$effect(() => {\n  // 获取迭代器布局中当前点击的条目数据\n  const row = $utils.getArrayFieldRow($self)\n  // 获取书签的图标地址\n  $utils.getBookmarkIconUrl(row.url, row.icon).then((iconUrl) => {\n    $props({\n      src: iconUrl,\n    })\n  })\n}, [])\n"
-                        }
-                      },
-                      "x-designable-id": "r7bhs2gj9wp",
-                      "x-index": 0
-                    },
-                    "title": {
-                      "type": "string",
-                      "x-component": "Text",
-                      "name": "title",
-                      "x-designable-id": "9fwhpl8r93g",
-                      "x-index": 1
-                    }
-                  }
-                }
+            "properties": {
+              "translate": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/translate/index.json"
+                },
+                "name": "translate",
+                "x-designable-id": "d2ji3rersh2",
+                "x-index": 0
               }
             }
-          }
-        }
-      },
-      "f513ch3scns": {
-        "type": "void",
-        "x-component": "Card",
-        "x-component-props": {
-          "title": "前端常用链接-图文版-横向",
-          "style": {
-            "margin": "12px 12px 12px 12px"
           },
-          "bordered": false
-        },
-        "x-designable-id": "f513ch3scns",
-        "x-index": 3,
-        "properties": {
-          "jw4tfln4pab": {
-            "type": "array",
-            "x-component": "IteratorLayout",
-            "x-component-props": {
-              "style": {
-                "display": "grid",
-                "gridTemplateColumns": "repeat(auto-fill, 140px)",
-                "justifyContent": "space-between",
-                "gap": "10px"
-              }
-            },
-            "default": [
-              {
-                "title": "React",
-                "url": "https://zh-hans.react.dev/learn"
-              },
-              {
-                "title": "ReactRouter",
-                "url": "https://reactrouter.com/en/main/start/tutorial"
-              },
-              {
-                "title": "Zustand",
-                "url": "https://docs.pmnd.rs/zustand/getting-started/introduction"
-              },
-              {
-                "title": "Redux",
-                "url": "https://redux.js.org/introduction/getting-started"
-              },
-              {
-                "title": "Redux-Toolkit",
-                "url": "https://redux-toolkit.js.org/introduction/getting-started"
-              },
-              {
-                "title": "Next.js",
-                "url": "https://www.nextjs.cn"
-              },
-              {
-                "title": "Vue",
-                "url": "https://cn.vuejs.org/v2/guide/index.html"
-              },
-              {
-                "title": "VueRouter",
-                "url": "https://router.vuejs.org/zh/guide"
-              },
-              {
-                "title": "Vuex",
-                "url": "https://vuex.vuejs.org/zh/guide"
-              },
-              {
-                "title": "Pinia",
-                "url": "https://pinia.vuejs.org/zh/introduction.html"
-              },
-              {
-                "title": "Nuxt",
-                "url": "https://nuxt.com/docs/getting-started/installation"
-              },
-              {
-                "title": "Electron",
-                "url": "https://www.electronjs.org/zh/docs/latest/tutorial/quick-start"
-              },
-              {
-                "title": "Tauri",
-                "url": "https://tauri.app/zh-cn/v1/guides/"
-              }
-            ],
+          "eeh5qoam66z": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
             "x-validator": [],
-            "x-designable-id": "jw4tfln4pab",
-            "x-index": 0,
-            "items": {
-              "type": "object",
-              "x-designable-id": "z40sgnp5tgf",
-              "properties": {
-                "4s367ihs897": {
-                  "type": "void",
-                  "x-component": "Div",
-                  "x-component-props": {
-                    "style": {
-                      "cursor": "pointer",
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "alignItems": "center",
-                      "padding": "8px 0px 8px 0px"
-                    }
-                  },
-                  "x-reactions": {
-                    "fulfill": {
-                      "run": "$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n})\n"
-                    }
-                  },
-                  "x-designable-id": "4s367ihs897",
-                  "x-index": 0,
-                  "properties": {
-                    "icon": {
-                      "type": "string",
-                      "x-component": "Img",
-                      "x-component-props": {
-                        "style": {
-                          "width": "30px",
-                          "height": "30px",
-                          "margin": "0px 8px 0px 0px"
-                        },
-                        "objectFit": "contain"
-                      },
-                      "name": "icon",
-                      "x-reactions": {
-                        "dependencies": [
-                          {
-                            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                            "property": "value",
-                            "type": "any"
-                          }
-                        ],
-                        "fulfill": {
-                          "run": "$effect(() => {\n  // 获取迭代器布局中当前点击的条目数据\n  const row = $utils.getArrayFieldRow($self)\n  // 获取书签的图标地址\n  $utils.getBookmarkIconUrl(row.url, row.icon).then((iconUrl) => {\n    $props({\n      src: iconUrl,\n    })\n  })\n}, [])\n"
-                        }
-                      },
-                      "x-validator": [],
-                      "x-designable-id": "zxwr4y5qv04",
-                      "x-index": 0
-                    },
-                    "title": {
-                      "type": "string",
-                      "x-component": "Text",
-                      "name": "title",
-                      "x-component-props": {},
-                      "x-designable-id": "4jzfvm2q1wk",
-                      "x-index": 1
-                    }
-                  }
-                }
+            "x-component-props": {
+              "gridSpan": 2
+            },
+            "x-designable-id": "eeh5qoam66z",
+            "x-index": 1,
+            "properties": {
+              "searchCard": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/search-card/index.json"
+                },
+                "x-designable-id": "w04jbupvfbp",
+                "x-index": 0,
+                "name": "searchCard"
               }
             }
           }
         }
       },
-      "ho98j7lccnm": {
+      "bottomRightFloatMenu": {
         "type": "void",
-        "x-component": "Card",
+        "x-component": "DynamicSchemaBlock",
         "x-component-props": {
-          "title": "前端常用链接-文字版",
-          "style": {
-            "margin": "12px 12px 12px 12px"
-          },
-          "bordered": false
+          "schema": {},
+          "cacheRemoteSchema": true,
+          "valueType": "object",
+          "reset": true,
+          "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bottom-right-float-menu/index.json"
         },
-        "x-designable-id": "ho98j7lccnm",
-        "x-index": 4,
-        "properties": {
-          "wjlg19hsd91": {
-            "type": "array",
-            "x-component": "IteratorLayout",
-            "x-component-props": {
-              "style": {
-                "display": "grid",
-                "gridTemplateColumns": "repeat(auto-fill, 90px)",
-                "justifyContent": "space-between",
-                "gap": "10px"
-              }
-            },
-            "default": [
-              {
-                "title": "React",
-                "url": "https://zh-hans.react.dev/learn"
-              },
-              {
-                "title": "ReactRouter",
-                "url": "https://reactrouter.com/en/main/start/tutorial"
-              },
-              {
-                "title": "Zustand",
-                "url": "https://docs.pmnd.rs/zustand/getting-started/introduction"
-              },
-              {
-                "title": "Redux",
-                "url": "https://redux.js.org/introduction/getting-started"
-              },
-              {
-                "title": "Redux-Toolkit",
-                "url": "https://redux-toolkit.js.org/introduction/getting-started"
-              },
-              {
-                "title": "Next.js",
-                "url": "https://www.nextjs.cn"
-              },
-              {
-                "title": "Vue",
-                "url": "https://cn.vuejs.org/v2/guide/index.html"
-              },
-              {
-                "title": "VueRouter",
-                "url": "https://router.vuejs.org/zh/guide"
-              },
-              {
-                "title": "Vuex",
-                "url": "https://vuex.vuejs.org/zh/guide"
-              },
-              {
-                "title": "Pinia",
-                "url": "https://pinia.vuejs.org/zh/introduction.html"
-              },
-              {
-                "title": "Nuxt",
-                "url": "https://nuxt.com/docs/getting-started/installation"
-              },
-              {
-                "title": "Electron",
-                "url": "https://www.electronjs.org/zh/docs/latest/tutorial/quick-start"
-              },
-              {
-                "title": "Tauri",
-                "url": "https://tauri.app/zh-cn/v1/guides/"
-              }
-            ],
-            "x-validator": [],
-            "x-designable-id": "wjlg19hsd91",
-            "x-index": 0,
-            "items": {
-              "type": "object",
-              "x-designable-id": "1cowz5dwai2",
-              "properties": {
-                "title": {
-                  "type": "string",
-                  "x-component": "Button",
-                  "x-component-props": {
-                    "target": "_blank",
-                    "type": "link",
-                    "children": "超链接"
-                  },
-                  "name": "title",
-                  "x-reactions": {
-                    "dependencies": [
-                      {
-                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                        "property": "value",
-                        "type": "any"
-                      }
-                    ],
-                    "fulfill": {
-                      "run": "$props({\n  onClick: () => {\n    // 处理点击指定的循环类组件的条目链接，默认就是取的条目的 url 字段来打开\n    $utils.clickArrayFieldUrlItem($self)\n  },\n})\n"
-                    }
-                  },
-                  "x-designable-id": "s4slpbt3fni",
-                  "x-index": 0
-                }
-              }
-            }
-          }
-        }
-      },
-      "oiiql0q7pb0": {
-        "type": "void",
-        "x-component": "FloatButtonGroup",
-        "x-component-props": {
-          "icon": "MoreOutlined",
-          "type": "primary",
-          "trigger": "hover",
-          "insetInlineEnd": 48,
-          "insetBlockEnd": 48,
-          "badge": {}
-        },
-        "x-designable-id": "oiiql0q7pb0",
-        "x-index": 5,
-        "properties": {
-          "utvm3pcabbi": {
-            "x-component": "FloatButton",
-            "x-component-props": {
-              "description": "",
-              "type": "primary",
-              "badge": {},
-              "target": "_blank",
-              "icon": "EditFilled",
-              "tooltip": "编辑当前页面"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "any"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    // 编辑当前页面\n    $ga.editCurrentPage()\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "utvm3pcabbi",
-            "x-index": 0
-          },
-          "3ce4pdz0w31": {
-            "x-component": "FloatButton",
-            "x-component-props": {
-              "description": "",
-              "type": "primary",
-              "insetInlineEnd": 24,
-              "insetBlockEnd": 48,
-              "badge": {},
-              "target": "_blank",
-              "icon": "SettingOutlined",
-              "tooltip": "低代码页面管理"
-            },
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "any"
-                }
-              ],
-              "fulfill": {
-                "run": "$props({\n  onClick: () => {\n    // 低代码页面管理\n    $ga.lowCodePageManage()\n  },\n})\n"
-              }
-            },
-            "x-designable-id": "3ce4pdz0w31",
-            "x-index": 1
-          }
-        }
+        "name": "bottomRightFloatMenu",
+        "x-designable-id": "t3xxq7r5zus",
+        "x-index": 1
       }
     },
-    "x-designable-id": "glsoje8s709"
+    "x-designable-id": "rbceubaxcvi"
   }
 }

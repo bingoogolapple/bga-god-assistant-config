@@ -98,12 +98,12 @@
                 "x-component": "FormGrid",
                 "x-validator": [],
                 "x-component-props": {
-                    "columnGap": 16,
-                    "rowGap": 16,
+                    "columnGap": 12,
+                    "rowGap": 12,
                     "minColumns": 2,
                     "maxColumns": 2,
                     "style": {
-                        "margin": "16px 16px 16px 16px"
+                        "margin": "12px 12px 12px 12px"
                     }
                 },
                 "x-designable-id": "khhftitma81",
