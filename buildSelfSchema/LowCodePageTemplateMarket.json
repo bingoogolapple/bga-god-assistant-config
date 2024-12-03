@@ -106,7 +106,8 @@
               "x-component-props": {
                 "title": "操作",
                 "style": {},
-                "width": 655
+                "width": 610,
+                "align": "center"
               },
               "x-designable-id": "2pq9zkxbra6",
               "x-index": 1,
@@ -133,7 +134,8 @@
                     "type": "dashed",
                     "style": {
                       "margin": "0px 16px 0px 0px"
-                    }
+                    },
+                    "size": "small"
                   },
                   "x-designable-id": "uhru1qwo5yb",
                   "x-index": 0
@@ -160,7 +162,8 @@
                     "type": "default",
                     "style": {
                       "margin": "0px 16px 0px 0px"
-                    }
+                    },
+                    "size": "small"
                   },
                   "x-designable-id": "139uxa2b1df",
                   "x-index": 1
@@ -184,7 +187,8 @@
                   "x-component-props": {
                     "children": "复制页面模板 schema 去低代码编辑器中使用",
                     "target": "_blank",
-                    "type": "primary"
+                    "type": "primary",
+                    "size": "small"
                   },
                   "x-designable-id": "xf934tyh35f",
                   "x-index": 2
@@ -418,6 +422,6 @@
         }
       }
     },
-    "x-designable-id": "70zcdbjpg82"
+    "x-designable-id": "yargephtraz"
   }
 }

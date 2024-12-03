@@ -106,7 +106,8 @@
               "x-component-props": {
                 "title": "操作",
                 "style": {},
-                "width": 400
+                "width": 870,
+                "align": "center"
               },
               "x-designable-id": "2pq9zkxbra6",
               "x-index": 1,
@@ -132,8 +133,9 @@
                     "target": "_blank",
                     "type": "dashed",
                     "style": {
-                      "margin": "0px 16px 0px 0px"
-                    }
+                      "margin": "0px 8px 0px 0px"
+                    },
+                    "size": "small"
                   },
                   "x-designable-id": "uhru1qwo5yb",
                   "x-index": 0
@@ -159,8 +161,9 @@
                     "target": "_blank",
                     "type": "default",
                     "style": {
-                      "margin": "0px 16px 0px 0px"
-                    }
+                      "margin": "0px 8px 0px 0px"
+                    },
+                    "size": "small"
                   },
                   "x-designable-id": "xf934tyh35f",
                   "x-index": 1
@@ -186,8 +189,9 @@
                     "target": "_blank",
                     "type": "default",
                     "style": {
-                      "margin": "16px 0px 16px 0px"
-                    }
+                      "margin": "0px 8px 0px 0px"
+                    },
+                    "size": "small"
                   },
                   "x-designable-id": "dd6sb766crw",
                   "x-index": 2
@@ -211,7 +215,8 @@
                   "x-component-props": {
                     "children": "复制区块模板 url 去低代码编辑器中使用",
                     "target": "_blank",
-                    "type": "primary"
+                    "type": "primary",
+                    "size": "small"
                   },
                   "x-designable-id": "pvttxy2spih",
                   "x-index": 3
@@ -368,6 +373,6 @@
         }
       }
     },
-    "x-designable-id": "e7c330gtrvn"
+    "x-designable-id": "yargephtraz"
   }
 }
