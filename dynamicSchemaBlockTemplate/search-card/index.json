@@ -198,8 +198,9 @@
             "x-decorator-props": {
                 "style": {
                     "margin": "8px auto 0px auto",
-                    "minWidth": "330px",
-                    "maxWidth": "500px"
+                    "minWidth": "340px",
+                    "maxWidth": "500px",
+                    "padding": "0px 8px 0px 8px"
                 }
             },
             "name": "searchKeyword",

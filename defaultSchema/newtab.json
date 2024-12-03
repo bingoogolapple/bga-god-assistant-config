@@ -52,39 +52,15 @@
               }
             }
           },
-          "z2y0idpsk5o": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {},
-            "x-designable-id": "z2y0idpsk5o",
-            "x-index": 1,
-            "properties": {
-              "frequentlyBookmark": {
-                "type": "void",
-                "x-component": "DynamicSchemaBlock",
-                "x-component-props": {
-                  "schema": {},
-                  "cacheRemoteSchema": true,
-                  "valueType": "object",
-                  "reset": true,
-                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/bookmark-card/index.json"
-                },
-                "name": "frequentlyBookmark",
-                "x-designable-id": "d2ji3rersh2",
-                "x-index": 0
-              }
-            }
-          },
           "pqsmpbvig8q": {
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-validator": [],
             "x-component-props": {},
             "x-designable-id": "pqsmpbvig8q",
-            "x-index": 2,
+            "x-index": 1,
             "properties": {
-              "kcisuk0gj4y": {
+              "todoList": {
                 "type": "void",
                 "x-component": "DynamicSchemaBlock",
                 "x-component-props": {
@@ -95,6 +71,31 @@
                   "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/todo-list/index.json"
                 },
                 "x-designable-id": "kcisuk0gj4y",
+                "x-index": 0,
+                "name": "todoList"
+              }
+            }
+          },
+          "z2y0idpsk5o": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {},
+            "x-designable-id": "z2y0idpsk5o",
+            "x-index": 2,
+            "properties": {
+              "translate": {
+                "type": "void",
+                "x-component": "DynamicSchemaBlock",
+                "x-component-props": {
+                  "schema": {},
+                  "cacheRemoteSchema": true,
+                  "valueType": "object",
+                  "reset": true,
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/translate/index.json"
+                },
+                "name": "translate",
+                "x-designable-id": "d2ji3rersh2",
                 "x-index": 0
               }
             }
@@ -234,6 +235,6 @@
         "x-index": 1
       }
     },
-    "x-designable-id": "pnotudeem72"
+    "x-designable-id": "g43es0y365u"
   }
 }
