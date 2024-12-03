@@ -1,0 +1,163 @@
+{
+  "type": "void",
+  "x-component": "Div",
+  "x-component-props": {
+    "style": {
+      "backgroundColor": "rgba(255,255,255,1)",
+      "borderRadius": "8px 8px 8px 8px",
+      "border": "1px solid #f0f0f0"
+    }
+  },
+  "name": "translateCardDiv",
+  "x-reactions": {
+    "dependencies": [
+      {
+        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+        "property": "value",
+        "type": "any"
+      }
+    ],
+    "fulfill": {
+      "run": "// 区块路径\nconst rootEntire = $self.address.entire\n// 只截取自己和父节点，避免拖动位置后数据丢失\nconst cacheKeyPrefix = $self.address.segments.slice(-2).join(\".\")\n\n// 修复样式问题\n$props({\n  className: $self.props.name,\n})\n$effect(() => {\n  const rootNode = document.querySelector(`.${$self.props.name}`)\n  if (rootNode) {\n    const element = rootNode.querySelector(\n      \".ant-formily-item-feedback-layout-loose\"\n    )\n    if (element) {\n      element.style.marginBottom = 0\n    }\n  }\n}, [])\n"
+    }
+  },
+  "properties": {
+    "headerDiv": {
+      "type": "void",
+      "x-component": "Div",
+      "x-component-props": {
+        "style": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "margin": "0px 0px 0px 0px",
+          "padding": "4px 10px 4px 10px",
+          "justifyContent": "space-between"
+        }
+      },
+      "x-designable-id": "7dycm9fafsn",
+      "x-index": 0,
+      "name": "headerDiv",
+      "properties": {
+        "headerLeftDiv": {
+          "type": "void",
+          "x-component": "Div",
+          "x-component-props": {
+            "style": {
+              "display": "flex",
+              "flexDirection": "row",
+              "alignItems": "center",
+              "margin": "0px 0px 0px 0px",
+              "padding": "0px 0px 0px 0px",
+              "justifyContent": "flex-start"
+            }
+          },
+          "x-designable-id": "cbhy83gcxqi",
+          "x-index": 0,
+          "name": "headerLeftDiv",
+          "properties": {
+            "translateHeaderImg": {
+              "type": "string",
+              "x-component": "Img",
+              "x-validator": [],
+              "x-component-props": {
+                "src": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/translate/icon.svg",
+                "style": {
+                  "width": "24px",
+                  "height": "24px"
+                }
+              },
+              "x-designable-id": "mx17k89jp3m",
+              "x-index": 0,
+              "name": "translateHeaderImg"
+            },
+            "translateTitle": {
+              "type": "string",
+              "x-component": "Text",
+              "x-validator": [],
+              "x-component-props": {
+                "content": "翻译",
+                "style": {
+                  "fontSize": "16px",
+                  "fontWeight": 700,
+                  "margin": "0px 0px 0px 4px"
+                }
+              },
+              "x-designable-id": "1p651k33in0",
+              "x-index": 1,
+              "name": "translateTitle"
+            }
+          }
+        }
+      }
+    },
+    "divider": {
+      "type": "string",
+      "x-component": "Divider",
+      "x-validator": [],
+      "x-component-props": {
+        "children": "",
+        "style": {
+          "margin": "4px 0px 4px 0px"
+        }
+      },
+      "x-designable-id": "ohiba0voyar",
+      "x-index": 1,
+      "name": "divider"
+    },
+    "fromLanguage": {
+      "type": "string",
+      "title": "",
+      "x-decorator": "FormItem",
+      "x-component": "Input.TextArea",
+      "x-validator": [],
+      "x-component-props": {
+        "placeholder": "请输入文本，回车或失去焦点时自动触发翻译"
+      },
+      "x-decorator-props": {
+        "style": {
+          "margin": "8px 8px 0px 8px"
+        }
+      },
+      "name": "fromLanguage",
+      "x-designable-id": "sqxkf6ycyyr",
+      "x-index": 2,
+      "x-reactions": {
+        "dependencies": [
+          {
+            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+            "property": "value",
+            "type": "any"
+          }
+        ],
+        "fulfill": {
+          "run": "const getLan = (text) => {\n  return fetch(\"https://fanyi.baidu.com/langdetect\", {\n    headers: {\n      \"content-type\": \"application/x-www-form-urlencoded\",\n    },\n    body: `query=${encodeURIComponent(text)}`,\n    method: \"POST\",\n  })\n    .then((res) => res.json())\n    .then((res) => {\n      if (res.error === 0) {\n        return res.lan\n      } else {\n        $message.error(`自动检测当前语言失败 ${res.msg}`)\n        return null\n      }\n    })\n    .catch((e) => {\n      $message.error(\"自动检测当前语言失败\")\n      return null\n    })\n}\n\nconst getToLanguage = (from, text) => {\n  let to = \"zh\"\n  if (from === \"zh\") {\n    to = \"en\"\n  }\n  return fetch(\"https://fanyi.baidu.com/transapi\", {\n    headers: {\n      \"content-type\": \"application/x-www-form-urlencoded\",\n    },\n    body: `from=${from}&query=${encodeURIComponent(text)}&source=txt&to=${to}`,\n    method: \"POST\",\n  })\n    .then((res) => res.json())\n    .then((res) => {\n      if (res.status === 0) {\n        if (res.type === 2) {\n          return res.data?.[0].dst\n        } else if (res.type === 1) {\n          const data = JSON.parse(res.result)\n          const mean = data.content[0].mean\n          const result = mean\n            .map((item) => {\n              const cont = Object.keys(item.cont).join(\"; \")\n\n              if (item.pre) {\n                return `${item.pre} ${cont}`\n              } else {\n                return cont\n              }\n            })\n            .join(\"\\n\")\n          return result\n        } else {\n          $message.error(\"未支持的翻译类型\")\n          return\n        }\n      } else {\n        $message.error(\"翻译失败\")\n        return null\n      }\n    })\n    .catch((e) => {\n      $message.error(\"翻译失败\")\n      return null\n    })\n}\n\nlet lastText = null\nconst handleTranslate = async (e) => {\n  const text = e.target.value\n  if (!text) {\n    return\n  }\n  if (text === lastText) {\n    return\n  }\n\n  lastText = text\n\n  const lan = await getLan(text)\n  if (!lan) {\n    return\n  }\n\n  const result = await getToLanguage(lan, text)\n  if (!result) {\n    return\n  }\n\n  const toLanguage = $self\n    .query(`${$self.parent.address.entire}.toLanguage`)\n    .take()\n  toLanguage.value = result\n}\n\n$props({\n  onPressEnter: async (e) => {\n    e.preventDefault()\n\n    handleTranslate(e)\n  },\n  onBlur: (e) => {\n    handleTranslate(e)\n  },\n})\n"
+        }
+      }
+    },
+    "toLanguage": {
+      "type": "string",
+      "title": "",
+      "x-decorator": "FormItem",
+      "x-component": "Input.TextArea",
+      "x-validator": [],
+      "x-component-props": {
+        "placeholder": "翻译结果",
+        "autoSize": {
+          "minRows": 3,
+          "maxRows": 5
+        },
+        "style": {}
+      },
+      "x-decorator-props": {
+        "style": {
+          "margin": "8px 8px 8px 8px"
+        }
+      },
+      "name": "toLanguage",
+      "x-designable-id": "ilgw9xcvvz1",
+      "x-index": 3,
+      "x-pattern": "readOnly"
+    }
+  }
+}

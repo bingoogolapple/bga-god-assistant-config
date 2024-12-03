@@ -31,7 +31,7 @@
           "flexDirection": "row",
           "alignItems": "center",
           "margin": "0px 0px 0px 0px",
-          "padding": "8px 10px 8px 10px",
+          "padding": "4px 10px 4px 10px",
           "justifyContent": "space-between"
         }
       },
@@ -63,8 +63,8 @@
               "x-component-props": {
                 "src": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/duo-ling-guo/icon.svg",
                 "style": {
-                  "width": "40px",
-                  "height": "40px"
+                  "width": "24px",
+                  "height": "24px"
                 }
               },
               "x-designable-id": "grc32ahl3kd",
@@ -109,7 +109,8 @@
             "children": "",
             "target": "_blank",
             "icon": "SettingOutlined",
-            "type": "default"
+            "type": "default",
+            "size": "small"
           },
           "x-designable-id": "rmtx5m9758q",
           "x-index": 1,

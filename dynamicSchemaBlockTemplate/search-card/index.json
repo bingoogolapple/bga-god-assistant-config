@@ -18,7 +18,7 @@
             }
         ],
         "fulfill": {
-            "run": "const rootEntire = $self.address.entire\n// 只截取自己和父节点，避免拖动位置后数据丢失\nconst cacheKeyPrefix = $self.address.segments.slice(-2).join(\".\")\n// 搜索列表持久化缓存的 key\nconst cacheKeySearchList = `${cacheKeyPrefix}SearchList`\n// 默认搜索持久化缓存的 key\nconst cacheKeyDefaultSearch = `${cacheKeyPrefix}DefaultSearch`\n\n// 修复样式问题\n$props({\n  className: $self.props.name,\n})\n$effect(() => {\n  const rootNode = document.querySelector(`.${$self.props.name}`)\n  if (rootNode) {\n    const element = rootNode.querySelector(\n      \".ant-formily-item-feedback-layout-loose\"\n    )\n    if (element) {\n      element.style.marginBottom = 0\n    }\n  }\n}, [])\n\n$self.state = $observable({\n  defaultSearch: null,\n  searchList: null,\n})\n\n// 默认搜索列表\nconst defualtList = [\n  {\n    title: \"百度\",\n    url: \"https://www.baidu.com/s?wd=%s\",\n  },\n  {\n    title: \"必应\",\n    url: \"https://www.bing.com/search?q=%s\",\n  },\n  {\n    title: \"Google\",\n    url: \"https://www.google.com/search?q=%s\",\n  },\n  {\n    title: \"搜狗\",\n    url: \"https://www.sogou.com/web?query=%s\",\n  },\n  {\n    title: \"360\",\n    url: \"https://www.so.com/s?q=%s\",\n  },\n  {\n    title: \"掘金\",\n    url: \"https://juejin.cn/search?query=%s\",\n  },\n  {\n    title: \"npm\",\n    url: \"https://www.npmjs.com/search?q=%s\",\n  },\n  {\n    title: \"Bilibili\",\n    url: \"https://search.bilibili.com/all?keyword=%s\",\n  },\n  {\n    title: \"YouTube\",\n    url: \"https://www.youtube.com/results?search_query=%s\",\n  },\n  {\n    title: \"抖音\",\n    url: \"https://www.douyin.com/search/%s\",\n  },\n  {\n    title: \"快手\",\n    url: \"https://www.kuaishou.com/search/video?searchKey=%s\",\n  },\n  {\n    title: \"小红书\",\n    url: \"https://www.xiaohongshu.com/search_result?keyword=%s\",\n  },\n  {\n    title: \"知乎\",\n    url: \"https://www.zhihu.com/search?type=content&q=%s\",\n  },\n  {\n    title: \"微博\",\n    url: \"https://s.weibo.com/weibo?q=%s\",\n  },\n  {\n    title: \"Facebook\",\n    url: \"https://www.facebook.com/search/top/?q=%s\",\n  },\n  {\n    title: \"X\",\n    url: \"https://x.com/search?q=%s\",\n  },\n].map((item, index) => {\n  return {\n    ...item,\n    id: Date.now() + index,\n  }\n})\n\n// 获取默认搜索\n$self.getDefaultSearch = async () => {\n  if ($self.state.defaultSearch) {\n    // 返回内存缓存的默认搜索\n    return $self.state.defaultSearch\n  }\n\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeyDefaultSearch)\n    if (res) {\n      res = JSON.parse(res)\n    }\n  } catch (e) {\n    $logger.info(\"获取默认搜索失败\", e)\n  }\n\n  $self.state.defaultSearch = res || $self.state.searchList[0]\n  return $self.state.defaultSearch\n}\n\n// 修改默认搜索\n$self.updateDefaultSearch = async (defaultSearch) => {\n  try {\n    await $chrome.localStorage.setItem(\n      cacheKeyDefaultSearch,\n      JSON.stringify(defaultSearch)\n    )\n\n    $self.state.defaultSearch = defaultSearch\n  } catch (e) {\n    $logger.info(\"修改默认搜索失败\", e)\n  }\n}\n\n// 展示搜索管理对话框\n$self.showSearchManageDialog = () => {\n  const searchManageDialog = $self\n    .query(`${rootEntire}.searchManageDialog`)\n    .take()\n  searchManageDialog.setComponentProps({\n    open: true,\n  })\n}\n\n// 展示添加或修改搜索方式对话框\n$self.showAddOrUpdateSearchDialog = (search) => {\n  const addOrUpdateSearchDialog = $self\n    .query(`${rootEntire}.addOrUpdateSearchDialog`)\n    .take()\n  addOrUpdateSearchDialog.value = {\n    ...(search || {}),\n  }\n  addOrUpdateSearchDialog.setComponentProps({\n    open: true,\n    title: `${search ? \"修改\" : \"添加\"}方式`,\n  })\n}\n\n// 添加或修改搜索方式\n$self.addOrUpdateSearch = async (search) => {\n  const list = await $self.fetchSearchList()\n\n  if (search.id) {\n    // 修改\n    const index = list.findIndex((item) => item.id === search.id)\n    list[index] = search\n  } else {\n    // 添加\n    search.id = Date.now()\n    list.push(search)\n  }\n\n  try {\n    await $chrome.localStorage.setItem(cacheKeySearchList, JSON.stringify(list))\n    $self.state.searchList = [...list]\n  } catch (e) {\n    $logger.info(`${search.id ? \"修改\" : \"添加\"}搜索方式失败`, e)\n  }\n}\n\n// 删除搜索方式\n$self.deleteSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n  list = list.filter((item) => item.id !== search.id)\n  $self.saveSearchList(list)\n}\n\n// 往前移动搜索方式\n$self.moveUpSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n\n  const index = list.findIndex((item) => item.id === search.id)\n  let preIndex = index - 1\n  if (preIndex === -1) {\n    // 已经是第一条，则和最后一条互换\n    preIndex = list.length - 1\n  }\n\n  const other = list[preIndex]\n  list[preIndex] = search\n  list[index] = other\n  $self.saveSearchList(list)\n}\n\n// 往后移动搜索方式\n$self.moveDownSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n\n  const index = list.findIndex((item) => item.id === search.id)\n  let nextIndex = index + 1\n  if (nextIndex === list.length) {\n    // 已经是最后一条，则和第一条互换\n    nextIndex = 0\n  }\n\n  const other = list[nextIndex]\n  list[nextIndex] = search\n  list[index] = other\n\n  $self.saveSearchList(list)\n}\n\n// 保存搜索列表数据\n$self.saveSearchList = async (list) => {\n  try {\n    await $chrome.localStorage.setItem(cacheKeySearchList, JSON.stringify(list))\n\n    $self.state.searchList = [...list]\n  } catch (e) {\n    $logger.info(`保存搜索列表数据失败`, e)\n  }\n}\n\n// 执行搜索\n$self.handleSearch = async (search) => {\n  if (!search) {\n    search = await $self.getDefaultSearch()\n  }\n\n  const searchKeyword = $self.query(`${rootEntire}.searchKeyword`).take()\n  const keyword = searchKeyword.value\n  const url = search.url.replace(\"%s\", keyword)\n  $utils.openUrl(url)\n}\n\n// 获取搜索列表\n$self.fetchSearchList = async () => {\n  if ($self.state.searchList) {\n    return $self.state.searchList\n  }\n\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeySearchList)\n  } catch (e) {\n    $logger.info(\"获取搜索列表失败\", e)\n    return []\n  }\n\n  if (!res) {\n    $self.saveSearchList(defualtList)\n    return defualtList\n  }\n\n  try {\n    const searchCardData = JSON.parse(res) || []\n    return searchCardData\n  } catch (e) {\n    $logger.info(\"解析搜索列表数据失败\", e)\n    return []\n  }\n}\n\n$effect(() => {\n  const searchIteratorLayout = $self\n    .query(`${rootEntire}.searchIteratorLayout`)\n    .take()\n  searchIteratorLayout.value = $self.state.searchList\n}, [$self.state.searchList])\n\n$effect(() => {\n  const defaultSearch = $self.state.defaultSearch || defualtList[0]\n  const searchKeyword = $self.query(`${rootEntire}.searchKeyword`).take()\n  searchKeyword.setComponentProps({\n    placeholder: `请输入搜索内容，回车键默认「${defaultSearch.title}」搜索`,\n  })\n\n  const searchCardTitle = $self.query(`${rootEntire}.searchCardTitleDiv.searchCardTitleLeftDiv.searchCardTitle`).take()\n  searchCardTitle.value = `「${defaultSearch.title}」搜索`\n}, [$self.state.defaultSearch])\n\n// 初始化\nconst init = async () => {\n  $self.state.searchList = await $self.fetchSearchList()\n\n  $self.getDefaultSearch()\n}\n\n$effect(async () => {\n  init()\n}, [])\n"
+            "run": "const rootEntire = $self.address.entire\n// 只截取自己和父节点，避免拖动位置后数据丢失\nconst cacheKeyPrefix = $self.address.segments.slice(-2).join(\".\")\n// 搜索列表持久化缓存的 key\nconst cacheKeySearchList = `${cacheKeyPrefix}SearchList`\n// 默认搜索持久化缓存的 key\nconst cacheKeyDefaultSearch = `${cacheKeyPrefix}DefaultSearch`\n\n// 修复样式问题\n$props({\n  className: $self.props.name,\n})\n$effect(() => {\n  const rootNode = document.querySelector(`.${$self.props.name}`)\n  if (rootNode) {\n    const element = rootNode.querySelector(\n      \".ant-formily-item-feedback-layout-loose\"\n    )\n    if (element) {\n      element.style.marginBottom = 0\n    }\n  }\n}, [])\n\n$self.state = $observable({\n  defaultSearch: null,\n  searchList: null,\n})\n\n// 默认搜索列表\nconst defualtList = [\n  {\n    title: \"百度\",\n    url: \"https://www.baidu.com/s?wd=%s\",\n  },\n  {\n    title: \"必应\",\n    url: \"https://www.bing.com/search?q=%s\",\n  },\n  {\n    title: \"Google\",\n    url: \"https://www.google.com/search?q=%s\",\n  },\n  {\n    title: \"搜狗\",\n    url: \"https://www.sogou.com/web?query=%s\",\n  },\n  {\n    title: \"360\",\n    url: \"https://www.so.com/s?q=%s\",\n  },\n  {\n    title: \"掘金\",\n    url: \"https://juejin.cn/search?query=%s\",\n  },\n  {\n    title: \"npm\",\n    url: \"https://www.npmjs.com/search?q=%s\",\n  },\n  {\n    title: \"GitHub\",\n    url: \"https://github.com/search?q=%s\",\n  },\n  {\n    title: \"Bilibili\",\n    url: \"https://search.bilibili.com/all?keyword=%s\",\n  },\n  {\n    title: \"YouTube\",\n    url: \"https://www.youtube.com/results?search_query=%s\",\n  },\n  {\n    title: \"抖音\",\n    url: \"https://www.douyin.com/search/%s\",\n  },\n  {\n    title: \"快手\",\n    url: \"https://www.kuaishou.com/search/video?searchKey=%s\",\n  },\n  {\n    title: \"小红书\",\n    url: \"https://www.xiaohongshu.com/search_result?keyword=%s\",\n  },\n  {\n    title: \"知乎\",\n    url: \"https://www.zhihu.com/search?type=content&q=%s\",\n  },\n  {\n    title: \"微博\",\n    url: \"https://s.weibo.com/weibo?q=%s\",\n  },\n  {\n    title: \"Facebook\",\n    url: \"https://www.facebook.com/search/top/?q=%s\",\n  },\n  {\n    title: \"X\",\n    url: \"https://x.com/search?q=%s\",\n  },\n].map((item, index) => {\n  return {\n    ...item,\n    id: Date.now() + index,\n  }\n})\n\n// 获取默认搜索\n$self.getDefaultSearch = async () => {\n  if ($self.state.defaultSearch) {\n    // 返回内存缓存的默认搜索\n    return $self.state.defaultSearch\n  }\n\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeyDefaultSearch)\n    if (res) {\n      res = JSON.parse(res)\n    }\n  } catch (e) {\n    $logger.info(\"获取默认搜索失败\", e)\n  }\n\n  $self.state.defaultSearch = res || $self.state.searchList[0]\n  return $self.state.defaultSearch\n}\n\n// 修改默认搜索\n$self.updateDefaultSearch = async (defaultSearch) => {\n  try {\n    await $chrome.localStorage.setItem(\n      cacheKeyDefaultSearch,\n      JSON.stringify(defaultSearch)\n    )\n\n    $self.state.defaultSearch = defaultSearch\n  } catch (e) {\n    $logger.info(\"修改默认搜索失败\", e)\n  }\n}\n\n// 展示搜索管理对话框\n$self.showSearchManageDialog = () => {\n  const searchManageDialog = $self\n    .query(`${rootEntire}.searchManageDialog`)\n    .take()\n  searchManageDialog.setComponentProps({\n    open: true,\n  })\n}\n\n// 展示添加或修改搜索方式对话框\n$self.showAddOrUpdateSearchDialog = (search) => {\n  const addOrUpdateSearchDialog = $self\n    .query(`${rootEntire}.addOrUpdateSearchDialog`)\n    .take()\n  addOrUpdateSearchDialog.value = {\n    ...(search || {}),\n  }\n  addOrUpdateSearchDialog.setComponentProps({\n    open: true,\n    title: `${search ? \"修改\" : \"添加\"}方式`,\n  })\n}\n\n// 添加或修改搜索方式\n$self.addOrUpdateSearch = async (search) => {\n  const list = await $self.fetchSearchList()\n\n  if (search.id) {\n    // 修改\n    const index = list.findIndex((item) => item.id === search.id)\n    list[index] = search\n  } else {\n    // 添加\n    search.id = Date.now()\n    list.push(search)\n  }\n\n  try {\n    await $chrome.localStorage.setItem(cacheKeySearchList, JSON.stringify(list))\n    $self.state.searchList = [...list]\n  } catch (e) {\n    $logger.info(`${search.id ? \"修改\" : \"添加\"}搜索方式失败`, e)\n  }\n}\n\n// 删除搜索方式\n$self.deleteSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n  list = list.filter((item) => item.id !== search.id)\n  $self.saveSearchList(list)\n}\n\n// 往前移动搜索方式\n$self.moveUpSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n\n  const index = list.findIndex((item) => item.id === search.id)\n  let preIndex = index - 1\n  if (preIndex === -1) {\n    // 已经是第一条，则和最后一条互换\n    preIndex = list.length - 1\n  }\n\n  const other = list[preIndex]\n  list[preIndex] = search\n  list[index] = other\n  $self.saveSearchList(list)\n}\n\n// 往后移动搜索方式\n$self.moveDownSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n\n  const index = list.findIndex((item) => item.id === search.id)\n  let nextIndex = index + 1\n  if (nextIndex === list.length) {\n    // 已经是最后一条，则和第一条互换\n    nextIndex = 0\n  }\n\n  const other = list[nextIndex]\n  list[nextIndex] = search\n  list[index] = other\n\n  $self.saveSearchList(list)\n}\n\n// 保存搜索列表数据\n$self.saveSearchList = async (list) => {\n  try {\n    await $chrome.localStorage.setItem(cacheKeySearchList, JSON.stringify(list))\n\n    $self.state.searchList = [...list]\n  } catch (e) {\n    $logger.info(`保存搜索列表数据失败`, e)\n  }\n}\n\n// 执行搜索\n$self.handleSearch = async (search) => {\n  if (!search) {\n    search = await $self.getDefaultSearch()\n  }\n\n  const searchKeyword = $self.query(`${rootEntire}.searchKeyword`).take()\n  const keyword = searchKeyword.value\n  const url = search.url.replace(\"%s\", keyword)\n  $utils.openUrl(url)\n}\n\n// 获取搜索列表\n$self.fetchSearchList = async () => {\n  if ($self.state.searchList) {\n    return $self.state.searchList\n  }\n\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeySearchList)\n  } catch (e) {\n    $logger.info(\"获取搜索列表失败\", e)\n    return []\n  }\n\n  if (!res) {\n    $self.saveSearchList(defualtList)\n    return defualtList\n  }\n\n  try {\n    const searchCardData = JSON.parse(res) || []\n    return searchCardData\n  } catch (e) {\n    $logger.info(\"解析搜索列表数据失败\", e)\n    return []\n  }\n}\n\n$effect(() => {\n  const searchIteratorLayout = $self\n    .query(`${rootEntire}.searchIteratorLayout`)\n    .take()\n  searchIteratorLayout.value = $self.state.searchList\n}, [$self.state.searchList])\n\n$effect(() => {\n  const defaultSearch = $self.state.defaultSearch || defualtList[0]\n  const searchKeyword = $self.query(`${rootEntire}.searchKeyword`).take()\n  searchKeyword.setComponentProps({\n    placeholder: `请输入搜索内容，回车键默认「${defaultSearch.title}」搜索`,\n  })\n\n  const searchCardTitle = $self\n    .query(\n      `${rootEntire}.searchCardTitleDiv.searchCardTitleLeftDiv.searchCardTitle`\n    )\n    .take()\n  searchCardTitle.value = `「${defaultSearch.title}」搜索`\n}, [$self.state.defaultSearch])\n\n// 初始化\nconst init = async () => {\n  $self.state.searchList = await $self.fetchSearchList()\n\n  $self.getDefaultSearch()\n}\n\n$effect(async () => {\n  init()\n}, [])\n"
         }
     },
     "properties": {
@@ -31,7 +31,7 @@
                     "flexDirection": "row",
                     "alignItems": "center",
                     "margin": "0px 0px 0px 0px",
-                    "padding": "8px 10px 8px 10px",
+                    "padding": "4px 10px 4px 10px",
                     "justifyContent": "space-between"
                 }
             },
@@ -122,7 +122,8 @@
                                 "type": "default",
                                 "style": {
                                     "margin": "0px 0px 0px 12px"
-                                }
+                                },
+                                "size": "small"
                             },
                             "x-designable-id": "1bt70ow5cv7",
                             "x-index": 0,
@@ -151,7 +152,8 @@
                                 "type": "default",
                                 "style": {
                                     "margin": "0px 0px 0px 12px"
-                                }
+                                },
+                                "size": "small"
                             },
                             "x-designable-id": "iuyqdhe53b5",
                             "x-index": 1,
@@ -225,7 +227,7 @@
                     "flexDirection": "row",
                     "justifyContent": "center",
                     "flexWrap": "wrap",
-                    "padding": "16px 16px 8px 16px"
+                    "padding": "12px 16px 4px 16px"
                 }
             },
             "default": [],
@@ -413,7 +415,8 @@
                                 "x-component": "ArrayTable.Column",
                                 "x-component-props": {
                                     "title": "操作",
-                                    "width": 165
+                                    "width": 135,
+                                    "align": "center"
                                 },
                                 "x-designable-id": "wxk3yjsqja8",
                                 "x-index": 2,
@@ -441,7 +444,8 @@
                                             "icon": "DeleteOutlined",
                                             "style": {
                                                 "margin": "0px 0px 0px 0px"
-                                            }
+                                            },
+                                            "size": "small"
                                         },
                                         "x-designable-id": "q2utwk10jj5",
                                         "x-index": 0,
@@ -469,7 +473,8 @@
                                             "icon": "ArrowUpOutlined",
                                             "style": {
                                                 "margin": "0px 0px 0px 6px"
-                                            }
+                                            },
+                                            "size": "small"
                                         },
                                         "x-designable-id": "8i97b1d89hw",
                                         "x-index": 1,
@@ -497,7 +502,8 @@
                                             "icon": "ArrowDownOutlined",
                                             "style": {
                                                 "margin": "0px 0px 0px 6px"
-                                            }
+                                            },
+                                            "size": "small"
                                         },
                                         "x-designable-id": "cc8pumo6llz",
                                         "x-index": 2,
@@ -525,7 +531,8 @@
                                             "icon": "EditOutlined",
                                             "style": {
                                                 "margin": "0px 0px 0px 6px"
-                                            }
+                                            },
+                                            "size": "small"
                                         },
                                         "x-designable-id": "7x72m09nrlp",
                                         "x-index": 3,

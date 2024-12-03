@@ -31,7 +31,7 @@
           "flexDirection": "row",
           "alignItems": "center",
           "margin": "0px 0px 0px 0px",
-          "padding": "8px 10px 8px 10px",
+          "padding": "4px 10px 4px 10px",
           "justifyContent": "space-between"
         }
       },
@@ -110,7 +110,8 @@
                 "type": "default",
                 "style": {
                   "margin": "0px 0px 0px 12px"
-                }
+                },
+                "size": "small"
               },
               "x-designable-id": "n37r496ojuf",
               "x-index": 0,
@@ -139,7 +140,8 @@
                 "type": "default",
                 "style": {
                   "margin": "0px 0px 0px 12px"
-                }
+                },
+                "size": "small"
               },
               "x-designable-id": "mxdoh90e2ns",
               "x-index": 1,
@@ -524,7 +526,8 @@
                 "x-component": "ArrayTable.Column",
                 "x-component-props": {
                   "title": "操作",
-                  "width": 165
+                  "width": 135,
+                  "align": "center"
                 },
                 "x-designable-id": "kmov0p5frh4",
                 "x-index": 2,
@@ -552,7 +555,8 @@
                       "icon": "DeleteOutlined",
                       "style": {
                         "margin": "0px 0px 0px 0px"
-                      }
+                      },
+                      "size": "small"
                     },
                     "x-designable-id": "lm9jp7lirla",
                     "x-index": 0,
@@ -580,7 +584,8 @@
                       "icon": "ArrowUpOutlined",
                       "style": {
                         "margin": "0px 0px 0px 6px"
-                      }
+                      },
+                      "size": "small"
                     },
                     "x-designable-id": "asytmyipxsx",
                     "x-index": 1,
@@ -608,7 +613,8 @@
                       "icon": "ArrowDownOutlined",
                       "style": {
                         "margin": "0px 0px 0px 6px"
-                      }
+                      },
+                      "size": "small"
                     },
                     "x-designable-id": "zxi80mizvjy",
                     "x-index": 2,
@@ -636,7 +642,8 @@
                       "icon": "EditOutlined",
                       "style": {
                         "margin": "0px 0px 0px 6px"
-                      }
+                      },
+                      "size": "small"
                     },
                     "x-designable-id": "s0uci4fi3f6",
                     "x-index": 3,

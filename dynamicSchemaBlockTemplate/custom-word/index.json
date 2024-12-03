@@ -31,7 +31,7 @@
           "flexDirection": "row",
           "alignItems": "center",
           "margin": "0px 0px 0px 0px",
-          "padding": "8px 10px 8px 10px",
+          "padding": "4px 10px 4px 10px",
           "justifyContent": "space-between"
         }
       },
@@ -63,8 +63,8 @@
               "x-component-props": {
                 "src": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/custom-word/icon.svg",
                 "style": {
-                  "width": "40px",
-                  "height": "40px"
+                  "width": "24px",
+                  "height": "24px"
                 }
               },
               "x-designable-id": "3cpgoly1zjb",
@@ -76,7 +76,7 @@
               "x-component": "Text",
               "x-validator": [],
               "x-component-props": {
-                "content": "自定义单词",
+                "content": "自定义单词本",
                 "style": {
                   "fontSize": "16px",
                   "fontWeight": 700,
@@ -109,7 +109,8 @@
             "children": "",
             "target": "_blank",
             "icon": "PlusCircleOutlined",
-            "type": "default"
+            "type": "default",
+            "size": "small"
           },
           "x-designable-id": "ip73usf50ot",
           "x-index": 1,
@@ -198,7 +199,7 @@
             "x-component": "ArrayTable.Column",
             "x-component-props": {
               "title": "操作",
-              "width": 165,
+              "width": 135,
               "align": "center"
             },
             "x-designable-id": "spznivuol6h",
@@ -226,7 +227,8 @@
                   "icon": "DeleteOutlined",
                   "style": {
                     "margin": "0px 0px 0px 0px"
-                  }
+                  },
+                  "size": "small"
                 },
                 "x-designable-id": "c4p6xhtbp7c",
                 "x-index": 0,
@@ -254,7 +256,8 @@
                   "icon": "ArrowUpOutlined",
                   "style": {
                     "margin": "0px 0px 0px 6px"
-                  }
+                  },
+                  "size": "small"
                 },
                 "x-designable-id": "y34ahvz9qnk",
                 "x-index": 1,
@@ -282,7 +285,8 @@
                   "icon": "ArrowDownOutlined",
                   "style": {
                     "margin": "0px 0px 0px 6px"
-                  }
+                  },
+                  "size": "small"
                 },
                 "x-designable-id": "54tdogcyjpb",
                 "x-index": 2,
@@ -310,7 +314,8 @@
                   "icon": "EditOutlined",
                   "style": {
                     "margin": "0px 0px 0px 6px"
-                  }
+                  },
+                  "size": "small"
                 },
                 "x-designable-id": "9y6r6aa2hpa",
                 "x-index": 3,

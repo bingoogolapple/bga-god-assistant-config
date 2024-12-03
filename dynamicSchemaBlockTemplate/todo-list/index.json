@@ -31,7 +31,7 @@
                     "flexDirection": "row",
                     "alignItems": "center",
                     "margin": "0px 0px 0px 0px",
-                    "padding": "8px 10px 8px 10px",
+                    "padding": "4px 10px 4px 10px",
                     "justifyContent": "space-between"
                 }
             },
@@ -63,8 +63,8 @@
                             "x-component-props": {
                                 "src": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/todo-list/icon.png",
                                 "style": {
-                                    "width": "40px",
-                                    "height": "40px"
+                                    "width": "24px",
+                                    "height": "24px"
                                 }
                             },
                             "x-designable-id": "sxqaace5v8h",
@@ -109,7 +109,8 @@
                         "children": "",
                         "target": "_blank",
                         "icon": "PlusCircleOutlined",
-                        "type": "default"
+                        "type": "default",
+                        "size": "small"
                     },
                     "x-designable-id": "xwd27rrj15j",
                     "x-index": 1,
@@ -269,7 +270,8 @@
                                     "icon": "DeleteOutlined",
                                     "style": {
                                         "margin": "0px 0px 0px 0px"
-                                    }
+                                    },
+                                    "size": "small"
                                 },
                                 "x-designable-id": "5k821e4fk7q",
                                 "x-index": 0,
@@ -297,7 +299,8 @@
                                     "icon": "EditOutlined",
                                     "style": {
                                         "margin": "0px 0px 0px 6px"
-                                    }
+                                    },
+                                    "size": "small"
                                 },
                                 "x-designable-id": "njllgtecfr6",
                                 "x-index": 1,
