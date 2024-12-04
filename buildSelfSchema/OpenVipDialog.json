@@ -73,24 +73,13 @@
                     "flexDirection": "row",
                     "fontSize": "12px",
                     "margin": "8px 0px 0px 0px",
-                    "fontWeight": 400
+                    "fontWeight": 400,
+                    "fontStyle": "italic"
                   }
                 },
                 "x-designable-id": "0jhyo4pkbhs",
                 "x-index": 1,
-                "x-validator": [],
-                "x-reactions": {
-                  "dependencies": [
-                    {
-                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                      "property": "value",
-                      "type": "any"
-                    }
-                  ],
-                  "fulfill": {
-                    "run": "const init = async () => {\n  const config = await $utils.getAssistantConfig()\n  if (!config) {\n    return\n  }\n\n  $self.value = `已超过 ${config.vip.freeDay || 2} 天免费试用期或会员服务已到期，请开通会员或续期会员`\n}\n\n$effect(() => {\n  init()\n}, [])\n"
-                  }
-                }
+                "x-validator": []
               }
             }
           },
