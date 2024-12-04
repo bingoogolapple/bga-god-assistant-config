@@ -167,7 +167,7 @@
             "x-component": "FormGrid.GridColumn",
             "x-validator": [],
             "x-component-props": {
-              "gridSpan": 4,
+              "gridSpan": 6,
               "style": {
                 "display": "flex",
                 "justifyContent": "center",
@@ -220,28 +220,12 @@
               }
             }
           },
-          "gt57cp0aa4l": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 4,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "gt57cp0aa4l",
-            "x-index": 4
-          },
           "zblxkd8h524": {
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-validator": [],
             "x-component-props": {
-              "gridSpan": 4,
+              "gridSpan": 6,
               "style": {
                 "display": "flex",
                 "justifyContent": "center",
@@ -250,7 +234,7 @@
               }
             },
             "x-designable-id": "zblxkd8h524",
-            "x-index": 5,
+            "x-index": 4,
             "properties": {
               "rfqbgi5jkym": {
                 "type": "void",
