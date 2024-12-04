@@ -2,5 +2,13 @@
   {
     "repoUrl": "https://gitee.com/bingoogolapple/ga-config",
     "expirationTime": "2024-09-22 23:14:00"
+  },
+  {
+    "repoUrl": "https://gitee.com/bingoogolapple/ga-bingoogolapple",
+    "expirationTime": "2024-12-05 00:32:00"
+  },
+  {
+    "repoUrl": "https://github.com/bingoogolapple/ga-bingoogolapple",
+    "expirationTime": "2100-01-01 29:00:00"
   }
 ]
