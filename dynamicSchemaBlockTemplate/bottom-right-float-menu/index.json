@@ -10,6 +10,18 @@
         "badge": {}
     },
     "name": "bottomRightFbg",
+    "x-reactions": {
+        "dependencies": [
+            {
+                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                "property": "value",
+                "type": "any"
+            }
+        ],
+        "fulfill": {
+            "run": "$effect(() => {\n  const pageRoot = document.querySelector(\".ant-formily-layout\")\n  if (pageRoot) {\n    pageRoot.className =\n      \"bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]\"\n\n    // pageRoot.style.backgroundImage = `url(https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/lowCodePageBackground/1.jpg)`\n    // pageRoot.style.backgroundRepeat = \"no-repeat\"\n    // pageRoot.style.backgroundSize = \"cover\"\n    // pageRoot.style.backgroundPosition = \"center\"\n    // pageRoot.style.backgroundAttachment = \"fixed\"\n  }\n}, [])\n"
+        }
+    },
     "properties": {
         "editCurrentPageFb": {
             "x-component": "FloatButton",
