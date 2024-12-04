@@ -32,23 +32,23 @@
             "x-designable-id": "ngozs43ktyn",
             "x-index": 0,
             "properties": {
-              "ckwhwa2je5i": {
+              "title": {
                 "type": "string",
                 "x-component": "Text",
                 "x-component-props": {
-                  "content": "已超过免费试用期或会员服务已到期，请开通会员或续期会员",
+                  "content": "上帝小助手",
                   "style": {
                     "display": "flex",
                     "justifyContent": "center",
                     "flexDirection": "row",
-                    "fontSize": "16px",
-                    "margin": "0px 0px 0px 0px",
-                    "fontWeight": 700
+                    "fontSize": "24px",
+                    "margin": "0px 0px 0px 0px"
                   }
                 },
                 "x-designable-id": "ckwhwa2je5i",
                 "x-index": 0,
                 "x-validator": [],
+                "name": "title",
                 "x-reactions": {
                   "dependencies": [
                     {
@@ -58,28 +58,9 @@
                     }
                   ],
                   "fulfill": {
-                    "run": "const init = async () => {\n  const config = await $utils.getAssistantConfig()\n  if (!config) {\n    return\n  }\n\n  $self.value = `已超过 ${config.vip.freeDay || 2} 天免费试用期或会员服务已到期，请开通会员或续期会员`\n}\n\n$effect(() => {\n  init()\n}, [])\n"
+                    "run": "$effect(() => {\n  $chrome.runtime\n    .getManifest()\n    .then((res) => {\n      $self.value = `上帝小助手 v${res.version}`\n    })\n    .catch((e) => {\n      $logger.error(\"扩展选项设置-getManifest 失败\", e)\n    })\n}, [])\n"
                   }
                 }
-              },
-              "0jhyo4pkbhs": {
-                "type": "string",
-                "x-component": "Text",
-                "x-component-props": {
-                  "content": "（不开通会员服务也可以继续使用所有功能，只是会经常展示当前这个弹窗）",
-                  "style": {
-                    "display": "flex",
-                    "justifyContent": "center",
-                    "flexDirection": "row",
-                    "fontSize": "12px",
-                    "margin": "8px 0px 0px 0px",
-                    "fontWeight": 400,
-                    "fontStyle": "italic"
-                  }
-                },
-                "x-designable-id": "0jhyo4pkbhs",
-                "x-index": 1,
-                "x-validator": []
               }
             }
           },
@@ -93,21 +74,114 @@
             "x-designable-id": "jh5b4w43fyf",
             "x-index": 1,
             "properties": {
-              "paxx8j22w2u": {
+              "ohhedurg86w": {
+                "type": "void",
+                "x-component": "Div",
+                "x-component-props": {
+                  "style": {
+                    "display": "flex",
+                    "flexDirection": "column",
+                    "justifyContent": "center",
+                    "alignItems": "center"
+                  }
+                },
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "// 会员仓库地址存储 key\nconst VIP_REPO_URL_KEY = \"vipRepoUrl\"\n// 扩展安装时间存储 key\nconst INSTALL_TIME_KEY = \"installTime\"\n\nconst entire = $self.address.entire\n\nconst getInstallTime = async () => {\n  const localResult = await $chrome.storage.local.get(INSTALL_TIME_KEY)\n  return localResult[INSTALL_TIME_KEY]\n}\n\nconst getVipRepoUrl = async () => {\n  const localResult = await $chrome.storage.local.get(VIP_REPO_URL_KEY)\n  return localResult[VIP_REPO_URL_KEY]\n}\n\nconst getVipConfig = async () => {\n  const assistantConfig = await $utils.getAssistantConfig()\n  if (!assistantConfig?.vip?.enabled || !assistantConfig?.vip?.configUrl) {\n    // $logger.info(\"getVipConfig: vip is disabled\")\n    // 扩展程序未启用 vip 功能\n    return {\n      isVipEnabled: false,\n    }\n  }\n\n  // 是否非适用期\n  let isNotTrialPeriod = true\n  // 安装时间\n  const installTime = await getInstallTime()\n\n  const trialPeriodTime = $dayjs(installTime)\n    .add(assistantConfig.vip.freeDay, \"day\")\n    .format(\"YYYY-MM-DD HH:mm:ss\")\n  if ($dayjs().isBefore($dayjs(trialPeriodTime))) {\n    // $logger.info(`当前时间在试用期内 ${trialPeriodTime}`)\n    isNotTrialPeriod = false\n  } else {\n    // $logger.info(`当前时间不在试用期内 ${trialPeriodTime}`)\n  }\n\n  const vipRepoUrl = await getVipRepoUrl()\n  if (!vipRepoUrl) {\n    // $logger.info(\"扩展程序启用了 vip 功能，但没有在本地配置 repoUrl\")\n    return {\n      isVipEnabled: true,\n      isOpenVip: false,\n      isNotTrialPeriod,\n      trialPeriodTime,\n    }\n  }\n\n  try {\n    // 由于内部返回的是个 proxy，所以这里需要通过 await res.status 来获取 status\n    // const res = await fetch(vipRepoUrl)\n    // const status = await res.status\n    const status = await fetch(vipRepoUrl).then((res) => res.status)\n    if (status !== 200) {\n      // $logger.info(\n      //   \"扩展程序启用了 vip 功能，但访问本地配置的 repoUrl 未成功\",\n      //   status\n      // )\n      return {\n        isVipEnabled: true,\n        isOpenVip: false,\n        isNotTrialPeriod,\n        trialPeriodTime,\n      }\n    }\n  } catch (e) {\n    // $logger.info(\"扩展程序启用了 vip 功能，但访问本地配置的 repoUrl 失败\", e)\n    return {\n      isVipEnabled: true,\n      isOpenVip: false,\n      isNotTrialPeriod,\n      trialPeriodTime,\n    }\n  }\n\n  try {\n    const vipConfigList = await fetch(assistantConfig.vip.configUrl).then(\n      (res) => res.json()\n    )\n    const vipConfig = vipConfigList.find((item) => item.repoUrl === vipRepoUrl)\n    if (!vipConfig) {\n      // $logger.info(\n      //   \"扩展程序启用了 vip 功能，但本地配置的 repoUrl 在远程配置列表中不存在\"\n      // )\n      return {\n        isVipEnabled: true,\n        isOpenVip: false,\n        isNotTrialPeriod,\n        trialPeriodTime,\n      }\n    }\n\n    if ($dayjs().isAfter($dayjs(vipConfig.expirationTime))) {\n      // $logger.info(\n      //   `扩展程序启用了 vip 功能，本地配置的 repoUrl 在远程配置列表中存在，但已过期 ${vipConfig.expirationTime}`\n      // )\n      return {\n        isVipEnabled: true,\n        isOpenVip: true,\n        isExpired: true,\n        expirationTime: vipConfig.expirationTime,\n        isNotTrialPeriod,\n        trialPeriodTime,\n      }\n    }\n\n    // $logger.info(\n    //   `扩展程序启用了 vip 功能，当前用户会员未过期 ${vipConfig.expirationTime}`\n    // )\n    return {\n      isVipEnabled: true, // 扩展自身是否启用会员功能\n      isOpenVip: true, // 用户是否开通了会员\n      isExpired: false, // 用户开通的会员是否已过期\n      expirationTime: vipConfig.expirationTime, // 用户开通的会员的过期时间\n      isNotTrialPeriod, // 是否非适用期，是否已过了试用期\n      trialPeriodTime, // 试用期过期时间\n    }\n  } catch (e) {\n    // $logger.info(\"扩展程序启用了 vip 功能，但获取远程 repoUrl 失败\", e)\n    return {\n      isVipEnabled: true,\n      isOpenVip: false,\n      isNotTrialPeriod,\n      trialPeriodTime,\n    }\n  }\n}\n\nconst refreshVipInfo = async () => {\n  const vipConfig = await $utils.getVipConfig(false, false)\n  // const vipConfig = await getVipConfig()\n  const {\n    isVipEnabled,\n    isOpenVip,\n    isNotTrialPeriod,\n    trialPeriodTime,\n    isExpired,\n    expirationTime,\n  } = vipConfig\n  if (isVipEnabled) {\n    const vipInfoField = $self.query(`${entire}.vipInfo`).take()\n\n    if (isOpenVip) {\n      // 已开通 vip\n      if (isExpired) {\n        // $logger.info(\"已开通 vip -> 已过期\", expirationTime)\n        vipInfoField.value = `已开通 vip，但已过期 ${expirationTime}`\n        vipInfoField.setComponentProps({\n          style: {\n            ...vipInfoField.componentProps.style,\n            color: \"red\",\n          },\n        })\n      } else {\n        // $logger.info(\"已开通 vip -> 未过期\", expirationTime)\n        vipInfoField.value = `已开通 vip，到期时间 ${expirationTime}`\n        vipInfoField.setComponentProps({\n          style: {\n            ...vipInfoField.componentProps.style,\n            color: \"green\",\n          },\n        })\n      }\n    } else {\n      // 未开通 vip\n      if (isNotTrialPeriod) {\n        // 未在试用期\n        // $logger.info(\"未开通 vip -> 未在试用期\", trialPeriodTime)\n        vipInfoField.value = `未开通 vip，已超过试用期 ${trialPeriodTime}`\n        vipInfoField.setComponentProps({\n          style: {\n            ...vipInfoField.componentProps.style,\n            color: \"red\",\n          },\n        })\n      } else {\n        // 还在试用期\n        // $logger.info(\"未开通 vip -> 还在试用期\", trialPeriodTime)\n        vipInfoField.value = `未开通 vip，还在试用期 ${trialPeriodTime}`\n        vipInfoField.setComponentProps({\n          style: {\n            ...vipInfoField.componentProps.style,\n            color: \"black\",\n          },\n        })\n      }\n    }\n  } else {\n    // $logger.info(\"扩展程序未启用 vip 功能\")\n  }\n}\n\nconst handleSaveVipRepoUrl = async (vipRepoUrlField) => {\n  const vipRepoUrl = vipRepoUrlField.value\n  if (!vipRepoUrl) {\n    $message.error(\"vip 链接不能为空\")\n    return\n  }\n\n  await $chrome.storage.local.set({ [VIP_REPO_URL_KEY]: vipRepoUrl })\n\n  refreshVipInfo()\n}\n\nconst init = async () => {\n  const vipRepoUrlField = $self.query(`${entire}.vipRepoUrl`).take()\n  const saveBtnField = $self.query(`${entire}.saveBtn`).take()\n\n  vipRepoUrlField.setComponentProps({\n    onPressEnter: () => handleSaveVipRepoUrl(vipRepoUrlField),\n  })\n  saveBtnField.setComponentProps({\n    onClick: () => handleSaveVipRepoUrl(vipRepoUrlField),\n  })\n\n  refreshVipInfo()\n\n  const vipRepoUrl = await getVipRepoUrl()\n  if (!vipRepoUrl) {\n    return\n  }\n\n  vipRepoUrlField.value = vipRepoUrl\n}\n\n$effect(() => {\n  init()\n}, [])\n"
+                  }
+                },
+                "x-designable-id": "ohhedurg86w",
+                "x-index": 0,
+                "properties": {
+                  "vipInfo": {
+                    "type": "string",
+                    "x-component": "Text",
+                    "x-component-props": {
+                      "content": "",
+                      "style": {
+                        "display": "flex",
+                        "justifyContent": "center",
+                        "flexDirection": "row",
+                        "fontSize": "14px",
+                        "margin": "0px 0px 0px 0px",
+                        "fontStyle": "italic"
+                      }
+                    },
+                    "x-designable-id": "na39z9puvrc",
+                    "x-index": 0,
+                    "x-validator": [],
+                    "name": "vipInfo"
+                  },
+                  "vipRepoUrl": {
+                    "type": "string",
+                    "title": "vip 链接",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "x-validator": [],
+                    "x-component-props": {},
+                    "x-decorator-props": {
+                      "wrapperWidth": "400px",
+                      "style": {
+                        "margin": "12px 0px 0px 0px"
+                      }
+                    },
+                    "name": "vipRepoUrl",
+                    "description": "请输入开通 vip 时作者给的 url 链接，然后回车或点击下方来按钮启用 vip",
+                    "x-designable-id": "ax8i6v0jm10",
+                    "x-index": 1
+                  },
+                  "saveBtn": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "启用 vip",
+                      "target": "_blank",
+                      "type": "primary",
+                      "size": "large",
+                      "style": {
+                        "margin": "16px 0px 0px 0px"
+                      }
+                    },
+                    "name": "saveBtn",
+                    "x-designable-id": "zaio5545hbv",
+                    "x-index": 2
+                  }
+                }
+              }
+            }
+          },
+          "gv60viy9kku": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "gv60viy9kku",
+            "x-index": 2,
+            "properties": {
+              "ogrtl5kv4q4": {
                 "type": "string",
                 "x-component": "Text",
                 "x-component-props": {
-                  "content": "开通会员方式一：在社交平台点赞、转发、收藏、好评赠送会员服务",
+                  "content": "如对开通 vip 有疑问，请扫下方二维码咨询作者",
                   "style": {
                     "display": "flex",
-                    "justifyContent": "flex-start",
+                    "justifyContent": "center",
                     "flexDirection": "row",
-                    "fontSize": "14px",
-                    "margin": "0px 0px 0px 0px",
-                    "fontWeight": 700
+                    "fontSize": "20px",
+                    "margin": "50px 0px 0px 0px"
                   }
                 },
-                "x-designable-id": "paxx8j22w2u",
+                "x-designable-id": "ogrtl5kv4q4",
                 "x-index": 0,
                 "x-validator": []
               }
@@ -127,113 +201,13 @@
               }
             },
             "x-designable-id": "5j2cmjfeocy",
-            "x-index": 2,
-            "properties": {
-              "lpsuvtz56w5": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "应用商店 5 星好评",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "250px",
-                    "height": "inherit"
-                  }
-                },
-                "x-designable-id": "lpsuvtz56w5",
-                "x-index": 0,
-                "properties": {
-                  "wq8u09twcik": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://chromewebstore.google.com/detail/lgidjfclkbjgbjfbebecgapobjddolbd')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "Chrome 应用商店：赠送 5 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "wq8u09twcik",
-                    "x-index": 0
-                  },
-                  "q2z6pbe1oyo": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://microsoftedge.microsoft.com/addons/detail/badfbconebmibddbkhlnmljjagcfkgdo')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "Edge 应用商店：赠送 5 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "size": "small"
-                    },
-                    "x-designable-id": "q2z6pbe1oyo",
-                    "x-index": 1
-                  }
-                }
-              }
-            }
-          },
-          "d8ww1zi9k12": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 6,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "d8ww1zi9k12",
             "x-index": 3,
             "properties": {
-              "5xin2kpohl2": {
+              "9wiscb7k56g": {
                 "type": "void",
                 "x-component": "Card",
                 "x-component-props": {
-                  "title": "Git 仓库 Star",
+                  "title": "扫码加「作者微信」",
                   "styles": {
                     "title": {
                       "display": "flex",
@@ -248,745 +222,30 @@
                   },
                   "style": {
                     "width": "250px",
-                    "height": "inherit"
+                    "height": "280px"
                   }
                 },
-                "x-designable-id": "5xin2kpohl2",
+                "x-designable-id": "9wiscb7k56g",
                 "x-index": 0,
                 "properties": {
-                  "s254uh3xu4x": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://github.com/bingoogolapple/bga-god-assistant-config')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "GitHub Star 赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "s254uh3xu4x",
-                    "x-index": 0
-                  },
-                  "6y0n9fjfher": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://gitee.com/bingoogolapple/bga-god-assistant-config')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "Gitee Star 赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "size": "small"
-                    },
-                    "x-designable-id": "6y0n9fjfher",
-                    "x-index": 1
-                  }
-                }
-              }
-            }
-          },
-          "wdtpp2gr9bd": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 6,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "wdtpp2gr9bd",
-            "x-index": 4,
-            "properties": {
-              "2h4wme07btz": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "B 站视频一键三连",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "250px",
-                    "height": "inherit"
-                  }
-                },
-                "x-designable-id": "2h4wme07btz",
-                "x-index": 0,
-                "properties": {
-                  "zr8edib0ucz": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.bilibili.com/video/BV1wy1yYDEnL')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "B 站视频 1：赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "zr8edib0ucz",
-                    "x-index": 0
-                  },
-                  "dm3gfkav01r": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.bilibili.com/video/BV1JM1yYLEe8')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "B 站视频 2：赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "dm3gfkav01r",
-                    "x-index": 1
-                  },
-                  "ca1nz7nwdu5": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.bilibili.com/video/BV1WF1yYQEGd')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "B 站视频 3：赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "ca1nz7nwdu5",
-                    "x-index": 2
-                  },
-                  "x0vykyk1bvp": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.bilibili.com/video/BV1Eu1yYyE9h')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "B 站视频 4：赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "x0vykyk1bvp",
-                    "x-index": 3
-                  },
-                  "7umuqrk64hm": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.bilibili.com/video/BV1c82kYjEXH')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "B 站视频 5：赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "7umuqrk64hm",
-                    "x-index": 4
-                  }
-                }
-              }
-            }
-          },
-          "hlj73g7m3ki": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 6,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "hlj73g7m3ki",
-            "x-index": 5,
-            "properties": {
-              "hw1k2i6s1r3": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "YouTube 视频一键三连",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "250px",
-                    "height": "inherit"
-                  }
-                },
-                "x-designable-id": "hw1k2i6s1r3",
-                "x-index": 0,
-                "properties": {
-                  "twyptnxaobh": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.youtube.com/watch?v=FcpJoSvHEe4')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "YouTube 视频 1：赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "twyptnxaobh",
-                    "x-index": 0
-                  },
-                  "b0t86k1pqif": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.youtube.com/watch?v=3Eyub74FSPU')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "YouTube 视频 2：赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "b0t86k1pqif",
-                    "x-index": 1
-                  },
-                  "6qveot3tz6i": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.youtube.com/watch?v=SKysPdxW_x4')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "YouTube 视频 3：赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "6qveot3tz6i",
-                    "x-index": 2
-                  },
-                  "3hh200cu1yg": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.youtube.com/watch?v=yitVi3I-hrY')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "YouTube 视频 4：赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "3hh200cu1yg",
-                    "x-index": 3
-                  },
-                  "nhne83vhuru": {
-                    "type": "string",
-                    "x-component": "Button",
-                    "x-reactions": {
-                      "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.youtube.com/watch?v=vg7uwPwuzf0')\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
-                    },
-                    "x-validator": [],
-                    "x-component-props": {
-                      "children": "YouTube 视频 5：赠送 1 个月会员",
-                      "target": "_blank",
-                      "href": "",
-                      "type": "primary",
-                      "style": {
-                        "margin": "0px 0px 6px 0px"
-                      },
-                      "size": "small"
-                    },
-                    "x-designable-id": "nhne83vhuru",
-                    "x-index": 4
-                  }
-                }
-              }
-            }
-          },
-          "ackio491px4": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 12
-            },
-            "x-designable-id": "ackio491px4",
-            "x-index": 6,
-            "properties": {
-              "fbuuitlwrer": {
-                "type": "string",
-                "x-component": "Text",
-                "x-component-props": {
-                  "content": "开通会员方式二：通过以下任意二维码打赏作者 10.24 元即可开通 1 年会员服务",
-                  "style": {
-                    "display": "flex",
-                    "justifyContent": "flex-start",
-                    "flexDirection": "row",
-                    "fontSize": "14px",
-                    "margin": "0px 0px 0px 0px",
-                    "fontWeight": 700
-                  }
-                },
-                "x-designable-id": "fbuuitlwrer",
-                "x-index": 0,
-                "x-validator": []
-              }
-            }
-          },
-          "u640jhmvvli": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 4,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "u640jhmvvli",
-            "x-index": 7,
-            "properties": {
-              "9nnfehvkfxr": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "通过「微信」打赏",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "250px",
-                    "height": "300px"
-                  }
-                },
-                "x-designable-id": "9nnfehvkfxr",
-                "x-index": 0,
-                "properties": {
-                  "igs1rh2wtrc": {
+                  "fb0evkkpsbx": {
                     "type": "string",
                     "x-component": "Img",
                     "x-validator": [],
                     "x-component-props": {
                       "style": {
                         "width": "180px"
-                      }
-                    },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/donate-wechat.jpg",
-                    "x-designable-id": "igs1rh2wtrc",
-                    "x-index": 0
-                  }
-                }
-              }
-            }
-          },
-          "wbqb3rujjpp": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 4,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "wbqb3rujjpp",
-            "x-index": 8,
-            "properties": {
-              "i0dos0u88tq": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "通过「QQ」打赏",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "250px",
-                    "height": "300px"
-                  }
-                },
-                "x-designable-id": "i0dos0u88tq",
-                "x-index": 0,
-                "properties": {
-                  "lmn9w2rffu3": {
-                    "type": "string",
-                    "x-component": "Img",
-                    "x-validator": [],
-                    "x-component-props": {
-                      "style": {
-                        "width": "180px"
-                      }
-                    },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/donate-qq.jpg",
-                    "x-designable-id": "lmn9w2rffu3",
-                    "x-index": 0
-                  }
-                }
-              }
-            }
-          },
-          "3zbo4i0mwp8": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 4,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "3zbo4i0mwp8",
-            "x-index": 9,
-            "properties": {
-              "1562cfnvykv": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "通过「支付宝」打赏",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "250px",
-                    "height": "300px"
-                  }
-                },
-                "x-designable-id": "1562cfnvykv",
-                "x-index": 0,
-                "properties": {
-                  "th801feho5i": {
-                    "type": "string",
-                    "x-component": "Img",
-                    "x-validator": [],
-                    "x-component-props": {
-                      "style": {
-                        "width": "180px"
-                      }
-                    },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/donate-alipay.jpg",
-                    "x-designable-id": "th801feho5i",
-                    "x-index": 0
-                  }
-                }
-              }
-            }
-          },
-          "2ctnqkqartz": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 12
-            },
-            "x-designable-id": "2ctnqkqartz",
-            "x-index": 10,
-            "properties": {
-              "ssz8s07q9hc": {
-                "type": "string",
-                "x-component": "Text",
-                "x-component-props": {
-                  "content": "通过以上任意方式开通会员服务后，请扫下方二维码联系作者获取会员账号",
-                  "style": {
-                    "display": "flex",
-                    "justifyContent": "flex-start",
-                    "flexDirection": "row",
-                    "fontSize": "14px",
-                    "margin": "40px 0px 0px 0px",
-                    "fontWeight": 700
-                  }
-                },
-                "x-designable-id": "ssz8s07q9hc",
-                "x-index": 0,
-                "x-validator": []
-              }
-            }
-          },
-          "jprqmf3eogo": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 6,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "jprqmf3eogo",
-            "x-index": 11,
-            "properties": {
-              "mqxrgltg6le": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "加「作者微信」（推荐）",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "230px",
-                    "height": "260px"
-                  }
-                },
-                "x-designable-id": "mqxrgltg6le",
-                "x-index": 0,
-                "properties": {
-                  "j41g9t6hcam": {
-                    "type": "string",
-                    "x-component": "Img",
-                    "x-validator": [],
-                    "x-component-props": {
-                      "style": {
-                        "width": "170px",
-                        "height": "170px"
                       }
                     },
                     "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/BGAQrCode.png",
-                    "x-designable-id": "j41g9t6hcam",
+                    "x-designable-id": "fb0evkkpsbx",
                     "x-index": 0
                   }
                 }
               }
             }
           },
-          "4oxj81g4870": {
+          "zblxkd8h524": {
             "type": "void",
             "x-component": "FormGrid.GridColumn",
             "x-validator": [],
@@ -999,14 +258,14 @@
                 "alignItems": "center"
               }
             },
-            "x-designable-id": "4oxj81g4870",
-            "x-index": 12,
+            "x-designable-id": "zblxkd8h524",
+            "x-index": 4,
             "properties": {
-              "9czh92q37mf": {
+              "rfqbgi5jkym": {
                 "type": "void",
                 "x-component": "Card",
                 "x-component-props": {
-                  "title": "加「作者 QQ」（不推荐）",
+                  "title": "扫码加「作者 QQ」",
                   "styles": {
                     "title": {
                       "display": "flex",
@@ -1020,25 +279,24 @@
                     }
                   },
                   "style": {
-                    "width": "230px",
-                    "height": "260px"
+                    "width": "250px",
+                    "height": "280px"
                   }
                 },
-                "x-designable-id": "9czh92q37mf",
+                "x-designable-id": "rfqbgi5jkym",
                 "x-index": 0,
                 "properties": {
-                  "039ij8wem63": {
+                  "qto041qwbb3": {
                     "type": "string",
                     "x-component": "Img",
                     "x-validator": [],
                     "x-component-props": {
                       "style": {
-                        "width": "160px",
-                        "height": "160px"
+                        "width": "180px"
                       }
                     },
                     "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/BGAQQQrCode.jpg",
-                    "x-designable-id": "039ij8wem63",
+                    "x-designable-id": "qto041qwbb3",
                     "x-index": 0
                   }
                 }
@@ -1048,6 +306,6 @@
         }
       }
     },
-    "x-designable-id": "9aoe81u2ril"
+    "x-designable-id": "ig3sf7xyo7k"
   }
 }

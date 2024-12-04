@@ -6,7 +6,7 @@
   "blacklistUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/configs/blacklistUrl.json",
   "tailwindCss": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/configs/tailwindCss.json",
   "vip": {
-    "enabled": true,
+    "enabled": false,
     "configUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/configs/vip.json",
     "freeDay": 3
   },
