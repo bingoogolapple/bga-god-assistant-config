@@ -36,7 +36,7 @@
                 "type": "string",
                 "x-component": "Text",
                 "x-component-props": {
-                  "content": "已超过 3 天免费试用期或会员服务已到期，请开通会员或续期会员",
+                  "content": "已超过免费试用期或会员服务已到期，请开通会员或续期会员",
                   "style": {
                     "display": "flex",
                     "justifyContent": "center",
@@ -48,7 +48,49 @@
                 },
                 "x-designable-id": "ckwhwa2je5i",
                 "x-index": 0,
-                "x-validator": []
+                "x-validator": [],
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "const init = async () => {\n  const config = await $utils.getAssistantConfig()\n  if (!config) {\n    return\n  }\n\n  $self.value = `已超过 ${config.vip.freeDay || 2} 天免费试用期或会员服务已到期，请开通会员或续期会员`\n}\n\n$effect(() => {\n  init()\n}, [])\n"
+                  }
+                }
+              },
+              "0jhyo4pkbhs": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "（不开通会员服务也可以继续使用所有功能，只是会经常展示当前这个弹窗）",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "flexDirection": "row",
+                    "fontSize": "12px",
+                    "margin": "8px 0px 0px 0px",
+                    "fontWeight": 400
+                  }
+                },
+                "x-designable-id": "0jhyo4pkbhs",
+                "x-index": 1,
+                "x-validator": [],
+                "x-reactions": {
+                  "dependencies": [
+                    {
+                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                      "property": "value",
+                      "type": "any"
+                    }
+                  ],
+                  "fulfill": {
+                    "run": "const init = async () => {\n  const config = await $utils.getAssistantConfig()\n  if (!config) {\n    return\n  }\n\n  $self.value = `已超过 ${config.vip.freeDay || 2} 天免费试用期或会员服务已到期，请开通会员或续期会员`\n}\n\n$effect(() => {\n  init()\n}, [])\n"
+                  }
+                }
               }
             }
           },
@@ -128,14 +170,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://chromewebstore.google.com/detail/lgidjfclkbjgbjfbebecgapobjddolbd')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
-                      "children": "Chrome 应用商店：赠送 3 个月会员",
+                      "children": "Chrome 应用商店：赠送 5 个月会员",
                       "target": "_blank",
-                      "href": "https://chromewebstore.google.com/detail/lgidjfclkbjgbjfbebecgapobjddolbd",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
@@ -150,14 +199,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://microsoftedge.microsoft.com/addons/detail/badfbconebmibddbkhlnmljjagcfkgdo')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
-                      "children": "Edge 应用商店：赠送 3 个月会员",
+                      "children": "Edge 应用商店：赠送 5 个月会员",
                       "target": "_blank",
-                      "href": "https://microsoftedge.microsoft.com/addons/detail/badfbconebmibddbkhlnmljjagcfkgdo",
+                      "href": "",
                       "type": "primary",
                       "size": "small"
                     },
@@ -214,14 +270,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://github.com/bingoogolapple/bga-god-assistant-config')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "GitHub Star 赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://github.com/bingoogolapple/bga-god-assistant-config",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
@@ -236,14 +299,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://gitee.com/bingoogolapple/bga-god-assistant-config')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "Gitee Star 赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://gitee.com/bingoogolapple/bga-god-assistant-config",
+                      "href": "",
                       "type": "primary",
                       "size": "small"
                     },
@@ -300,14 +370,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.bilibili.com/video/BV1wy1yYDEnL')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "B 站视频 1：赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://www.bilibili.com/video/BV1wy1yYDEnL",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
@@ -322,14 +399,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.bilibili.com/video/BV1JM1yYLEe8')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "B 站视频 2：赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://www.bilibili.com/video/BV1JM1yYLEe8",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
@@ -344,14 +428,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.bilibili.com/video/BV1WF1yYQEGd')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "B 站视频 3：赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://www.bilibili.com/video/BV1WF1yYQEGd",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
@@ -366,14 +457,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.bilibili.com/video/BV1Eu1yYyE9h')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "B 站视频 4：赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://www.bilibili.com/video/BV1Eu1yYyE9h",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
@@ -388,14 +486,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.bilibili.com/video/BV1c82kYjEXH')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "B 站视频 5：赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://www.bilibili.com/video/BV1c82kYjEXH",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
@@ -455,14 +560,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.youtube.com/watch?v=FcpJoSvHEe4')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "YouTube 视频 1：赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://www.youtube.com/watch?v=FcpJoSvHEe4",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
@@ -477,14 +589,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.youtube.com/watch?v=3Eyub74FSPU')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "YouTube 视频 2：赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://www.youtube.com/watch?v=3Eyub74FSPU",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
@@ -499,14 +618,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.youtube.com/watch?v=SKysPdxW_x4')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "YouTube 视频 3：赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://www.youtube.com/watch?v=SKysPdxW_x4",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
@@ -521,14 +647,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.youtube.com/watch?v=yitVi3I-hrY')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "YouTube 视频 4：赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://www.youtube.com/watch?v=yitVi3I-hrY",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
@@ -543,14 +676,21 @@
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
-                      }
+                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://www.youtube.com/watch?v=vg7uwPwuzf0')\n  },\n})\n"
+                      },
+                      "dependencies": [
+                        {
+                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                          "property": "value",
+                          "type": "any"
+                        }
+                      ]
                     },
                     "x-validator": [],
                     "x-component-props": {
                       "children": "YouTube 视频 5：赠送 1 个月会员",
                       "target": "_blank",
-                      "href": "https://www.youtube.com/watch?v=vg7uwPwuzf0",
+                      "href": "",
                       "type": "primary",
                       "style": {
                         "margin": "0px 0px 6px 0px"
