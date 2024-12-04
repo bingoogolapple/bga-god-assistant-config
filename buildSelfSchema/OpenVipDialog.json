@@ -36,13 +36,14 @@
                 "type": "string",
                 "x-component": "Text",
                 "x-component-props": {
-                  "content": "开通会员-敬请期待",
+                  "content": "已超过 3 天免费试用期或会员服务已到期，请开通会员或续期会员",
                   "style": {
                     "display": "flex",
                     "justifyContent": "center",
                     "flexDirection": "row",
-                    "fontSize": "24px",
-                    "margin": "0px 0px 0px 0px"
+                    "fontSize": "16px",
+                    "margin": "0px 0px 0px 0px",
+                    "fontWeight": 700
                   }
                 },
                 "x-designable-id": "ckwhwa2je5i",
@@ -61,138 +62,23 @@
             "x-designable-id": "jh5b4w43fyf",
             "x-index": 1,
             "properties": {
-              "f5lufugzcbv": {
+              "paxx8j22w2u": {
                 "type": "string",
                 "x-component": "Text",
                 "x-component-props": {
-                  "content": "欢迎扫下方二维码咨询或反馈问题",
+                  "content": "开通会员方式一：在社交平台点赞、转发、收藏、好评赠送会员服务",
                   "style": {
                     "display": "flex",
                     "justifyContent": "flex-start",
                     "flexDirection": "row",
-                    "fontSize": "20px",
-                    "margin": "0px 0px 0px 0px"
+                    "fontSize": "14px",
+                    "margin": "0px 0px 0px 0px",
+                    "fontWeight": 700
                   }
                 },
-                "x-designable-id": "f5lufugzcbv",
+                "x-designable-id": "paxx8j22w2u",
                 "x-index": 0,
                 "x-validator": []
-              }
-            }
-          },
-          "njfy0prvfqc": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 4,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "njfy0prvfqc",
-            "x-index": 2,
-            "properties": {
-              "ewj4q1n587o": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "扫码加「微信群」",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "250px",
-                    "height": "280px"
-                  }
-                },
-                "x-designable-id": "ewj4q1n587o",
-                "x-index": 0,
-                "properties": {
-                  "449bf00eo7a": {
-                    "type": "string",
-                    "x-component": "Img",
-                    "x-validator": [],
-                    "x-component-props": {
-                      "style": {
-                        "width": "180px"
-                      }
-                    },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/WeChatGroup1QrCode.jpg",
-                    "x-designable-id": "449bf00eo7a",
-                    "x-index": 0
-                  }
-                }
-              }
-            }
-          },
-          "g9q0ojk6fj0": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 4,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "g9q0ojk6fj0",
-            "x-index": 3,
-            "properties": {
-              "0gmk4llsapv": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "扫码关注「微信公众号」查看视频教程",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "320px",
-                    "height": "280px"
-                  }
-                },
-                "x-designable-id": "0gmk4llsapv",
-                "x-index": 0,
-                "properties": {
-                  "srigf86l50o": {
-                    "type": "string",
-                    "x-component": "Img",
-                    "x-validator": [],
-                    "x-component-props": {
-                      "style": {
-                        "width": "180px"
-                      }
-                    },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/GongZhongHao.png",
-                    "x-designable-id": "srigf86l50o",
-                    "x-index": 0
-                  }
-                }
               }
             }
           },
@@ -201,7 +87,7 @@
             "x-component": "FormGrid.GridColumn",
             "x-validator": [],
             "x-component-props": {
-              "gridSpan": 4,
+              "gridSpan": 6,
               "style": {
                 "display": "flex",
                 "justifyContent": "center",
@@ -210,13 +96,13 @@
               }
             },
             "x-designable-id": "5j2cmjfeocy",
-            "x-index": 4,
+            "x-index": 2,
             "properties": {
-              "9wiscb7k56g": {
+              "lpsuvtz56w5": {
                 "type": "void",
                 "x-component": "Card",
                 "x-component-props": {
-                  "title": "扫码加「作者微信」",
+                  "title": "应用商店 5 星好评",
                   "styles": {
                     "title": {
                       "display": "flex",
@@ -231,360 +117,453 @@
                   },
                   "style": {
                     "width": "250px",
-                    "height": "280px"
+                    "height": "inherit"
                   }
                 },
-                "x-designable-id": "9wiscb7k56g",
+                "x-designable-id": "lpsuvtz56w5",
                 "x-index": 0,
                 "properties": {
-                  "fb0evkkpsbx": {
-                    "type": "string",
-                    "x-component": "Img",
-                    "x-validator": [],
-                    "x-component-props": {
-                      "style": {
-                        "width": "180px"
-                      }
-                    },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/BGAQrCode.png",
-                    "x-designable-id": "fb0evkkpsbx",
-                    "x-index": 0
-                  }
-                }
-              }
-            }
-          },
-          "gt57cp0aa4l": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 4,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "gt57cp0aa4l",
-            "x-index": 5,
-            "properties": {
-              "djy1ssan0h7": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "扫码加「QQ 群」",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "250px",
-                    "height": "280px"
-                  }
-                },
-                "x-designable-id": "djy1ssan0h7",
-                "x-index": 0,
-                "properties": {
-                  "2fzo3r07jnw": {
-                    "type": "string",
-                    "x-component": "Img",
-                    "x-validator": [],
-                    "x-component-props": {
-                      "style": {
-                        "width": "180px"
-                      }
-                    },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/QQGroup1QrCode.jpg",
-                    "x-designable-id": "2fzo3r07jnw",
-                    "x-index": 0
-                  }
-                }
-              }
-            }
-          },
-          "38dkao8442n": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 4,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "38dkao8442n",
-            "x-index": 6,
-            "properties": {
-              "zr664np59os": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "扫码在「QQ 短视频」查看视频教程",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "320px",
-                    "height": "280px"
-                  }
-                },
-                "x-designable-id": "zr664np59os",
-                "x-index": 0,
-                "properties": {
-                  "1lnho6evrn4": {
-                    "type": "string",
-                    "x-component": "Img",
-                    "x-validator": [],
-                    "x-component-props": {
-                      "style": {
-                        "width": "180px"
-                      }
-                    },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/QQShortVideo.jpg",
-                    "x-designable-id": "1lnho6evrn4",
-                    "x-index": 0
-                  }
-                }
-              }
-            }
-          },
-          "zblxkd8h524": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 4,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "zblxkd8h524",
-            "x-index": 7,
-            "properties": {
-              "rfqbgi5jkym": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "扫码加「作者 QQ」",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "250px",
-                    "height": "280px"
-                  }
-                },
-                "x-designable-id": "rfqbgi5jkym",
-                "x-index": 0,
-                "properties": {
-                  "qto041qwbb3": {
-                    "type": "string",
-                    "x-component": "Img",
-                    "x-validator": [],
-                    "x-component-props": {
-                      "style": {
-                        "width": "180px"
-                      }
-                    },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/BGAQQQrCode.jpg",
-                    "x-designable-id": "qto041qwbb3",
-                    "x-index": 0
-                  }
-                }
-              }
-            }
-          },
-          "glgpllfy6cu": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 4,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "glgpllfy6cu",
-            "x-index": 8,
-            "properties": {
-              "o1kqpc51xmz": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "扫码加「Telegram 群」",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "250px",
-                    "height": "280px"
-                  }
-                },
-                "x-designable-id": "o1kqpc51xmz",
-                "x-index": 0,
-                "properties": {
-                  "ggdj659c1j3": {
-                    "type": "string",
-                    "x-component": "Img",
-                    "x-validator": [],
-                    "x-component-props": {
-                      "style": {
-                        "width": "180px"
-                      }
-                    },
-                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/TelegramGroup1QrCode.jpg",
-                    "x-designable-id": "ggdj659c1j3",
-                    "x-index": 0
-                  }
-                }
-              }
-            }
-          },
-          "6iftz6uusgb": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 8,
-              "style": {
-                "display": "flex",
-                "justifyContent": "center",
-                "flexDirection": "row",
-                "alignItems": "center"
-              }
-            },
-            "x-designable-id": "6iftz6uusgb",
-            "x-index": 9,
-            "x-reactions": {
-              "dependencies": [
-                {
-                  "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                  "property": "value",
-                  "type": "any"
-                }
-              ],
-              "fulfill": {
-                "run": ""
-              }
-            },
-            "properties": {
-              "e9xtp98076s": {
-                "type": "void",
-                "x-component": "Card",
-                "x-component-props": {
-                  "title": "点击下方链接加「Telegram 群」",
-                  "styles": {
-                    "title": {
-                      "display": "flex",
-                      "flexDirection": "row",
-                      "justifyContent": "center"
-                    },
-                    "body": {
-                      "display": "flex",
-                      "flexDirection": "column",
-                      "alignItems": "center"
-                    }
-                  },
-                  "style": {
-                    "width": "350px",
-                    "height": "140px"
-                  }
-                },
-                "x-designable-id": "e9xtp98076s",
-                "x-index": 0,
-                "properties": {
-                  "qu9hgnfssre": {
+                  "wq8u09twcik": {
                     "type": "string",
                     "x-component": "Button",
                     "x-reactions": {
                       "fulfill": {
-                        "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab(\"https://t.me/god_assistant_extension\")\n  },\n})\n"
-                      },
-                      "dependencies": [
-                        {
-                          "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                          "property": "value",
-                          "type": "any"
-                        }
-                      ]
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
                     },
                     "x-validator": [],
                     "x-component-props": {
-                      "children": "https://t.me/god_assistant_extension",
+                      "children": "Chrome 应用商店：赠送 3 个月会员",
                       "target": "_blank",
-                      "type": "link"
+                      "href": "https://chromewebstore.google.com/detail/lgidjfclkbjgbjfbebecgapobjddolbd",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
                     },
-                    "x-designable-id": "qu9hgnfssre",
+                    "x-designable-id": "wq8u09twcik",
                     "x-index": 0
+                  },
+                  "q2z6pbe1oyo": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "Edge 应用商店：赠送 3 个月会员",
+                      "target": "_blank",
+                      "href": "https://microsoftedge.microsoft.com/addons/detail/badfbconebmibddbkhlnmljjagcfkgdo",
+                      "type": "primary",
+                      "size": "small"
+                    },
+                    "x-designable-id": "q2z6pbe1oyo",
+                    "x-index": 1
                   }
                 }
               }
             }
-          }
-        }
-      },
-      "2don9d2f5ym": {
-        "type": "void",
-        "x-component": "FormGrid",
-        "x-validator": [],
-        "x-component-props": {
-          "minColumns": 12,
-          "maxColumns": 12,
-          "style": {
-            "padding": "20px 20px 20px 20px"
           },
-          "rowGap": 18,
-          "columnGap": 18
-        },
-        "x-designable-id": "2don9d2f5ym",
-        "x-index": 1,
-        "properties": {
+          "d8ww1zi9k12": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 6,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
+            },
+            "x-designable-id": "d8ww1zi9k12",
+            "x-index": 3,
+            "properties": {
+              "5xin2kpohl2": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "Git 仓库 Star",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "250px",
+                    "height": "inherit"
+                  }
+                },
+                "x-designable-id": "5xin2kpohl2",
+                "x-index": 0,
+                "properties": {
+                  "s254uh3xu4x": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "GitHub Star 赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://github.com/bingoogolapple/bga-god-assistant-config",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
+                    },
+                    "x-designable-id": "s254uh3xu4x",
+                    "x-index": 0
+                  },
+                  "6y0n9fjfher": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "Gitee Star 赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://gitee.com/bingoogolapple/bga-god-assistant-config",
+                      "type": "primary",
+                      "size": "small"
+                    },
+                    "x-designable-id": "6y0n9fjfher",
+                    "x-index": 1
+                  }
+                }
+              }
+            }
+          },
+          "wdtpp2gr9bd": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 6,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
+            },
+            "x-designable-id": "wdtpp2gr9bd",
+            "x-index": 4,
+            "properties": {
+              "2h4wme07btz": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "B 站视频一键三连",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "250px",
+                    "height": "inherit"
+                  }
+                },
+                "x-designable-id": "2h4wme07btz",
+                "x-index": 0,
+                "properties": {
+                  "zr8edib0ucz": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "B 站视频 1：赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://www.bilibili.com/video/BV1wy1yYDEnL",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
+                    },
+                    "x-designable-id": "zr8edib0ucz",
+                    "x-index": 0
+                  },
+                  "dm3gfkav01r": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "B 站视频 2：赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://www.bilibili.com/video/BV1JM1yYLEe8",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
+                    },
+                    "x-designable-id": "dm3gfkav01r",
+                    "x-index": 1
+                  },
+                  "ca1nz7nwdu5": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "B 站视频 3：赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://www.bilibili.com/video/BV1WF1yYQEGd",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
+                    },
+                    "x-designable-id": "ca1nz7nwdu5",
+                    "x-index": 2
+                  },
+                  "x0vykyk1bvp": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "B 站视频 4：赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://www.bilibili.com/video/BV1Eu1yYyE9h",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
+                    },
+                    "x-designable-id": "x0vykyk1bvp",
+                    "x-index": 3
+                  },
+                  "7umuqrk64hm": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "B 站视频 5：赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://www.bilibili.com/video/BV1c82kYjEXH",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
+                    },
+                    "x-designable-id": "7umuqrk64hm",
+                    "x-index": 4
+                  }
+                }
+              }
+            }
+          },
+          "hlj73g7m3ki": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 6,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
+            },
+            "x-designable-id": "hlj73g7m3ki",
+            "x-index": 5,
+            "properties": {
+              "hw1k2i6s1r3": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "YouTube 视频一键三连",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "250px",
+                    "height": "inherit"
+                  }
+                },
+                "x-designable-id": "hw1k2i6s1r3",
+                "x-index": 0,
+                "properties": {
+                  "twyptnxaobh": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "YouTube 视频 1：赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://www.youtube.com/watch?v=FcpJoSvHEe4",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
+                    },
+                    "x-designable-id": "twyptnxaobh",
+                    "x-index": 0
+                  },
+                  "b0t86k1pqif": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "YouTube 视频 2：赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://www.youtube.com/watch?v=3Eyub74FSPU",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
+                    },
+                    "x-designable-id": "b0t86k1pqif",
+                    "x-index": 1
+                  },
+                  "6qveot3tz6i": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "YouTube 视频 3：赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://www.youtube.com/watch?v=SKysPdxW_x4",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
+                    },
+                    "x-designable-id": "6qveot3tz6i",
+                    "x-index": 2
+                  },
+                  "3hh200cu1yg": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "YouTube 视频 4：赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://www.youtube.com/watch?v=yitVi3I-hrY",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
+                    },
+                    "x-designable-id": "3hh200cu1yg",
+                    "x-index": 3
+                  },
+                  "nhne83vhuru": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "$props({\n  onClick: () => {\n    $message.info(\"TODO 处理点击事件\")\n  },\n})\n"
+                      }
+                    },
+                    "x-validator": [],
+                    "x-component-props": {
+                      "children": "YouTube 视频 5：赠送 1 个月会员",
+                      "target": "_blank",
+                      "href": "https://www.youtube.com/watch?v=vg7uwPwuzf0",
+                      "type": "primary",
+                      "style": {
+                        "margin": "0px 0px 6px 0px"
+                      },
+                      "size": "small"
+                    },
+                    "x-designable-id": "nhne83vhuru",
+                    "x-index": 4
+                  }
+                }
+              }
+            }
+          },
           "ackio491px4": {
             "type": "void",
             "x-component": "FormGrid.GridColumn",
@@ -593,51 +572,23 @@
               "gridSpan": 12
             },
             "x-designable-id": "ackio491px4",
-            "x-index": 0,
+            "x-index": 6,
             "properties": {
               "fbuuitlwrer": {
                 "type": "string",
                 "x-component": "Text",
                 "x-component-props": {
-                  "content": "打赏支持作者",
-                  "style": {
-                    "display": "flex",
-                    "justifyContent": "flex-start",
-                    "flexDirection": "row",
-                    "fontSize": "20px",
-                    "margin": "0px 0px 0px 0px"
-                  }
-                },
-                "x-designable-id": "fbuuitlwrer",
-                "x-index": 0,
-                "x-validator": []
-              }
-            }
-          },
-          "rg3inwkir28": {
-            "type": "void",
-            "x-component": "FormGrid.GridColumn",
-            "x-validator": [],
-            "x-component-props": {
-              "gridSpan": 12
-            },
-            "x-designable-id": "rg3inwkir28",
-            "x-index": 1,
-            "properties": {
-              "jc2mfudls7w": {
-                "type": "string",
-                "x-component": "Text",
-                "x-component-props": {
-                  "content": "如果您觉得上帝小助手浏览器扩展程序对你有帮助，可以扫描下方二维码打赏 10.24 元支持作者继续创作",
+                  "content": "开通会员方式二：通过以下任意二维码打赏作者 10.24 元即可开通 1 年会员服务",
                   "style": {
                     "display": "flex",
                     "justifyContent": "flex-start",
                     "flexDirection": "row",
                     "fontSize": "14px",
-                    "margin": "0px 0px 0px 0px"
+                    "margin": "0px 0px 0px 0px",
+                    "fontWeight": 700
                   }
                 },
-                "x-designable-id": "jc2mfudls7w",
+                "x-designable-id": "fbuuitlwrer",
                 "x-index": 0,
                 "x-validator": []
               }
@@ -657,7 +608,7 @@
               }
             },
             "x-designable-id": "u640jhmvvli",
-            "x-index": 2,
+            "x-index": 7,
             "properties": {
               "9nnfehvkfxr": {
                 "type": "void",
@@ -678,7 +629,7 @@
                   },
                   "style": {
                     "width": "250px",
-                    "height": "350px"
+                    "height": "300px"
                   }
                 },
                 "x-designable-id": "9nnfehvkfxr",
@@ -715,7 +666,7 @@
               }
             },
             "x-designable-id": "wbqb3rujjpp",
-            "x-index": 3,
+            "x-index": 8,
             "properties": {
               "i0dos0u88tq": {
                 "type": "void",
@@ -736,7 +687,7 @@
                   },
                   "style": {
                     "width": "250px",
-                    "height": "350px"
+                    "height": "300px"
                   }
                 },
                 "x-designable-id": "i0dos0u88tq",
@@ -773,7 +724,7 @@
               }
             },
             "x-designable-id": "3zbo4i0mwp8",
-            "x-index": 4,
+            "x-index": 9,
             "properties": {
               "1562cfnvykv": {
                 "type": "void",
@@ -794,7 +745,7 @@
                   },
                   "style": {
                     "width": "250px",
-                    "height": "350px"
+                    "height": "300px"
                   }
                 },
                 "x-designable-id": "1562cfnvykv",
@@ -816,10 +767,158 @@
                 }
               }
             }
+          },
+          "2ctnqkqartz": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 12
+            },
+            "x-designable-id": "2ctnqkqartz",
+            "x-index": 10,
+            "properties": {
+              "ssz8s07q9hc": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "通过以上任意方式开通会员服务后，请扫下方二维码联系作者获取会员账号",
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "flexDirection": "row",
+                    "fontSize": "14px",
+                    "margin": "40px 0px 0px 0px",
+                    "fontWeight": 700
+                  }
+                },
+                "x-designable-id": "ssz8s07q9hc",
+                "x-index": 0,
+                "x-validator": []
+              }
+            }
+          },
+          "jprqmf3eogo": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 6,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
+            },
+            "x-designable-id": "jprqmf3eogo",
+            "x-index": 11,
+            "properties": {
+              "mqxrgltg6le": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "加「作者微信」（推荐）",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "230px",
+                    "height": "260px"
+                  }
+                },
+                "x-designable-id": "mqxrgltg6le",
+                "x-index": 0,
+                "properties": {
+                  "j41g9t6hcam": {
+                    "type": "string",
+                    "x-component": "Img",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "style": {
+                        "width": "170px",
+                        "height": "170px"
+                      }
+                    },
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/BGAQrCode.png",
+                    "x-designable-id": "j41g9t6hcam",
+                    "x-index": 0
+                  }
+                }
+              }
+            }
+          },
+          "4oxj81g4870": {
+            "type": "void",
+            "x-component": "FormGrid.GridColumn",
+            "x-validator": [],
+            "x-component-props": {
+              "gridSpan": 6,
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "flexDirection": "row",
+                "alignItems": "center"
+              }
+            },
+            "x-designable-id": "4oxj81g4870",
+            "x-index": 12,
+            "properties": {
+              "9czh92q37mf": {
+                "type": "void",
+                "x-component": "Card",
+                "x-component-props": {
+                  "title": "加「作者 QQ」（不推荐）",
+                  "styles": {
+                    "title": {
+                      "display": "flex",
+                      "flexDirection": "row",
+                      "justifyContent": "center"
+                    },
+                    "body": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "alignItems": "center"
+                    }
+                  },
+                  "style": {
+                    "width": "230px",
+                    "height": "260px"
+                  }
+                },
+                "x-designable-id": "9czh92q37mf",
+                "x-index": 0,
+                "properties": {
+                  "039ij8wem63": {
+                    "type": "string",
+                    "x-component": "Img",
+                    "x-validator": [],
+                    "x-component-props": {
+                      "style": {
+                        "width": "160px",
+                        "height": "160px"
+                      }
+                    },
+                    "default": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/images/BGAQQQrCode.jpg",
+                    "x-designable-id": "039ij8wem63",
+                    "x-index": 0
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "x-designable-id": "95gdde7fdvf"
+    "x-designable-id": "9aoe81u2ril"
   }
 }
