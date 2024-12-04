@@ -94,12 +94,31 @@
                     }
                   ],
                   "fulfill": {
-                    "run": "// 会员仓库地址存储 key\nconst VIP_REPO_URL_KEY = \"vipRepoUrl\"\n\nconst entire = $self.address.entire\n\nconst refreshVipInfo = async () => {\n  const vipConfig = await $utils.getVipConfig(false, false)\n  $logger.info(\"init vipConfig\", vipConfig)\n  const {\n    isVipEnabled,\n    isOpenVip,\n    isNotTrialPeriod,\n    trialPeriodTime,\n    isExpired,\n    expirationTime,\n  } = vipConfig\n  if (isVipEnabled) {\n    if (isOpenVip) {\n      // 已开通 vip\n      if (isExpired) {\n        $logger.info(\"已开通 vip -> 已过期\", expirationTime)\n      } else {\n        $logger.info(\"已开通 vip -> 未过期\", expirationTime)\n      }\n    } else {\n      // 未开通 vip\n      if (isNotTrialPeriod) {\n        // 未在试用期\n        $logger.info(\"未开通 vip -> 未在试用期\", trialPeriodTime)\n      } else {\n        // 还在试用期\n        $logger.info(\"未开通 vip -> 还在试用期\", trialPeriodTime)\n      }\n    }\n  } else {\n    $logger.info(\"扩展程序未启用 vip 功能\")\n  }\n}\n\nconst handleSaveVipRepoUrl = async (vipRepoUrlField) => {\n  const vipRepoUrl = vipRepoUrlField.value\n  if (!vipRepoUrl) {\n    $message.error(\"vip 链接不能为空\")\n    return\n  }\n\n  await $chrome.storage.local.set({ [VIP_REPO_URL_KEY]: vipRepoUrl })\n\n  refreshVipInfo()\n}\n\nconst init = async () => {\n  const vipRepoUrlField = $self.query(`${entire}.vipRepoUrl`).take()\n  const saveBtnField = $self.query(`${entire}.saveBtn`).take()\n\n  vipRepoUrlField.setComponentProps({\n    onPressEnter: () => handleSaveVipRepoUrl(vipRepoUrlField),\n  })\n  saveBtnField.setComponentProps({\n    onClick: () => handleSaveVipRepoUrl(vipRepoUrlField),\n  })\n\n  refreshVipInfo()\n\n  const localResult = await $chrome.storage.local.get(VIP_REPO_URL_KEY)\n  const vipRepoUrl = localResult[VIP_REPO_URL_KEY]\n  if (!vipRepoUrl) {\n    return\n  }\n\n  vipRepoUrlField.value = vipRepoUrl\n}\n\n$effect(() => {\n  init()\n}, [])\n"
+                    "run": "// 会员仓库地址存储 key\nconst VIP_REPO_URL_KEY = \"vipRepoUrl\"\n\nconst entire = $self.address.entire\n\nconst refreshVipInfo = async () => {\n  const vipConfig = await $utils.getVipConfig(false, false)\n  $logger.info(\"init vipConfig\", vipConfig)\n  const {\n    isVipEnabled,\n    isOpenVip,\n    isNotTrialPeriod,\n    trialPeriodTime,\n    isExpired,\n    expirationTime,\n  } = vipConfig\n  if (isVipEnabled) {\n    const vipInfoField = $self.query(`${entire}.vipInfo`).take()\n\n    if (isOpenVip) {\n      // 已开通 vip\n      if (isExpired) {\n        // $logger.info(\"已开通 vip -> 已过期\", expirationTime)\n        vipInfoField.value = `已开通 vip，但已过期 ${expirationTime}`\n        vipInfoField.setComponentProps({\n          style: {\n            ...vipInfoField.componentProps.style,\n            color: \"red\",\n          },\n        })\n      } else {\n        // $logger.info(\"已开通 vip -> 未过期\", expirationTime)\n        vipInfoField.value = `已开通 vip，到期时间 ${expirationTime}`\n        vipInfoField.setComponentProps({\n          style: {\n            ...vipInfoField.componentProps.style,\n            color: \"green\",\n          },\n        })\n      }\n    } else {\n      // 未开通 vip\n      if (isNotTrialPeriod) {\n        // 未在试用期\n        // $logger.info(\"未开通 vip -> 未在试用期\", trialPeriodTime)\n        vipInfoField.value = `未开通 vip，已超过试用期 ${trialPeriodTime}`\n        vipInfoField.setComponentProps({\n          style: {\n            ...vipInfoField.componentProps.style,\n            color: \"red\",\n          },\n        })\n      } else {\n        // 还在试用期\n        // $logger.info(\"未开通 vip -> 还在试用期\", trialPeriodTime)\n        vipInfoField.value = `未开通 vip，还在试用期 ${trialPeriodTime}`\n        vipInfoField.setComponentProps({\n          style: {\n            ...vipInfoField.componentProps.style,\n            color: \"black\",\n          },\n        })\n      }\n    }\n  } else {\n    // $logger.info(\"扩展程序未启用 vip 功能\")\n  }\n}\n\nconst handleSaveVipRepoUrl = async (vipRepoUrlField) => {\n  const vipRepoUrl = vipRepoUrlField.value\n  if (!vipRepoUrl) {\n    $message.error(\"vip 链接不能为空\")\n    return\n  }\n\n  await $chrome.storage.local.set({ [VIP_REPO_URL_KEY]: vipRepoUrl })\n\n  refreshVipInfo()\n}\n\nconst init = async () => {\n  const vipRepoUrlField = $self.query(`${entire}.vipRepoUrl`).take()\n  const saveBtnField = $self.query(`${entire}.saveBtn`).take()\n\n  vipRepoUrlField.setComponentProps({\n    onPressEnter: () => handleSaveVipRepoUrl(vipRepoUrlField),\n  })\n  saveBtnField.setComponentProps({\n    onClick: () => handleSaveVipRepoUrl(vipRepoUrlField),\n  })\n\n  refreshVipInfo()\n\n  const localResult = await $chrome.storage.local.get(VIP_REPO_URL_KEY)\n  const vipRepoUrl = localResult[VIP_REPO_URL_KEY]\n  if (!vipRepoUrl) {\n    return\n  }\n\n  vipRepoUrlField.value = vipRepoUrl\n}\n\n$effect(() => {\n  init()\n}, [])\n"
                   }
                 },
                 "x-designable-id": "ohhedurg86w",
                 "x-index": 0,
                 "properties": {
+                  "vipInfo": {
+                    "type": "string",
+                    "x-component": "Text",
+                    "x-component-props": {
+                      "content": "",
+                      "style": {
+                        "display": "flex",
+                        "justifyContent": "center",
+                        "flexDirection": "row",
+                        "fontSize": "14px",
+                        "margin": "0px 0px 0px 0px",
+                        "fontStyle": "italic"
+                      }
+                    },
+                    "x-designable-id": "na39z9puvrc",
+                    "x-index": 0,
+                    "x-validator": [],
+                    "name": "vipInfo"
+                  },
                   "vipRepoUrl": {
                     "type": "string",
                     "title": "vip 链接",
@@ -108,12 +127,15 @@
                     "x-validator": [],
                     "x-component-props": {},
                     "x-decorator-props": {
-                      "wrapperWidth": "400px"
+                      "wrapperWidth": "400px",
+                      "style": {
+                        "margin": "12px 0px 0px 0px"
+                      }
                     },
                     "name": "vipRepoUrl",
                     "description": "请输入开通 vip 时作者给的 url 链接，然后回车或点击下方来按钮启用 vip",
                     "x-designable-id": "ax8i6v0jm10",
-                    "x-index": 0
+                    "x-index": 1
                   },
                   "saveBtn": {
                     "type": "string",
@@ -123,11 +145,14 @@
                       "children": "启用 vip",
                       "target": "_blank",
                       "type": "primary",
-                      "size": "large"
+                      "size": "large",
+                      "style": {
+                        "margin": "16px 0px 0px 0px"
+                      }
                     },
                     "name": "saveBtn",
                     "x-designable-id": "zaio5545hbv",
-                    "x-index": 1
+                    "x-index": 2
                   }
                 }
               }
@@ -153,7 +178,7 @@
                     "justifyContent": "center",
                     "flexDirection": "row",
                     "fontSize": "20px",
-                    "margin": "70px 0px 0px 0px"
+                    "margin": "50px 0px 0px 0px"
                   }
                 },
                 "x-designable-id": "ogrtl5kv4q4",
@@ -281,6 +306,6 @@
         }
       }
     },
-    "x-designable-id": "yx06tzs9aih"
+    "x-designable-id": "amly11rejqk"
   }
 }
