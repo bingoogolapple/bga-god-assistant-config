@@ -44,7 +44,7 @@
                   "cacheRemoteSchema": true,
                   "valueType": "object",
                   "reset": true,
-                  "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/search-card/index.json"
+                  "schemaUrl": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/search-card/index.json"
                 },
                 "x-designable-id": "w04jbupvfbp",
                 "x-index": 0,
