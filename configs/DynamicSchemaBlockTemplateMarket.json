@@ -46,7 +46,8 @@
         "name": "右下角浮动按钮",
         "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/bottom-right-float-menu/index.json",
         "images": [
-            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/bottom-right-float-menu/1.png"
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/bottom-right-float-menu/1.png",
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/bottom-right-float-menu/2.png"
         ]
     },
     {
