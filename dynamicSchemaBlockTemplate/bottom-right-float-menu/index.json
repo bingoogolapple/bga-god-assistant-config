@@ -1,15 +1,8 @@
 {
     "type": "void",
-    "x-component": "FloatButtonGroup",
-    "x-component-props": {
-        "icon": "MoreOutlined",
-        "type": "primary",
-        "trigger": "hover",
-        "insetInlineEnd": 48,
-        "insetBlockEnd": 48,
-        "badge": {}
-    },
-    "name": "bottomRightFbg",
+    "x-component": "Div",
+    "x-component-props": {},
+    "name": "bottomRightMenuDiv",
     "x-reactions": {
         "dependencies": [
             {
@@ -19,63 +12,235 @@
             }
         ],
         "fulfill": {
-            "run": "$effect(() => {\n  const pageRoot = document.querySelector(\".ant-formily-layout\")\n  if (pageRoot) {\n    pageRoot.className =\n      \"bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]\"\n\n    // pageRoot.style.backgroundImage = `url(https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/lowCodePageBackground/1.jpg)`\n    // pageRoot.style.backgroundRepeat = \"no-repeat\"\n    // pageRoot.style.backgroundSize = \"cover\"\n    // pageRoot.style.backgroundPosition = \"center\"\n    // pageRoot.style.backgroundAttachment = \"fixed\"\n  }\n}, [])\n"
+            "run": "const rootEntire = $self.address.entire\n// 只截取自己和父节点，避免拖动位置后数据丢失\nconst cacheKeyPrefix = $self.address.segments.slice(-2).join(\".\")\n// 页面背景地址持久化缓存的 key\nconst cacheKeyBackgroundUrl = `${cacheKeyPrefix}BackgroundUrl`\n// 页面背景 base64 持久化缓存的 key\nconst cacheKeyBackgroundBase64 = `${cacheKeyPrefix}BackgroundBase64`\n\nconst DEFUALT_CLASS_NAME =\n  \"bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]\"\nconst ROOT_CLASS = \"ant-formily-layout\"\n\n$self.state = $observable({\n  backgroundUrl: null,\n  backgroundBase64: null,\n})\n\n// 转换图片地址为 base64，以便加快本地加载速度\nconst convertImageUrlToBase64 = async (url) => {\n  const blob = await fetch(url).then((res) => res.blob())\n\n  return new Promise((resolve, reject) => {\n    const reader = new FileReader()\n    reader.onloadend = () => {\n      const base64data = reader.result\n      resolve(base64data)\n    }\n    reader.onerror = (error) => {\n      reject(error)\n    }\n    reader.readAsDataURL(blob)\n  })\n}\n\n// 刷新页面背景\n$self.refreshPageBackground = async () => {\n  const backgroundUrl = await $chrome.localStorage.getItem(\n    cacheKeyBackgroundUrl\n  )\n  const backgroundBase64 = await $chrome.localStorage.getItem(\n    cacheKeyBackgroundBase64\n  )\n\n  $self.state.backgroundUrl = backgroundUrl\n  $self.state.backgroundBase64 = backgroundBase64\n\n  const pageRoot = document.querySelector(\".ant-formily-layout\")\n  if (!pageRoot) {\n    return\n  }\n\n  if (backgroundUrl) {\n    if (backgroundUrl.startsWith(\"http\")) {\n      if (backgroundBase64) {\n        pageRoot.style.backgroundImage = `url(${backgroundBase64})`\n      } else {\n        pageRoot.style.backgroundImage = `url(${backgroundUrl})`\n      }\n      pageRoot.style.backgroundRepeat = \"no-repeat\"\n      pageRoot.style.backgroundSize = \"cover\"\n      pageRoot.style.backgroundPosition = \"center\"\n      pageRoot.style.backgroundAttachment = \"fixed\"\n\n      pageRoot.className = `${ROOT_CLASS}`\n    } else {\n      pageRoot.className = `${backgroundUrl} ${ROOT_CLASS}`\n\n      const {\n        backgroundImage,\n        backgroundRepeat,\n        backgroundSize,\n        backgroundPosition,\n        backgroundAttachment,\n        ...restStyle\n      } = pageRoot.style\n      pageRoot.style = {\n        ...restStyle,\n      }\n    }\n  } else {\n    pageRoot.className = `${DEFUALT_CLASS_NAME} ${ROOT_CLASS}`\n\n    const {\n      backgroundImage,\n      backgroundRepeat,\n      backgroundSize,\n      backgroundPosition,\n      backgroundAttachment,\n      ...restStyle\n    } = pageRoot.style\n    pageRoot.style = {\n      ...restStyle,\n    }\n  }\n}\n\n// 设置页面背景\n$self.setPageBackground = async () => {\n  const pageBackgroundUrlField = $self\n    .query(`${rootEntire}.settingPageBackgroundDialog.pageBackgroundUrl`)\n    .take()\n  const backgroundUrl = pageBackgroundUrlField.value\n\n  let newBackgroundUrl = \"\"\n  let newBackgroundBase64 = \"\"\n\n  if (backgroundUrl) {\n    if (backgroundUrl.startsWith(\"http\")) {\n      try {\n        newBackgroundBase64 = await convertImageUrlToBase64(backgroundUrl)\n      } catch (e) {\n        $logger.error(\"背景图片转 base64 失败\")\n      }\n\n      newBackgroundUrl = backgroundUrl\n    } else {\n      newBackgroundUrl = backgroundUrl\n    }\n  }\n\n  await $chrome.localStorage.setItem(cacheKeyBackgroundUrl, newBackgroundUrl)\n  await $chrome.localStorage.setItem(\n    cacheKeyBackgroundBase64,\n    newBackgroundBase64\n  )\n\n  $self.refreshPageBackground()\n\n  if ($utils.isPreviewEnv) {\n    const tabs = await $chrome.tabs.query({\n      active: true,\n      currentWindow: true,\n    })\n    const tab = tabs[0]\n    if (tab) {\n      $chrome.tabs.update(tab.id, { url: tab.url })\n    }\n  }\n}\n\n// 展示设置页面背景对话框\n$self.showSettingPageBackgroundDialog = () => {\n  const settingPageBackgroundDialog = $self\n    .query(`${rootEntire}.settingPageBackgroundDialog`)\n    .take()\n  settingPageBackgroundDialog.setComponentProps({\n    open: true,\n  })\n}\n\n$effect(() => {\n  $self.refreshPageBackground()\n}, [])\n"
         }
     },
     "properties": {
-        "editCurrentPageFb": {
-            "x-component": "FloatButton",
-            "x-component-props": {
-                "description": "",
-                "type": "primary",
-                "badge": {},
-                "target": "_blank",
-                "icon": "EditFilled",
-                "tooltip": "编辑当前页面"
-            },
+        "settingPageBackgroundDialog": {
+            "type": "object",
+            "x-component": "Modal",
             "x-reactions": {
+                "fulfill": {
+                    "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    const rootName = \"bottomRightMenuDiv\"\n    const rootEntire = $self.address.entire.substring(\n      0,\n      $self.address.entire.lastIndexOf(rootName) + rootName.length\n    )\n    const rootField = $self.query(rootEntire).take()\n    rootField.setPageBackground()\n\n    $self.componentProps.open = false\n  },\n})\n"
+                },
                 "dependencies": [
                     {
                         "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
                         "property": "value",
                         "type": "any"
                     }
-                ],
-                "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    // 编辑当前页面\n    $ga.editCurrentPage()\n  },\n})\n"
-                }
+                ]
             },
-            "x-designable-id": "xwo67yypp2v",
+            "x-component-props": {
+                "cancelButtonProps": {},
+                "cancelText": "取消",
+                "okButtonProps": {},
+                "okText": "确定",
+                "classNames": {},
+                "styles": {},
+                "title": "设置页面背景"
+            },
+            "name": "settingPageBackgroundDialog",
+            "x-designable-id": "wqr7hluk23w",
             "x-index": 0,
-            "name": "editCurrentPageFb"
-        },
-        "settingsFb": {
-            "x-component": "FloatButton",
-            "x-component-props": {
-                "description": "",
-                "type": "primary",
-                "insetInlineEnd": 24,
-                "insetBlockEnd": 48,
-                "badge": {},
-                "target": "_blank",
-                "icon": "SettingOutlined",
-                "tooltip": "低代码页面管理"
-            },
-            "x-reactions": {
-                "dependencies": [
-                    {
-                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                        "property": "value",
-                        "type": "any"
+            "properties": {
+                "pageBackgroundUrl": {
+                    "type": "string",
+                    "title": "",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input.TextArea",
+                    "x-validator": [],
+                    "x-component-props": {
+                        "placeholder": "请输入页面背景地址",
+                        "autoSize": {
+                            "minRows": 3,
+                            "maxRows": 5
+                        },
+                        "style": {}
+                    },
+                    "x-decorator-props": {},
+                    "name": "pageBackgroundUrl",
+                    "x-designable-id": "ujr0yk22bgn",
+                    "x-index": 0,
+                    "x-reactions": {
+                        "dependencies": [
+                            {
+                                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                "property": "value",
+                                "type": "any"
+                            }
+                        ],
+                        "fulfill": {
+                            "run": "const rootName = \"bottomRightMenuDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$self.value = rootField.state.backgroundUrl\n"
+                        }
                     }
-                ],
-                "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    // 低代码页面管理\n    $ga.lowCodePageManage()\n  },\n})\n"
+                },
+                "fx9nc9i9ei2": {
+                    "type": "void",
+                    "x-component": "Div",
+                    "x-component-props": {
+                        "style": {
+                            "display": "flex",
+                            "flexDirection": "column",
+                            "justifyContent": "center",
+                            "alignItems": "center"
+                        }
+                    },
+                    "x-designable-id": "fx9nc9i9ei2",
+                    "x-index": 1,
+                    "properties": {
+                        "tnijdzy5wus": {
+                            "type": "string",
+                            "x-component": "Button",
+                            "x-reactions": {
+                                "fulfill": {
+                                    "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://image.baidu.com/search/index?tn=baiduimage&fm=result&ie=utf-8&word=%E6%A1%8C%E9%9D%A2%E5%A3%81%E7%BA%B8')\n  },\n})\n"
+                                },
+                                "dependencies": [
+                                    {
+                                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                        "property": "value",
+                                        "type": "any"
+                                    }
+                                ]
+                            },
+                            "x-validator": [],
+                            "x-component-props": {
+                                "children": "点我打开百度桌面壁纸-右键-复制图片地址",
+                                "target": "_blank",
+                                "style": {
+                                    "margin": "0px 0px 8px 0px"
+                                }
+                            },
+                            "x-designable-id": "tnijdzy5wus",
+                            "x-index": 0
+                        },
+                        "i0yqtyfe7m6": {
+                            "type": "string",
+                            "x-component": "Button",
+                            "x-reactions": {
+                                "fulfill": {
+                                    "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab(\n      \"https://www.bing.com/images/search?q=%E6%A1%8C%E9%9D%A2%E5%A3%81%E7%BA%B8&first=1\"\n    )\n  },\n})\n"
+                                },
+                                "dependencies": [
+                                    {
+                                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                        "property": "value",
+                                        "type": "any"
+                                    }
+                                ]
+                            },
+                            "x-validator": [],
+                            "x-component-props": {
+                                "children": "点我打开必应桌面壁纸-右键-复制图片地址",
+                                "target": "_blank",
+                                "style": {
+                                    "margin": "0px 0px 8px 0px"
+                                }
+                            },
+                            "x-designable-id": "i0yqtyfe7m6",
+                            "x-index": 1
+                        }
+                    }
                 }
+            }
+        },
+        "bottomRightFbg": {
+            "type": "void",
+            "x-component": "FloatButtonGroup",
+            "x-component-props": {
+                "icon": "MoreOutlined",
+                "type": "primary",
+                "trigger": "hover",
+                "insetInlineEnd": 48,
+                "insetBlockEnd": 48,
+                "badge": {}
             },
-            "x-designable-id": "3ce4pdz0w31",
+            "x-designable-id": "oiiql0q7pb0",
             "x-index": 1,
-            "name": "settingsFb"
+            "name": "bottomRightFbg",
+            "properties": {
+                "editCurrentPageFb": {
+                    "x-component": "FloatButton",
+                    "x-component-props": {
+                        "description": "",
+                        "type": "primary",
+                        "badge": {},
+                        "target": "_blank",
+                        "icon": "EditFilled",
+                        "tooltip": "编辑当前页面"
+                    },
+                    "x-reactions": {
+                        "dependencies": [
+                            {
+                                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                "property": "value",
+                                "type": "any"
+                            }
+                        ],
+                        "fulfill": {
+                            "run": "$props({\n  onClick: () => {\n    // 编辑当前页面\n    $ga.editCurrentPage()\n  },\n})\n"
+                        }
+                    },
+                    "x-designable-id": "xwo67yypp2v",
+                    "x-index": 0,
+                    "name": "editCurrentPageFb"
+                },
+                "editBackgroundFb": {
+                    "x-component": "FloatButton",
+                    "x-component-props": {
+                        "description": "",
+                        "type": "primary",
+                        "badge": {},
+                        "target": "_blank",
+                        "icon": "BgColorsOutlined",
+                        "tooltip": "编辑页面背景"
+                    },
+                    "x-reactions": {
+                        "dependencies": [
+                            {
+                                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                "property": "value",
+                                "type": "any"
+                            }
+                        ],
+                        "fulfill": {
+                            "run": "const rootName = \"bottomRightMenuDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    rootField.showSettingPageBackgroundDialog()\n  },\n})\n"
+                        }
+                    },
+                    "x-designable-id": "yh1wmxf3t9p",
+                    "x-index": 1,
+                    "name": "editBackgroundFb"
+                },
+                "settingsFb": {
+                    "x-component": "FloatButton",
+                    "x-component-props": {
+                        "description": "",
+                        "type": "primary",
+                        "insetInlineEnd": 24,
+                        "insetBlockEnd": 48,
+                        "badge": {},
+                        "target": "_blank",
+                        "icon": "SettingOutlined",
+                        "tooltip": "低代码页面管理"
+                    },
+                    "x-reactions": {
+                        "dependencies": [
+                            {
+                                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                "property": "value",
+                                "type": "any"
+                            }
+                        ],
+                        "fulfill": {
+                            "run": "$props({\n  onClick: () => {\n    // 低代码页面管理\n    $ga.lowCodePageManage()\n  },\n})\n"
+                        }
+                    },
+                    "x-designable-id": "3ce4pdz0w31",
+                    "x-index": 2,
+                    "name": "settingsFb"
+                }
+            }
         }
     }
 }
