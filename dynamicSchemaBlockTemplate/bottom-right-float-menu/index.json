@@ -94,6 +94,32 @@
                             "x-component": "Button",
                             "x-reactions": {
                                 "fulfill": {
+                                    "run": "const rootName = \"bottomRightMenuDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\n\nconst getLocalImageBase64 = () => {\n  return new Promise((resolve, reject) => {\n    const fileInput = document.createElement(\"input\")\n    fileInput.type = \"file\"\n    fileInput.accept = \"image/*\"\n    fileInput.style.display = \"none\"\n    document.body.appendChild(fileInput)\n\n    fileInput.onchange = (event) => {\n      const target = event.target\n      const file = target.files?.[0]\n\n      if (file) {\n        const reader = new FileReader()\n        reader.onload = () => {\n          if (typeof reader.result === \"string\") {\n            resolve(reader.result)\n          } else {\n            reject(new Error(\"读取本地图片 base64 失败\"))\n          }\n          document.body.removeChild(fileInput)\n        }\n\n        reader.onerror = (error) => {\n          reject(error)\n          document.body.removeChild(fileInput)\n        }\n\n        reader.readAsDataURL(file)\n      } else {\n        reject(new Error(\"未选择任何文件\"))\n        document.body.removeChild(fileInput)\n      }\n    }\n\n    fileInput.click()\n  })\n}\n\n$props({\n  onClick: async () => {\n    try {\n      const base64 = await getLocalImageBase64()\n\n      const pageBackgroundUrlField = $self\n        .query(`${rootEntire}.settingPageBackgroundDialog.pageBackgroundUrl`)\n        .take()\n      pageBackgroundUrlField.value = base64\n    } catch (e) {\n      $logger.error(\"获取本地图片 base64 失败\", e)\n    }\n  },\n})\n"
+                                },
+                                "dependencies": [
+                                    {
+                                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                        "property": "value",
+                                        "type": "any"
+                                    }
+                                ]
+                            },
+                            "x-validator": [],
+                            "x-component-props": {
+                                "children": "选择本地图片",
+                                "target": "_blank",
+                                "style": {
+                                    "margin": "0px 0px 8px 0px"
+                                }
+                            },
+                            "x-designable-id": "tnijdzy5wus",
+                            "x-index": 0
+                        },
+                        "r0gx9lxzdpo": {
+                            "type": "string",
+                            "x-component": "Button",
+                            "x-reactions": {
+                                "fulfill": {
                                     "run": "$props({\n  onClick: () => {\n    $utils.openUrlInNewTab('https://image.baidu.com/search/index?tn=baiduimage&fm=result&ie=utf-8&word=%E6%A1%8C%E9%9D%A2%E5%A3%81%E7%BA%B8')\n  },\n})\n"
                                 },
                                 "dependencies": [
@@ -112,8 +138,8 @@
                                     "margin": "0px 0px 8px 0px"
                                 }
                             },
-                            "x-designable-id": "tnijdzy5wus",
-                            "x-index": 0
+                            "x-designable-id": "r0gx9lxzdpo",
+                            "x-index": 1
                         },
                         "i0yqtyfe7m6": {
                             "type": "string",
@@ -139,7 +165,7 @@
                                 }
                             },
                             "x-designable-id": "i0yqtyfe7m6",
-                            "x-index": 1
+                            "x-index": 2
                         }
                     }
                 }
