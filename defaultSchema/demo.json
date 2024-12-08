@@ -254,7 +254,7 @@
                 "x-component": "Button",
                 "x-reactions": {
                   "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    window.currentForm = $form\n    window.currentField = $self\n\n    // 获取弹窗\n    const dialog = $self.query(\"createNewWindowDialog\").take()\n    // 打开弹窗\n    dialog.componentProps.open = true\n  },\n})\n"
+                    "run": "$props({\n  onClick: () => {\n    window.currentForm = $form\n    window.currentField = $self\n\n    // 获取弹窗\n    const dialog = $self.query(`${$self.parent.address.entire}.createNewWindowDialog`).take()\n    // 打开弹窗\n    dialog.componentProps.open = true\n  },\n})\n"
                   },
                   "dependencies": [
                     {
@@ -363,6 +363,7 @@
                     ],
                     "x-validator": [],
                     "x-designable-id": "ldqpaqqrkrb",
+                    "x-index": 3,
                     "items": {
                       "type": "string",
                       "x-component": "Button",
@@ -389,8 +390,7 @@
                         }
                       },
                       "x-designable-id": "m805sw3om39"
-                    },
-                    "x-index": 3
+                    }
                   }
                 }
               }
@@ -409,7 +409,7 @@
                 "x-component": "Button",
                 "x-reactions": {
                   "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    window.currentForm = $form\n    window.currentField = $self\n\n    // 获取弹窗\n    const dialog = $self.query(\"updateCurrentWindowDialog\").take()\n    // 打开弹窗\n    dialog.componentProps.open = true\n  },\n})\n"
+                    "run": "$props({\n  onClick: () => {\n    window.currentForm = $form\n    window.currentField = $self\n\n    // 获取弹窗\n    const dialog = $self.query(`${$self.parent.address.entire}.updateCurrentWindowDialog`).take()\n    // 打开弹窗\n    dialog.componentProps.open = true\n  },\n})\n"
                   },
                   "dependencies": [
                     {
@@ -505,6 +505,7 @@
                     ],
                     "x-validator": [],
                     "x-designable-id": "jq5nwe4oy01",
+                    "x-index": 2,
                     "items": {
                       "type": "string",
                       "x-component": "Button",
@@ -531,8 +532,7 @@
                         }
                       },
                       "x-designable-id": "7kt2ukxbiuj"
-                    },
-                    "x-index": 2
+                    }
                   }
                 }
               }
