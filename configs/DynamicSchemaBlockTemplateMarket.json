@@ -50,6 +50,20 @@
         ]
     },
     {
+        "name": "当前日期时间",
+        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/current-date-time/index.json",
+        "images": [
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/current-date-time/1.png"
+        ]
+    },
+    {
+        "name": "当前日期时间卡片",
+        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/current-date-time-card/index.json",
+        "images": [
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/current-date-time-card/1.png"
+        ]
+    },
+    {
         "name": "新建指定尺寸的窗口",
         "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/creates-a-new-window-of-the-specified-size/index.json",
         "images": [

@@ -1,0 +1,28 @@
+{
+    "type": "string",
+    "x-component": "Text",
+    "x-validator": [],
+    "x-component-props": {
+        "style": {
+            "fontSize": "20px",
+            "padding": "8px 8px 8px 8px",
+            "display": "flex",
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "alignItems": "center"
+        }
+    },
+    "name": "currentDateTimeText",
+    "x-reactions": {
+        "dependencies": [
+            {
+                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                "property": "value",
+                "type": "any"
+            }
+        ],
+        "fulfill": {
+            "run": "const refreshDateTime = () => {\n  $self.value = $dayjs().format(\"YYYY-MM-DD HH:mm:ss\")\n}\n\nrefreshDateTime()\n\n$effect(() => {\n  refreshDateTime()\n  setInterval(() => {\n    refreshDateTime()\n  }, 1000)\n}, [])\n"
+        }
+    }
+}

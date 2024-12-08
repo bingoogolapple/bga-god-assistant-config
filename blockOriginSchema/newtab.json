@@ -109,15 +109,194 @@
                 "x-designable-id": "khhftitma81",
                 "x-index": 1,
                 "properties": {
-                    "g82uw6lbo4c": {
+                    "jzqskploeu9": {
                         "type": "void",
                         "x-component": "FormGrid.GridColumn",
                         "x-validator": [],
                         "x-component-props": {
                             "gridSpan": 2
                         },
-                        "x-designable-id": "g82uw6lbo4c",
+                        "x-designable-id": "jzqskploeu9",
                         "x-index": 0,
+                        "properties": {
+                            "currentDateTimeText": {
+                                "type": "string",
+                                "x-component": "Text",
+                                "x-validator": [],
+                                "x-component-props": {
+                                    "style": {
+                                        "fontSize": "20px",
+                                        "padding": "8px 8px 8px 8px",
+                                        "display": "flex",
+                                        "flexDirection": "row",
+                                        "justifyContent": "center",
+                                        "alignItems": "center"
+                                    }
+                                },
+                                "name": "currentDateTimeText",
+                                "x-reactions": {
+                                    "dependencies": [
+                                        {
+                                            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                            "property": "value",
+                                            "type": "any"
+                                        }
+                                    ],
+                                    "fulfill": {
+                                        "run": "const refreshDateTime = () => {\n  $self.value = $dayjs().format(\"YYYY-MM-DD HH:mm:ss\")\n}\n\nrefreshDateTime()\n\n$effect(() => {\n  refreshDateTime()\n  setInterval(() => {\n    refreshDateTime()\n  }, 1000)\n}, [])\n"
+                                    }
+                                },
+                                "x-designable-id": "lbkbjs7vmci",
+                                "x-index": 0
+                            }
+                        }
+                    },
+                    "zkgvmjzhr02": {
+                        "type": "void",
+                        "x-component": "FormGrid.GridColumn",
+                        "x-validator": [],
+                        "x-component-props": {
+                            "gridSpan": 2
+                        },
+                        "x-designable-id": "zkgvmjzhr02",
+                        "x-index": 1,
+                        "properties": {
+                            "currentDateTimeCardDiv": {
+                                "type": "void",
+                                "x-component": "Div",
+                                "x-component-props": {
+                                    "style": {
+                                        "backgroundColor": "rgba(255,255,255,1)",
+                                        "borderRadius": "8px 8px 8px 8px",
+                                        "border": "1px solid #f0f0f0"
+                                    }
+                                },
+                                "name": "currentDateTimeCardDiv",
+                                "x-reactions": {
+                                    "dependencies": [
+                                        {
+                                            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                            "property": "value",
+                                            "type": "any"
+                                        }
+                                    ],
+                                    "fulfill": {
+                                        "run": "const rootEntire = $self.address.entire\n// 只截取自己和父节点，避免拖动位置后数据丢失\nconst cacheKeyPrefix = $self.address.segments.slice(-2).join(\".\")\n// 搜索列表持久化缓存的 key\nconst cacheKeySearchList = `${cacheKeyPrefix}SearchList`\n// 默认搜索持久化缓存的 key\nconst cacheKeyDefaultSearch = `${cacheKeyPrefix}DefaultSearch`\n\n// 修复样式问题\n$props({\n  className: $self.props.name,\n})\n$effect(() => {\n  const rootNode = document.querySelector(`.${$self.props.name}`)\n  if (rootNode) {\n    const element = rootNode.querySelector(\n      \".ant-formily-item-feedback-layout-loose\"\n    )\n    if (element) {\n      element.style.marginBottom = 0\n    }\n  }\n}, [])\n\n$self.state = $observable({\n  defaultSearch: null,\n  searchList: null,\n})\n\n// 默认搜索列表\nconst defualtList = [\n  {\n    title: \"百度\",\n    url: \"https://www.baidu.com/s?wd=%s\",\n  },\n  {\n    title: \"必应\",\n    url: \"https://www.bing.com/search?q=%s\",\n  },\n  {\n    title: \"Google\",\n    url: \"https://www.google.com/search?q=%s\",\n  },\n  {\n    title: \"搜狗\",\n    url: \"https://www.sogou.com/web?query=%s\",\n  },\n  {\n    title: \"360\",\n    url: \"https://www.so.com/s?q=%s\",\n  },\n  {\n    title: \"掘金\",\n    url: \"https://juejin.cn/search?query=%s\",\n  },\n  {\n    title: \"npm\",\n    url: \"https://www.npmjs.com/search?q=%s\",\n  },\n  {\n    title: \"GitHub\",\n    url: \"https://github.com/search?q=%s\",\n  },\n  {\n    title: \"Bilibili\",\n    url: \"https://search.bilibili.com/all?keyword=%s\",\n  },\n  {\n    title: \"YouTube\",\n    url: \"https://www.youtube.com/results?search_query=%s\",\n  },\n  {\n    title: \"抖音\",\n    url: \"https://www.douyin.com/search/%s\",\n  },\n  {\n    title: \"快手\",\n    url: \"https://www.kuaishou.com/search/video?searchKey=%s\",\n  },\n  {\n    title: \"小红书\",\n    url: \"https://www.xiaohongshu.com/search_result?keyword=%s\",\n  },\n  {\n    title: \"知乎\",\n    url: \"https://www.zhihu.com/search?type=content&q=%s\",\n  },\n  {\n    title: \"微博\",\n    url: \"https://s.weibo.com/weibo?q=%s\",\n  },\n  {\n    title: \"Facebook\",\n    url: \"https://www.facebook.com/search/top/?q=%s\",\n  },\n  {\n    title: \"X\",\n    url: \"https://x.com/search?q=%s\",\n  },\n].map((item, index) => {\n  return {\n    ...item,\n    id: Date.now() + index,\n  }\n})\n\n// 获取默认搜索\n$self.getDefaultSearch = async () => {\n  if ($self.state.defaultSearch) {\n    // 返回内存缓存的默认搜索\n    return $self.state.defaultSearch\n  }\n\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeyDefaultSearch)\n    if (res) {\n      res = JSON.parse(res)\n    }\n  } catch (e) {\n    $logger.info(\"获取默认搜索失败\", e)\n  }\n\n  $self.state.defaultSearch = res || $self.state.searchList[0]\n  return $self.state.defaultSearch\n}\n\n// 修改默认搜索\n$self.updateDefaultSearch = async (defaultSearch) => {\n  try {\n    await $chrome.localStorage.setItem(\n      cacheKeyDefaultSearch,\n      JSON.stringify(defaultSearch)\n    )\n\n    $self.state.defaultSearch = defaultSearch\n  } catch (e) {\n    $logger.info(\"修改默认搜索失败\", e)\n  }\n}\n\n// 展示搜索管理对话框\n$self.showSearchManageDialog = () => {\n  const searchManageDialog = $self\n    .query(`${rootEntire}.searchManageDialog`)\n    .take()\n  searchManageDialog.setComponentProps({\n    open: true,\n  })\n}\n\n// 展示添加或修改搜索方式对话框\n$self.showAddOrUpdateSearchDialog = (search) => {\n  const addOrUpdateSearchDialog = $self\n    .query(`${rootEntire}.addOrUpdateSearchDialog`)\n    .take()\n  addOrUpdateSearchDialog.value = {\n    ...(search || {}),\n  }\n  addOrUpdateSearchDialog.setComponentProps({\n    open: true,\n    title: `${search ? \"修改\" : \"添加\"}方式`,\n  })\n}\n\n// 添加或修改搜索方式\n$self.addOrUpdateSearch = async (search) => {\n  const list = await $self.fetchSearchList()\n\n  if (search.id) {\n    // 修改\n    const index = list.findIndex((item) => item.id === search.id)\n    list[index] = search\n  } else {\n    // 添加\n    search.id = Date.now()\n    list.push(search)\n  }\n\n  try {\n    await $chrome.localStorage.setItem(cacheKeySearchList, JSON.stringify(list))\n    $self.state.searchList = [...list]\n  } catch (e) {\n    $logger.info(`${search.id ? \"修改\" : \"添加\"}搜索方式失败`, e)\n  }\n}\n\n// 删除搜索方式\n$self.deleteSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n  list = list.filter((item) => item.id !== search.id)\n  $self.saveSearchList(list)\n}\n\n// 往前移动搜索方式\n$self.moveUpSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n\n  const index = list.findIndex((item) => item.id === search.id)\n  let preIndex = index - 1\n  if (preIndex === -1) {\n    // 已经是第一条，则和最后一条互换\n    preIndex = list.length - 1\n  }\n\n  const other = list[preIndex]\n  list[preIndex] = search\n  list[index] = other\n  $self.saveSearchList(list)\n}\n\n// 往后移动搜索方式\n$self.moveDownSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n\n  const index = list.findIndex((item) => item.id === search.id)\n  let nextIndex = index + 1\n  if (nextIndex === list.length) {\n    // 已经是最后一条，则和第一条互换\n    nextIndex = 0\n  }\n\n  const other = list[nextIndex]\n  list[nextIndex] = search\n  list[index] = other\n\n  $self.saveSearchList(list)\n}\n\n// 保存搜索列表数据\n$self.saveSearchList = async (list) => {\n  try {\n    await $chrome.localStorage.setItem(cacheKeySearchList, JSON.stringify(list))\n\n    $self.state.searchList = [...list]\n  } catch (e) {\n    $logger.info(`保存搜索列表数据失败`, e)\n  }\n}\n\n// 执行搜索\n$self.handleSearch = async (search) => {\n  if (!search) {\n    search = await $self.getDefaultSearch()\n  }\n\n  const searchKeyword = $self.query(`${rootEntire}.searchKeyword`).take()\n  const keyword = searchKeyword.value\n  const url = search.url.replace(\"%s\", keyword)\n  $utils.openUrl(url)\n}\n\n// 获取搜索列表\n$self.fetchSearchList = async () => {\n  if ($self.state.searchList) {\n    return $self.state.searchList\n  }\n\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeySearchList)\n  } catch (e) {\n    $logger.info(\"获取搜索列表失败\", e)\n    return []\n  }\n\n  if (!res) {\n    $self.saveSearchList(defualtList)\n    return defualtList\n  }\n\n  try {\n    const searchCardData = JSON.parse(res) || []\n    return searchCardData\n  } catch (e) {\n    $logger.info(\"解析搜索列表数据失败\", e)\n    return []\n  }\n}\n\n$effect(() => {\n  const searchIteratorLayout = $self\n    .query(`${rootEntire}.searchIteratorLayout`)\n    .take()\n  searchIteratorLayout.value = $self.state.searchList\n}, [$self.state.searchList])\n\n$effect(() => {\n  if (!$self.state.defaultSearch) {\n    return\n  }\n\n  const defaultSearch = $self.state.defaultSearch\n  const searchKeyword = $self.query(`${rootEntire}.searchKeyword`).take()\n  searchKeyword.setComponentProps({\n    placeholder: `请输入搜索内容，回车键默认「${defaultSearch.title}」搜索`,\n  })\n\n  const searchCardTitle = $self\n    .query(\n      `${rootEntire}.searchCardTitleDiv.searchCardTitleLeftDiv.searchCardTitle`\n    )\n    .take()\n  searchCardTitle.value = `「${defaultSearch.title}」搜索`\n}, [$self.state.defaultSearch])\n\n// 初始化\nconst init = async () => {\n  $self.state.searchList = await $self.fetchSearchList()\n\n  $self.getDefaultSearch()\n}\n\n$effect(async () => {\n  init()\n}, [])\n"
+                                    }
+                                },
+                                "x-designable-id": "b0wwsrfop6q",
+                                "x-index": 0,
+                                "properties": {
+                                    "currentDateTimeCardTitleDiv": {
+                                        "type": "void",
+                                        "x-component": "Div",
+                                        "x-component-props": {
+                                            "style": {
+                                                "display": "flex",
+                                                "flexDirection": "row",
+                                                "alignItems": "center",
+                                                "margin": "0px 0px 0px 0px",
+                                                "padding": "4px 10px 4px 10px",
+                                                "justifyContent": "space-between"
+                                            }
+                                        },
+                                        "x-designable-id": "eeid84354r3",
+                                        "x-index": 0,
+                                        "name": "currentDateTimeCardTitleDiv",
+                                        "properties": {
+                                            "currentDateTimeCardTitleLeftDiv": {
+                                                "type": "void",
+                                                "x-component": "Div",
+                                                "x-component-props": {
+                                                    "style": {
+                                                        "display": "flex",
+                                                        "flexDirection": "row",
+                                                        "alignItems": "center",
+                                                        "margin": "0px 0px 0px 0px",
+                                                        "padding": "0px 0px 0px 0px",
+                                                        "justifyContent": "flex-start"
+                                                    }
+                                                },
+                                                "x-designable-id": "xtdaqxo1ik4",
+                                                "x-index": 0,
+                                                "name": "currentDateTimeCardTitleLeftDiv",
+                                                "properties": {
+                                                    "currentDateTimeCardTitle": {
+                                                        "type": "string",
+                                                        "x-component": "Text",
+                                                        "x-validator": [],
+                                                        "x-component-props": {
+                                                            "content": "当前时间",
+                                                            "style": {
+                                                                "fontSize": "14px",
+                                                                "fontWeight": 700,
+                                                                "margin": "0px 0px 0px 0px"
+                                                            }
+                                                        },
+                                                        "x-designable-id": "knly16afz1m",
+                                                        "x-index": 0,
+                                                        "name": "currentDateTimeCardTitle"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "5w37e56szq3": {
+                                        "type": "string",
+                                        "x-component": "Divider",
+                                        "x-validator": [],
+                                        "x-component-props": {
+                                            "children": "",
+                                            "style": {
+                                                "margin": "0px 0px 0px 0px"
+                                            }
+                                        },
+                                        "x-designable-id": "5w37e56szq3",
+                                        "x-index": 1
+                                    },
+                                    "currentDateTimeText": {
+                                        "type": "string",
+                                        "x-component": "Text",
+                                        "x-validator": [],
+                                        "x-component-props": {
+                                            "style": {
+                                                "fontSize": "20px",
+                                                "padding": "8px 8px 8px 8px",
+                                                "display": "flex",
+                                                "flexDirection": "row",
+                                                "justifyContent": "center",
+                                                "alignItems": "center"
+                                            }
+                                        },
+                                        "name": "currentDateTimeText",
+                                        "x-reactions": {
+                                            "dependencies": [
+                                                {
+                                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                                                    "property": "value",
+                                                    "type": "any"
+                                                }
+                                            ],
+                                            "fulfill": {
+                                                "run": "const refreshDateTime = () => {\n  $self.value = $dayjs().format(\"YYYY-MM-DD HH:mm:ss\")\n}\n\nrefreshDateTime()\n\n$effect(() => {\n  refreshDateTime()\n  setInterval(() => {\n    refreshDateTime()\n  }, 1000)\n}, [])\n"
+                                            }
+                                        },
+                                        "x-designable-id": "bl9kgtlwm3m",
+                                        "x-index": 2
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "tuq09prcomu": {
+                        "type": "void",
+                        "x-component": "FormGrid.GridColumn",
+                        "x-validator": [],
+                        "x-component-props": {
+                            "gridSpan": 2
+                        },
+                        "x-designable-id": "tuq09prcomu",
+                        "x-index": 2,
                         "properties": {
                             "searchCardDiv": {
                                 "type": "void",
@@ -142,7 +321,7 @@
                                         "run": "const rootEntire = $self.address.entire\n// 只截取自己和父节点，避免拖动位置后数据丢失\nconst cacheKeyPrefix = $self.address.segments.slice(-2).join(\".\")\n// 搜索列表持久化缓存的 key\nconst cacheKeySearchList = `${cacheKeyPrefix}SearchList`\n// 默认搜索持久化缓存的 key\nconst cacheKeyDefaultSearch = `${cacheKeyPrefix}DefaultSearch`\n\n// 修复样式问题\n$props({\n  className: $self.props.name,\n})\n$effect(() => {\n  const rootNode = document.querySelector(`.${$self.props.name}`)\n  if (rootNode) {\n    const element = rootNode.querySelector(\n      \".ant-formily-item-feedback-layout-loose\"\n    )\n    if (element) {\n      element.style.marginBottom = 0\n    }\n  }\n}, [])\n\n$self.state = $observable({\n  defaultSearch: null,\n  searchList: null,\n})\n\n// 默认搜索列表\nconst defualtList = [\n  {\n    title: \"百度\",\n    url: \"https://www.baidu.com/s?wd=%s\",\n  },\n  {\n    title: \"必应\",\n    url: \"https://www.bing.com/search?q=%s\",\n  },\n  {\n    title: \"Google\",\n    url: \"https://www.google.com/search?q=%s\",\n  },\n  {\n    title: \"搜狗\",\n    url: \"https://www.sogou.com/web?query=%s\",\n  },\n  {\n    title: \"360\",\n    url: \"https://www.so.com/s?q=%s\",\n  },\n  {\n    title: \"掘金\",\n    url: \"https://juejin.cn/search?query=%s\",\n  },\n  {\n    title: \"npm\",\n    url: \"https://www.npmjs.com/search?q=%s\",\n  },\n  {\n    title: \"GitHub\",\n    url: \"https://github.com/search?q=%s\",\n  },\n  {\n    title: \"Bilibili\",\n    url: \"https://search.bilibili.com/all?keyword=%s\",\n  },\n  {\n    title: \"YouTube\",\n    url: \"https://www.youtube.com/results?search_query=%s\",\n  },\n  {\n    title: \"抖音\",\n    url: \"https://www.douyin.com/search/%s\",\n  },\n  {\n    title: \"快手\",\n    url: \"https://www.kuaishou.com/search/video?searchKey=%s\",\n  },\n  {\n    title: \"小红书\",\n    url: \"https://www.xiaohongshu.com/search_result?keyword=%s\",\n  },\n  {\n    title: \"知乎\",\n    url: \"https://www.zhihu.com/search?type=content&q=%s\",\n  },\n  {\n    title: \"微博\",\n    url: \"https://s.weibo.com/weibo?q=%s\",\n  },\n  {\n    title: \"Facebook\",\n    url: \"https://www.facebook.com/search/top/?q=%s\",\n  },\n  {\n    title: \"X\",\n    url: \"https://x.com/search?q=%s\",\n  },\n].map((item, index) => {\n  return {\n    ...item,\n    id: Date.now() + index,\n  }\n})\n\n// 获取默认搜索\n$self.getDefaultSearch = async () => {\n  if ($self.state.defaultSearch) {\n    // 返回内存缓存的默认搜索\n    return $self.state.defaultSearch\n  }\n\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeyDefaultSearch)\n    if (res) {\n      res = JSON.parse(res)\n    }\n  } catch (e) {\n    $logger.info(\"获取默认搜索失败\", e)\n  }\n\n  $self.state.defaultSearch = res || $self.state.searchList[0]\n  return $self.state.defaultSearch\n}\n\n// 修改默认搜索\n$self.updateDefaultSearch = async (defaultSearch) => {\n  try {\n    await $chrome.localStorage.setItem(\n      cacheKeyDefaultSearch,\n      JSON.stringify(defaultSearch)\n    )\n\n    $self.state.defaultSearch = defaultSearch\n  } catch (e) {\n    $logger.info(\"修改默认搜索失败\", e)\n  }\n}\n\n// 展示搜索管理对话框\n$self.showSearchManageDialog = () => {\n  const searchManageDialog = $self\n    .query(`${rootEntire}.searchManageDialog`)\n    .take()\n  searchManageDialog.setComponentProps({\n    open: true,\n  })\n}\n\n// 展示添加或修改搜索方式对话框\n$self.showAddOrUpdateSearchDialog = (search) => {\n  const addOrUpdateSearchDialog = $self\n    .query(`${rootEntire}.addOrUpdateSearchDialog`)\n    .take()\n  addOrUpdateSearchDialog.value = {\n    ...(search || {}),\n  }\n  addOrUpdateSearchDialog.setComponentProps({\n    open: true,\n    title: `${search ? \"修改\" : \"添加\"}方式`,\n  })\n}\n\n// 添加或修改搜索方式\n$self.addOrUpdateSearch = async (search) => {\n  const list = await $self.fetchSearchList()\n\n  if (search.id) {\n    // 修改\n    const index = list.findIndex((item) => item.id === search.id)\n    list[index] = search\n  } else {\n    // 添加\n    search.id = Date.now()\n    list.push(search)\n  }\n\n  try {\n    await $chrome.localStorage.setItem(cacheKeySearchList, JSON.stringify(list))\n    $self.state.searchList = [...list]\n  } catch (e) {\n    $logger.info(`${search.id ? \"修改\" : \"添加\"}搜索方式失败`, e)\n  }\n}\n\n// 删除搜索方式\n$self.deleteSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n  list = list.filter((item) => item.id !== search.id)\n  $self.saveSearchList(list)\n}\n\n// 往前移动搜索方式\n$self.moveUpSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n\n  const index = list.findIndex((item) => item.id === search.id)\n  let preIndex = index - 1\n  if (preIndex === -1) {\n    // 已经是第一条，则和最后一条互换\n    preIndex = list.length - 1\n  }\n\n  const other = list[preIndex]\n  list[preIndex] = search\n  list[index] = other\n  $self.saveSearchList(list)\n}\n\n// 往后移动搜索方式\n$self.moveDownSearch = async (search) => {\n  let list = await $self.fetchSearchList()\n\n  const index = list.findIndex((item) => item.id === search.id)\n  let nextIndex = index + 1\n  if (nextIndex === list.length) {\n    // 已经是最后一条，则和第一条互换\n    nextIndex = 0\n  }\n\n  const other = list[nextIndex]\n  list[nextIndex] = search\n  list[index] = other\n\n  $self.saveSearchList(list)\n}\n\n// 保存搜索列表数据\n$self.saveSearchList = async (list) => {\n  try {\n    await $chrome.localStorage.setItem(cacheKeySearchList, JSON.stringify(list))\n\n    $self.state.searchList = [...list]\n  } catch (e) {\n    $logger.info(`保存搜索列表数据失败`, e)\n  }\n}\n\n// 执行搜索\n$self.handleSearch = async (search) => {\n  if (!search) {\n    search = await $self.getDefaultSearch()\n  }\n\n  const searchKeyword = $self.query(`${rootEntire}.searchKeyword`).take()\n  const keyword = searchKeyword.value\n  const url = search.url.replace(\"%s\", keyword)\n  $utils.openUrl(url)\n}\n\n// 获取搜索列表\n$self.fetchSearchList = async () => {\n  if ($self.state.searchList) {\n    return $self.state.searchList\n  }\n\n  let res = null\n  try {\n    res = await $chrome.localStorage.getItem(cacheKeySearchList)\n  } catch (e) {\n    $logger.info(\"获取搜索列表失败\", e)\n    return []\n  }\n\n  if (!res) {\n    $self.saveSearchList(defualtList)\n    return defualtList\n  }\n\n  try {\n    const searchCardData = JSON.parse(res) || []\n    return searchCardData\n  } catch (e) {\n    $logger.info(\"解析搜索列表数据失败\", e)\n    return []\n  }\n}\n\n$effect(() => {\n  const searchIteratorLayout = $self\n    .query(`${rootEntire}.searchIteratorLayout`)\n    .take()\n  searchIteratorLayout.value = $self.state.searchList\n}, [$self.state.searchList])\n\n$effect(() => {\n  if (!$self.state.defaultSearch) {\n    return\n  }\n\n  const defaultSearch = $self.state.defaultSearch\n  const searchKeyword = $self.query(`${rootEntire}.searchKeyword`).take()\n  searchKeyword.setComponentProps({\n    placeholder: `请输入搜索内容，回车键默认「${defaultSearch.title}」搜索`,\n  })\n\n  const searchCardTitle = $self\n    .query(\n      `${rootEntire}.searchCardTitleDiv.searchCardTitleLeftDiv.searchCardTitle`\n    )\n    .take()\n  searchCardTitle.value = `「${defaultSearch.title}」搜索`\n}, [$self.state.defaultSearch])\n\n// 初始化\nconst init = async () => {\n  $self.state.searchList = await $self.fetchSearchList()\n\n  $self.getDefaultSearch()\n}\n\n$effect(async () => {\n  init()\n}, [])\n"
                                     }
                                 },
-                                "x-designable-id": "4mfe5ds4zmg",
+                                "x-designable-id": "93m6bs9ls7h",
                                 "x-index": 0,
                                 "properties": {
                                     "searchCardTitleDiv": {
@@ -158,7 +337,7 @@
                                                 "justifyContent": "space-between"
                                             }
                                         },
-                                        "x-designable-id": "3g2rfhf48ik",
+                                        "x-designable-id": "vpaomsgm3sh",
                                         "x-index": 0,
                                         "name": "searchCardTitleDiv",
                                         "properties": {
@@ -175,7 +354,7 @@
                                                         "justifyContent": "flex-start"
                                                     }
                                                 },
-                                                "x-designable-id": "f2t7d5mty09",
+                                                "x-designable-id": "8x2il020pyr",
                                                 "x-index": 0,
                                                 "name": "searchCardTitleLeftDiv",
                                                 "properties": {
@@ -191,21 +370,9 @@
                                                                 "margin": "0px 0px 0px 0px"
                                                             }
                                                         },
-                                                        "x-designable-id": "2nldf2acokh",
+                                                        "x-designable-id": "l3ausu9g5zn",
                                                         "x-index": 0,
-                                                        "name": "searchCardTitle",
-                                                        "x-reactions": {
-                                                            "dependencies": [
-                                                                {
-                                                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                                                                    "property": "value",
-                                                                    "type": "any"
-                                                                }
-                                                            ],
-                                                            "fulfill": {
-                                                                "run": ""
-                                                            }
-                                                        }
+                                                        "name": "searchCardTitle"
                                                     }
                                                 }
                                             },
@@ -218,7 +385,7 @@
                                                         "flexDirection": "row"
                                                     }
                                                 },
-                                                "x-designable-id": "jkuz7t8cszy",
+                                                "x-designable-id": "14xmwozlxi8",
                                                 "x-index": 1,
                                                 "name": "searchCardTitleRightDiv",
                                                 "properties": {
@@ -248,7 +415,7 @@
                                                             },
                                                             "size": "small"
                                                         },
-                                                        "x-designable-id": "1bt70ow5cv7",
+                                                        "x-designable-id": "s2q8ba0fn0s",
                                                         "x-index": 0,
                                                         "name": "searchManageBtn"
                                                     },
@@ -278,7 +445,7 @@
                                                             },
                                                             "size": "small"
                                                         },
-                                                        "x-designable-id": "iuyqdhe53b5",
+                                                        "x-designable-id": "38kv118zjpr",
                                                         "x-index": 1,
                                                         "name": "addSearchBtn"
                                                     }
@@ -286,7 +453,7 @@
                                             }
                                         }
                                     },
-                                    "b05vxa9tlca": {
+                                    "8ivah5cfwb1": {
                                         "type": "string",
                                         "x-component": "Divider",
                                         "x-validator": [],
@@ -296,7 +463,7 @@
                                                 "margin": "0px 0px 0px 0px"
                                             }
                                         },
-                                        "x-designable-id": "b05vxa9tlca",
+                                        "x-designable-id": "8ivah5cfwb1",
                                         "x-index": 1
                                     },
                                     "searchKeyword": {
@@ -327,7 +494,7 @@
                                             }
                                         },
                                         "name": "searchKeyword",
-                                        "x-designable-id": "rxg79wd5801",
+                                        "x-designable-id": "gz4powqq54m",
                                         "x-index": 2,
                                         "x-reactions": {
                                             "dependencies": [
@@ -356,24 +523,12 @@
                                         },
                                         "default": [],
                                         "x-validator": [],
-                                        "x-designable-id": "fylt162uhbt",
+                                        "x-designable-id": "jz6ebegxe1p",
                                         "x-index": 3,
                                         "name": "searchIteratorLayout",
-                                        "x-reactions": {
-                                            "dependencies": [
-                                                {
-                                                    "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                                                    "property": "value",
-                                                    "type": "any"
-                                                }
-                                            ],
-                                            "fulfill": {
-                                                "run": ""
-                                            }
-                                        },
                                         "items": {
                                             "type": "object",
-                                            "x-designable-id": "ijzl9dx09bk",
+                                            "x-designable-id": "dqsh47r3fqm",
                                             "x-validator": [],
                                             "properties": {
                                                 "title": {
@@ -400,7 +555,7 @@
                                                             "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    const search = $utils.getArrayFieldRow($self)\n    rootField.handleSearch(search)\n  },\n})\n"
                                                         }
                                                     },
-                                                    "x-designable-id": "45gb3o551fu",
+                                                    "x-designable-id": "gpxj1fox04u",
                                                     "x-index": 0,
                                                     "x-validator": []
                                                 }
@@ -428,7 +583,7 @@
                                             "width": 700
                                         },
                                         "name": "searchManageDialog",
-                                        "x-designable-id": "ezjkys90rxx",
+                                        "x-designable-id": "ng0zwjqjcph",
                                         "x-index": 4,
                                         "properties": {
                                             "defaultSearch": {
@@ -452,7 +607,7 @@
                                                         "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  const dataSource = rootField.state.searchList.map((item) => {\n    return {\n      label: item.title,\n      value: item.id,\n    }\n  })\n  $self.dataSource = dataSource\n}, [rootField.state.searchList])\n\n$effect(() => {\n  $self.value = rootField.state.defaultSearch.id\n}, [rootField.state.defaultSearch])\n\n$props({\n  // 监听到默认搜索方式变更\n  onChange: async (id) => {\n    const { title, url } = rootField.state.searchList.find(\n      (item) => (item.id === id)\n    )\n    // 更新默认搜索方式\n    await rootField.updateDefaultSearch({\n      id,\n      title,\n      url,\n    })\n  },\n})\n"
                                                     }
                                                 },
-                                                "x-designable-id": "em6nkst3mvx",
+                                                "x-designable-id": "jovzj3fd8iq",
                                                 "x-index": 0
                                             },
                                             "searchTable": {
@@ -481,12 +636,12 @@
                                                         "run": "const rootName = \"searchCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$effect(() => {\n  $self.value = rootField.state.searchList\n}, [rootField.state.searchList])\n"
                                                     }
                                                 },
-                                                "x-designable-id": "84gpllr0d35",
+                                                "x-designable-id": "70ctm2ra9h9",
                                                 "x-index": 1,
                                                 "name": "searchTable",
                                                 "items": {
                                                     "type": "object",
-                                                    "x-designable-id": "zub4hik94ls",
+                                                    "x-designable-id": "3t8eawnrvot",
                                                     "x-validator": [],
                                                     "properties": {
                                                         "titleColumn": {
@@ -496,7 +651,7 @@
                                                                 "title": "搜索方式名称",
                                                                 "width": 150
                                                             },
-                                                            "x-designable-id": "b7ewfa95acb",
+                                                            "x-designable-id": "gpd658dd1k3",
                                                             "x-index": 0,
                                                             "name": "titleColumn",
                                                             "properties": {
@@ -506,7 +661,7 @@
                                                                     "x-validator": [],
                                                                     "x-component-props": {},
                                                                     "name": "title",
-                                                                    "x-designable-id": "qs1bwzo34rn",
+                                                                    "x-designable-id": "9ux9bd3hp3e",
                                                                     "x-index": 0
                                                                 }
                                                             }
@@ -517,7 +672,7 @@
                                                             "x-component-props": {
                                                                 "title": "搜索地址"
                                                             },
-                                                            "x-designable-id": "swmc7x31ftr",
+                                                            "x-designable-id": "ap4ei4xmmcq",
                                                             "x-index": 1,
                                                             "name": "urlColumn",
                                                             "properties": {
@@ -529,7 +684,7 @@
                                                                         "content": ""
                                                                     },
                                                                     "name": "url",
-                                                                    "x-designable-id": "wbx527c5io9",
+                                                                    "x-designable-id": "rq8dzdm1uqy",
                                                                     "x-index": 0
                                                                 }
                                                             }
@@ -542,7 +697,7 @@
                                                                 "width": 135,
                                                                 "align": "center"
                                                             },
-                                                            "x-designable-id": "wxk3yjsqja8",
+                                                            "x-designable-id": "50sc25za39d",
                                                             "x-index": 2,
                                                             "name": "operateColumn",
                                                             "properties": {
@@ -571,7 +726,7 @@
                                                                         },
                                                                         "size": "small"
                                                                     },
-                                                                    "x-designable-id": "q2utwk10jj5",
+                                                                    "x-designable-id": "jczm5g5zu2i",
                                                                     "x-index": 0,
                                                                     "name": "deleteSearchBtn"
                                                                 },
@@ -600,7 +755,7 @@
                                                                         },
                                                                         "size": "small"
                                                                     },
-                                                                    "x-designable-id": "8i97b1d89hw",
+                                                                    "x-designable-id": "tx0igs06dp7",
                                                                     "x-index": 1,
                                                                     "name": "moveUpSearchBtn"
                                                                 },
@@ -629,7 +784,7 @@
                                                                         },
                                                                         "size": "small"
                                                                     },
-                                                                    "x-designable-id": "cc8pumo6llz",
+                                                                    "x-designable-id": "yhiaqk8k9af",
                                                                     "x-index": 2,
                                                                     "name": "moveDownSearchBtn"
                                                                 },
@@ -658,7 +813,7 @@
                                                                         },
                                                                         "size": "small"
                                                                     },
-                                                                    "x-designable-id": "7x72m09nrlp",
+                                                                    "x-designable-id": "td2tiv3h78i",
                                                                     "x-index": 3,
                                                                     "name": "editSearchBtn"
                                                                 }
@@ -695,7 +850,7 @@
                                             "zIndex": 1001
                                         },
                                         "name": "addOrUpdateSearchDialog",
-                                        "x-designable-id": "4a587y52a7r",
+                                        "x-designable-id": "3youpwjdv0v",
                                         "x-index": 5,
                                         "properties": {
                                             "title": {
@@ -710,7 +865,7 @@
                                                 "x-decorator-props": {},
                                                 "name": "title",
                                                 "required": true,
-                                                "x-designable-id": "fb8oy0qbire",
+                                                "x-designable-id": "e6lsb1539ud",
                                                 "x-index": 0
                                             },
                                             "url": {
@@ -725,7 +880,7 @@
                                                 "x-decorator-props": {},
                                                 "required": true,
                                                 "name": "url",
-                                                "x-designable-id": "iylnsbeu5kt",
+                                                "x-designable-id": "mgc9j4atfz0",
                                                 "x-index": 1,
                                                 "description": "使用 %s 代替搜索关键词"
                                             }
@@ -743,7 +898,7 @@
                             "gridSpan": 1
                         },
                         "x-designable-id": "csehzbiy14w",
-                        "x-index": 1,
+                        "x-index": 3,
                         "properties": {
                             "todoAppCardDiv": {
                                 "type": "void",
@@ -1149,7 +1304,7 @@
                         "x-validator": [],
                         "x-component-props": {},
                         "x-designable-id": "txw2uae2s4z",
-                        "x-index": 2,
+                        "x-index": 4,
                         "properties": {
                             "translateCardDiv": {
                                 "type": "void",
@@ -1322,7 +1477,7 @@
                         "type": "void",
                         "x-component": "FormGrid.GridColumn",
                         "x-designable-id": "de7xqyabrw6",
-                        "x-index": 3,
+                        "x-index": 5,
                         "x-validator": [],
                         "x-component-props": {},
                         "properties": {
@@ -1597,7 +1752,7 @@
                         "x-validator": [],
                         "x-component-props": {},
                         "x-designable-id": "7lww9d1ufcx",
-                        "x-index": 4,
+                        "x-index": 6,
                         "properties": {
                             "customWordCardDiv": {
                                 "type": "void",
@@ -2001,7 +2156,7 @@
                             "gridSpan": 2
                         },
                         "x-designable-id": "1rumjnvpp8v",
-                        "x-index": 5,
+                        "x-index": 7,
                         "properties": {
                             "bookmarkCardDiv": {
                                 "type": "void",
