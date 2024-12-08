@@ -52,6 +52,9 @@
         "x-component": "ArrayTable",
         "x-validator": [],
         "x-component-props": {
+          "pagination": {
+            "pageSize": 20
+          },
           "style": {}
         },
         "x-decorator-props": {
@@ -422,6 +425,6 @@
         }
       }
     },
-    "x-designable-id": "yargephtraz"
+    "x-designable-id": "pldtolfqhfl"
   }
 }
