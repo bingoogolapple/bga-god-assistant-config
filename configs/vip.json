@@ -1,38 +1,47 @@
 [
   {
     "repoUrl": "https://gitee.com/bingoogolapple/ga-bingoogolapple",
-    "expirationTime": "2100-01-01 00:00:00"
+    "expirationTime": "2100-01-01 00:00:00",
+    "nickname": "上帝小助手"
   },
   {
     "repoUrl": "https://github.com/bingoogolapple/ga-bingoogolapple",
-    "expirationTime": "2100-01-01 00:00:00"
+    "expirationTime": "2100-01-01 00:00:00",
+    "nickname": "上帝小助手"
   },
   {
     "repoUrl": "https://gitee.com/zhongdongyonghu/ga-zhongdongyonghu",
-    "expirationTime": "2100-01-01 00:00:00"
+    "expirationTime": "2100-01-01 00:00:00",
+    "nickname": "邓依"
   },
   {
     "repoUrl": "https://gitee.com/xie-fuling/ga-xie-fuling",
-    "expirationTime": "2100-01-01 00:00:00"
+    "expirationTime": "2100-01-01 00:00:00",
+    "nickname": "蒙娜丽芙"
   },
   {
     "repoUrl": "https://gitee.com/bingoogolapple/ga-thinerzq",
-    "expirationTime": "2100-01-01 00:00:00"
+    "expirationTime": "2100-01-01 00:00:00",
+    "nickname": "傻乎乎"
   },
   {
     "repoUrl": "https://gitee.com/bingoogolapple/ga-douya_neolix",
-    "expirationTime": "2100-01-01 00:00:00"
+    "expirationTime": "2100-01-01 00:00:00",
+    "nickname": "豆芽"
   },
   {
     "repoUrl": "https://gitee.com/bingoogolapple/ga-longshuihe",
-    "expirationTime": "2025-12-06 00:00:00"
+    "expirationTime": "2025-12-06 00:00:00",
+    "nickname": "不知道取啥名"
   },
   {
     "repoUrl": "https://github.com/bingoogolapple/ga-LinForStudy",
-    "expirationTime": "2030-12-06 00:00:00"
+    "expirationTime": "2030-12-06 00:00:00",
+    "nickname": "lc"
   },
   {
     "repoUrl": "https://www.yuque.com/bingoogolapple/god-assistant/rx0ib0ff731aq9dl",
-    "expirationTime": "2030-12-08 00:00:00"
+    "expirationTime": "2030-12-08 00:00:00",
+    "nickname": "笨鸟先飞"
   }
 ]
