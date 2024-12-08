@@ -63,8 +63,8 @@
               "x-component-props": {
                 "src": "https://gitee.com/bingoogolapple/bga-god-assistant-config/raw/master/dynamicSchemaBlockTemplate/custom-word/icon.svg",
                 "style": {
-                  "width": "24px",
-                  "height": "24px"
+                  "width": "20px",
+                  "height": "20px"
                 }
               },
               "x-designable-id": "3cpgoly1zjb",
@@ -78,7 +78,7 @@
               "x-component-props": {
                 "content": "自定义单词本",
                 "style": {
-                  "fontSize": "16px",
+                  "fontSize": "14px",
                   "fontWeight": 700,
                   "margin": "0px 0px 0px 4px"
                 }
@@ -125,7 +125,7 @@
       "x-component-props": {
         "children": "",
         "style": {
-          "margin": "4px 0px 4px 0px"
+          "margin": "0px 0px 4px 0px"
         }
       },
       "x-designable-id": "thsg0ktdovs",

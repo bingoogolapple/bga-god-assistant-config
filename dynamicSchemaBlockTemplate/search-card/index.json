@@ -63,7 +63,7 @@
                             "x-component-props": {
                                 "content": "搜索",
                                 "style": {
-                                    "fontSize": "16px",
+                                    "fontSize": "14px",
                                     "fontWeight": 700,
                                     "margin": "0px 0px 0px 0px"
                                 }
@@ -170,7 +170,7 @@
             "x-component-props": {
                 "children": "",
                 "style": {
-                    "margin": "4px 0px 4px 0px"
+                    "margin": "0px 0px 0px 0px"
                 }
             },
             "x-designable-id": "b05vxa9tlca",
