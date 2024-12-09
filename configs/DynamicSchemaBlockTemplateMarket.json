@@ -65,6 +65,13 @@
         ]
     },
     {
+        "name": "当前标签页二维码",
+        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/current-active-window-tab-qrcode/index.json",
+        "images": [
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/current-active-window-tab-qrcode/1.png"
+        ]
+    },
+    {
         "name": "新建指定尺寸的窗口",
         "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/creates-a-new-window-of-the-specified-size/index.json",
         "images": [

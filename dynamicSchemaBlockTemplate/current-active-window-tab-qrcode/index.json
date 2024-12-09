@@ -1,0 +1,68 @@
+{
+    "type": "void",
+    "x-component": "Div",
+    "x-component-props": {
+        "style": {
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center"
+        }
+    },
+    "name": "currentActiveWindowTabQrCodeDiv",
+    "properties": {
+        "m4sunypljsg": {
+            "type": "string",
+            "x-component": "QRCode",
+            "x-validator": [],
+            "x-component-props": {
+                "id": "qrCodeId",
+                "content": "我是二维码的内容",
+                "style": {
+                    "margin": "4px 4px 4px 4px"
+                },
+                "bordered": true
+            },
+            "x-reactions": {
+                "dependencies": [
+                    {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                    }
+                ],
+                "fulfill": {
+                    "run": "$effect(async () => {\n  const tabs = await $chrome.tabs.query({\n    active: true,\n    currentWindow: true,\n  })\n  $self.value = tabs[0].url\n}, [])\n"
+                }
+            },
+            "x-designable-id": "m4sunypljsg",
+            "x-index": 0
+        },
+        "qwc0xp9ztev": {
+            "type": "string",
+            "x-component": "Button",
+            "x-reactions": {
+                "fulfill": {
+                    "run": "$props({\n  onClick: () => {\n    const imageUrl = document\n      .getElementById(\"qrCodeId\")\n      ?.querySelector(\"canvas\")\n      ?.toDataURL(\"image/png\", 1)\n\n    $utils.copyImageToClipboard(imageUrl)\n  },\n})\n"
+                },
+                "dependencies": [
+                    {
+                        "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                        "property": "value",
+                        "type": "any"
+                    }
+                ]
+            },
+            "x-validator": [],
+            "x-component-props": {
+                "children": "复制二维码图片",
+                "target": "_blank",
+                "style": {
+                    "margin": "4px 4px 4px 4px"
+                },
+                "type": "primary"
+            },
+            "x-designable-id": "qwc0xp9ztev",
+            "x-index": 1
+        }
+    }
+}

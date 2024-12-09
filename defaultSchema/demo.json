@@ -175,12 +175,19 @@
             "x-designable-id": "c035qyoey2k",
             "x-index": 2
           },
-          "daziy8wlqb8": {
+          "currentActiveWindowTabQrCodeDiv": {
             "type": "void",
             "x-component": "Div",
-            "x-component-props": {},
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "center",
+                "alignItems": "center"
+              }
+            },
             "x-designable-id": "daziy8wlqb8",
             "x-index": 3,
+            "name": "currentActiveWindowTabQrCodeDiv",
             "properties": {
               "m4sunypljsg": {
                 "type": "string",
@@ -189,7 +196,10 @@
                 "x-component-props": {
                   "id": "qrCodeId",
                   "content": "我是二维码的内容",
-                  "style": {}
+                  "style": {
+                    "margin": "4px 4px 4px 4px"
+                  },
+                  "bordered": true
                 },
                 "x-reactions": {
                   "dependencies": [
@@ -200,7 +210,7 @@
                     }
                   ],
                   "fulfill": {
-                    "run": "$effect(async () => {\n  const tabs = await $chrome.tabs.query({\n    active: true,\n    lastFocusedWindow: true,\n  })\n  $self.value = tabs[0].url\n}, [])\n"
+                    "run": "$effect(async () => {\n  const tabs = await $chrome.tabs.query({\n    active: true,\n    currentWindow: true,\n  })\n  $self.value = tabs[0].url\n}, [])\n"
                   }
                 },
                 "x-designable-id": "m4sunypljsg",
@@ -223,8 +233,12 @@
                 },
                 "x-validator": [],
                 "x-component-props": {
-                  "children": "复制图片二维码",
-                  "target": "_blank"
+                  "children": "复制二维码图片",
+                  "target": "_blank",
+                  "style": {
+                    "margin": "4px 4px 4px 4px"
+                  },
+                  "type": "primary"
                 },
                 "x-designable-id": "qwc0xp9ztev",
                 "x-index": 1
@@ -541,6 +555,6 @@
         }
       }
     },
-    "x-designable-id": "ofhtuqgxnyg"
+    "x-designable-id": "qrf7wxr4adg"
   }
 }
