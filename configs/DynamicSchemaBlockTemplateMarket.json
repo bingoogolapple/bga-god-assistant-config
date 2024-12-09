@@ -72,17 +72,10 @@
         ]
     },
     {
-        "name": "新建指定尺寸的窗口",
-        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/creates-a-new-window-of-the-specified-size/index.json",
+        "name": "设置浏览器窗口尺寸",
+        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/window-size-settings/index.json",
         "images": [
-            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/creates-a-new-window-of-the-specified-size/1.png"
-        ]
-    },
-    {
-        "name": "修改当前窗口尺寸",
-        "url": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/modify-the-current-window-to-the-specified-size/index.json",
-        "images": [
-            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/modify-the-current-window-to-the-specified-size/1.png"
+            "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/dynamicSchemaBlockTemplate/window-size-settings/1.png"
         ]
     }
 ]

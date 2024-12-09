@@ -255,20 +255,20 @@
             "x-designable-id": "swhi1clj8v4",
             "x-index": 4
           },
-          "createNewWindowDiv": {
+          "windowSizeSettingsDiv": {
             "type": "void",
             "x-component": "Div",
             "x-component-props": {},
-            "name": "createNewWindowDiv",
+            "name": "windowSizeSettingsDiv",
             "x-designable-id": "0hlih6vvdnn",
             "x-index": 5,
             "properties": {
-              "createNewWindowBtn": {
+              "windowSizeSettingsBtn": {
                 "type": "string",
                 "x-component": "Button",
                 "x-reactions": {
                   "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    window.currentForm = $form\n    window.currentField = $self\n\n    // 获取弹窗\n    const dialog = $self.query(`${$self.parent.address.entire}.createNewWindowDialog`).take()\n    // 打开弹窗\n    dialog.componentProps.open = true\n  },\n})\n"
+                    "run": "$props({\n  onClick: () => {\n    // 获取弹窗\n    const dialog = $self\n      .query(`${$self.parent.address.entire}.windowSizeSettingsDialog`)\n      .take()\n    // 打开弹窗\n    dialog.componentProps.open = true\n  },\n})\n"
                   },
                   "dependencies": [
                     {
@@ -280,20 +280,20 @@
                 },
                 "x-validator": [],
                 "x-component-props": {
-                  "children": "新建指定尺寸的窗口",
+                  "children": "设置浏览器窗口尺寸",
                   "target": "_blank",
                   "type": "primary"
                 },
                 "x-designable-id": "i17037bdnrp",
                 "x-index": 0,
-                "name": "createNewWindowBtn"
+                "name": "windowSizeSettingsBtn"
               },
-              "createNewWindowDialog": {
+              "windowSizeSettingsDialog": {
                 "type": "object",
                 "x-component": "Modal",
                 "x-reactions": {
                   "fulfill": {
-                    "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    // 关闭当前对话框\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self\n      .validate() // 校验\n      .then(() => {\n        // $logger.info(\"$self.value\", $self.value)\n\n        // 关闭当前对话框\n        $self.componentProps.open = false\n\n        const { width, height, url } = $self.value\n\n        const params = {\n          width,\n          height,\n          url,\n        }\n        if (!params.url) {\n          delete params.url\n        }\n\n        // 新建指定尺寸的弹窗\n        $chrome.windows.create(params)\n      })\n      .catch((e) => {\n        $logger.info(\"表单校验失败\", e)\n      })\n  },\n})\n"
+                    "run": "$props({\n  // 点击「新建指定尺寸的浏览器窗口」按钮\n  onCancel: (e) => {\n    const tagName = e.target.tagName\n    if ([\"DIV\", \"svg\"].includes(tagName)) {\n      // 关闭当前对话框\n      $self.componentProps.open = false\n      return\n    }\n\n    $self\n      .validate() // 校验\n      .then(() => {\n        // $logger.info(\"$self.value\", $self.value)\n\n        // 关闭当前对话框\n        $self.componentProps.open = false\n\n        const { width, height, url } = $self.value\n\n        const params = {\n          width,\n          height,\n          url,\n        }\n        if (!params.url) {\n          delete params.url\n        }\n\n        // 新建指定尺寸的弹窗\n        $chrome.windows.create(params)\n      })\n      .catch((e) => {\n        $logger.info(\"表单校验失败\", e)\n      })\n  },\n  // 点击「修改当前浏览器窗口为指定尺寸」按钮\n  onOk: () => {\n    $self\n      .validate() // 校验\n      .then(async () => {\n        // $logger.info(\"$self.value\", $self.value)\n\n        // 关闭当前对话框\n        $self.componentProps.open = false\n\n        const { width, height } = $self.value\n\n        const params = {\n          width,\n          height,\n        }\n\n        // 获取当前窗口\n        // const currentWindow = await $chrome.windows.getCurrent()\n        const currentWindow = await $chrome.callMethodByPath(\n          \"windows.getCurrent\"\n        )\n\n        // 更新当前窗口尺寸\n        // $chrome.windows.update(currentWindow.id, params)\n        $chrome.callMethodByPath(\"windows.update\", currentWindow.id, params)\n      })\n      .catch((e) => {\n        $logger.info(\"表单校验失败\", e)\n      })\n  },\n})\n"
                   },
                   "dependencies": [
                     {
@@ -305,15 +305,15 @@
                 },
                 "x-component-props": {
                   "cancelButtonProps": {},
-                  "cancelText": "取消",
+                  "cancelText": "新建指定尺寸的浏览器窗口",
                   "okButtonProps": {},
-                  "okText": "确定",
+                  "okText": "修改当前浏览器窗口为指定尺寸",
                   "classNames": {},
                   "styles": {},
                   "open": false,
-                  "title": "新建指定尺寸的浏览器窗口"
+                  "title": "设置浏览器窗口尺寸"
                 },
-                "name": "createNewWindowDialog",
+                "name": "windowSizeSettingsDialog",
                 "x-designable-id": "la17t83altj",
                 "x-index": 1,
                 "properties": {
@@ -404,148 +404,6 @@
                         }
                       },
                       "x-designable-id": "m805sw3om39"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "updateCurrentWindowDiv": {
-            "type": "void",
-            "x-component": "Div",
-            "x-component-props": {},
-            "name": "updateCurrentWindowDiv",
-            "x-designable-id": "vsu7lr10xbu",
-            "x-index": 6,
-            "properties": {
-              "updateCurrentWindowBtn": {
-                "type": "string",
-                "x-component": "Button",
-                "x-reactions": {
-                  "fulfill": {
-                    "run": "$props({\n  onClick: () => {\n    window.currentForm = $form\n    window.currentField = $self\n\n    // 获取弹窗\n    const dialog = $self.query(`${$self.parent.address.entire}.updateCurrentWindowDialog`).take()\n    // 打开弹窗\n    dialog.componentProps.open = true\n  },\n})\n"
-                  },
-                  "dependencies": [
-                    {
-                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                      "property": "value",
-                      "type": "any"
-                    }
-                  ]
-                },
-                "x-validator": [],
-                "x-component-props": {
-                  "children": "修改当前窗口尺寸",
-                  "target": "_blank",
-                  "type": "primary"
-                },
-                "x-designable-id": "b3qs388b1v1",
-                "x-index": 0,
-                "name": "updateCurrentWindowBtn"
-              },
-              "updateCurrentWindowDialog": {
-                "type": "object",
-                "x-component": "Modal",
-                "x-reactions": {
-                  "fulfill": {
-                    "run": "$props({\n  // 点击取消按钮\n  onCancel: () => {\n    // 关闭当前对话框\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: () => {\n    $self\n      .validate() // 校验\n      .then(async () => {\n        // $logger.info(\"$self.value\", $self.value)\n\n        // 关闭当前对话框\n        $self.componentProps.open = false\n\n        const { width, height } = $self.value\n\n        const params = {\n          width,\n          height,\n        }\n\n        // 获取当前窗口\n        // const currentWindow = await $chrome.windows.getCurrent()\n        const currentWindow = await $chrome.callMethodByPath(\n          \"windows.getCurrent\"\n        )\n\n        // 更新当前窗口尺寸\n        // $chrome.windows.update(currentWindow.id, {\n        //   ...$self.value,\n        // })\n        $chrome.callMethodByPath(\"windows.update\", currentWindow.id, params)\n      })\n      .catch((e) => {\n        $logger.info(\"表单校验失败\", e)\n      })\n  },\n})\n"
-                  },
-                  "dependencies": [
-                    {
-                      "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                      "property": "value",
-                      "type": "any"
-                    }
-                  ]
-                },
-                "x-component-props": {
-                  "cancelButtonProps": {},
-                  "cancelText": "取消",
-                  "okButtonProps": {},
-                  "okText": "确定",
-                  "classNames": {},
-                  "styles": {},
-                  "open": false,
-                  "title": "修改浏览器当前窗口尺寸"
-                },
-                "name": "updateCurrentWindowDialog",
-                "x-designable-id": "g567yorfkqt",
-                "x-index": 1,
-                "properties": {
-                  "width": {
-                    "type": "number",
-                    "title": "窗口宽度",
-                    "x-decorator": "FormItem",
-                    "x-component": "NumberPicker",
-                    "x-validator": [],
-                    "x-component-props": {},
-                    "x-decorator-props": {},
-                    "name": "width",
-                    "x-designable-id": "s8ur6qq75tu",
-                    "x-index": 0,
-                    "default": 900,
-                    "required": true
-                  },
-                  "height": {
-                    "type": "number",
-                    "title": "窗口高度",
-                    "x-decorator": "FormItem",
-                    "x-component": "NumberPicker",
-                    "x-validator": [],
-                    "x-component-props": {},
-                    "x-decorator-props": {},
-                    "name": "height",
-                    "default": 800,
-                    "required": true,
-                    "x-designable-id": "kpodqdrk98l",
-                    "x-index": 1
-                  },
-                  "jq5nwe4oy01": {
-                    "type": "array",
-                    "x-component": "IteratorLayout",
-                    "x-component-props": {
-                      "style": {
-                        "display": "grid",
-                        "gridTemplateColumns": "repeat(auto-fill, 120px)",
-                        "justifyContent": "space-between",
-                        "gap": "10px"
-                      }
-                    },
-                    "default": [
-                      "1920x1080",
-                      "1366x768",
-                      "1280x720",
-                      "1280x760"
-                    ],
-                    "x-validator": [],
-                    "x-designable-id": "jq5nwe4oy01",
-                    "x-index": 2,
-                    "items": {
-                      "type": "string",
-                      "x-component": "Button",
-                      "x-reactions": {
-                        "fulfill": {
-                          "run": "$props({\n  onClick: () => {\n    const arr = $self.value.split(\"x\")\n    const width = parseInt(arr[0])\n    const height = parseInt(arr[1])\n    $self.parent.parent.value.width = width\n    $self.parent.parent.value.height = height\n  },\n})\n"
-                        },
-                        "dependencies": [
-                          {
-                            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
-                            "property": "value",
-                            "type": "any"
-                          }
-                        ]
-                      },
-                      "x-validator": [],
-                      "x-component-props": {
-                        "children": "",
-                        "target": "_blank",
-                        "type": "dashed",
-                        "size": "small",
-                        "style": {
-                          "margin": "4px 4px 4px 4px"
-                        }
-                      },
-                      "x-designable-id": "7kt2ukxbiuj"
                     }
                   }
                 }
