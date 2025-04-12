@@ -1,12 +1,12 @@
 {
   "version": "0.1.7",
-  "zipVersion": "0.1.9",
-  "updateUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/god-assistant-0.1.9.zip",
+  "zipVersion": "0.2.0",
+  "updateUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/god-assistant-0.2.0.zip",
   "changelogUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/CHANGELOG.md",
   "blacklistUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/configs/blacklistUrl.json",
   "tailwindCss": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/configs/tailwindCss.json",
   "vip": {
-    "enabled": true,
+    "enabled": false,
     "configUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/configs/vip.json",
     "freeDay": 3
   },
