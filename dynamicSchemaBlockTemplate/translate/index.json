@@ -18,7 +18,7 @@
       }
     ],
     "fulfill": {
-      "run": "// 区块路径\nconst rootEntire = $self.address.entire\n// 只截取自己和父节点，避免拖动位置后数据丢失\nconst cacheKeyPrefix = $self.address.segments.slice(-2).join(\".\")\n\n// 修复样式问题\n$props({\n  className: $self.props.name,\n})\n$effect(() => {\n  const rootNode = document.querySelector(`.${$self.props.name}`)\n  if (rootNode) {\n    const element = rootNode.querySelector(\n      \".ant-formily-item-feedback-layout-loose\"\n    )\n    if (element) {\n      element.style.marginBottom = 0\n    }\n  }\n}, [])\n"
+      "run": "// 区块路径\nconst rootEntire = $self.address.entire\n// 只截取自己和父节点，避免拖动位置后数据丢失\nconst cacheKeyPrefix = $self.address.segments.slice(-2).join(\".\")\n// 翻译卡片设置持久化缓存的 key，这里没有拼接 cacheKeyPrefix 是因为这些翻译设置要在用户脚本中使用\nconst cacheKeyTranslateCardSettings = `translateCardSettings`\n\n// 修复样式问题\n$props({\n  className: $self.props.name,\n})\n$effect(() => {\n  const rootNode = document.querySelector(`.${$self.props.name}`)\n  if (rootNode) {\n    const element = rootNode.querySelector(\n      \".ant-formily-item-feedback-layout-loose\"\n    )\n    if (element) {\n      element.style.marginBottom = 0\n    }\n  }\n}, [])\n\n// 展示设置对话框\n$self.showSettingsDialog = () => {\n  const settingsDialog = $self\n    .query(`${rootEntire}.translateSettingsDialog`)\n    .take()\n  settingsDialog.setComponentProps({\n    open: true,\n  })\n}\n\n// 获取翻译设置信息\n$self.getSettings = async () => {\n  try {\n    const res = await $chrome.storage.local.get(cacheKeyTranslateCardSettings)\n    const settings = res[cacheKeyTranslateCardSettings]\n\n    return settings || {}\n  } catch (e) {\n    $logger.info(\"获取缓存的翻译设置失败\", e)\n    return {}\n  }\n}\n\n// 更新多领国设置\n$self.updateSettings = async ({ settings }) => {\n  try {\n    await $chrome.storage.local.set({\n      [cacheKeyTranslateCardSettings]: settings,\n    })\n\n    refreshTranslateCardTitle()\n  } catch (e) {\n    $logger.info(\"更新翻译设置失败\", e)\n  }\n}\n\n// 刷新翻译卡片标题\nconst refreshTranslateCardTitle = async () => {\n  try {\n    const settings = await $self.getSettings()\n    const translateTitleText = $self\n      .query(`${rootEntire}.headerDiv.headerLeftDiv.translateTitleText`)\n      .take()\n    const vendor = settings?.vendor\n    if (vendor) {\n      translateTitleText.value = `「${vendor}」翻译`\n    } else {\n      translateTitleText.value = \"请先设置翻译厂商\"\n    }\n  } catch (e) {\n    $logger.info(\"获取缓存的翻译标题失败\", e)\n  }\n}\n\n$effect(() => {\n  refreshTranslateCardTitle()\n}, [])\n"
     }
   },
   "properties": {
@@ -71,7 +71,7 @@
               "x-index": 0,
               "name": "translateHeaderImg"
             },
-            "translateTitle": {
+            "translateTitleText": {
               "type": "string",
               "x-component": "Text",
               "x-validator": [],
@@ -85,9 +85,36 @@
               },
               "x-designable-id": "1p651k33in0",
               "x-index": 1,
-              "name": "translateTitle"
+              "name": "translateTitleText"
             }
           }
+        },
+        "translateSettingsBtn": {
+          "type": "string",
+          "x-component": "Button",
+          "x-reactions": {
+            "fulfill": {
+              "run": "const rootName = \"translateCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n$props({\n  onClick: () => {\n    rootField.showSettingsDialog()\n  },\n})\n"
+            },
+            "dependencies": [
+              {
+                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                "property": "value",
+                "type": "any"
+              }
+            ]
+          },
+          "x-validator": [],
+          "x-component-props": {
+            "children": "",
+            "target": "_blank",
+            "icon": "SettingOutlined",
+            "type": "default",
+            "size": "small"
+          },
+          "x-designable-id": "1zl5co9dhbx",
+          "x-index": 1,
+          "name": "translateSettingsBtn"
         }
       }
     },
@@ -131,7 +158,7 @@
           }
         ],
         "fulfill": {
-          "run": "const getLan = (text) => {\n  return fetch(\"https://fanyi.baidu.com/langdetect\", {\n    headers: {\n      \"content-type\": \"application/x-www-form-urlencoded\",\n    },\n    body: `query=${encodeURIComponent(text)}`,\n    method: \"POST\",\n  })\n    .then((res) => res.json())\n    .then((res) => {\n      if (res.error === 0) {\n        return res.lan\n      } else {\n        $message.error(`自动检测当前语言失败 ${res.msg}`)\n        return null\n      }\n    })\n    .catch((e) => {\n      $message.error(\"自动检测当前语言失败\")\n      return null\n    })\n}\n\nconst getToLanguage = (from, text) => {\n  let to = \"zh\"\n  if (from === \"zh\") {\n    to = \"en\"\n  }\n  return fetch(\"https://fanyi.baidu.com/transapi\", {\n    headers: {\n      \"content-type\": \"application/x-www-form-urlencoded\",\n    },\n    body: `from=${from}&query=${encodeURIComponent(text)}&source=txt&to=${to}`,\n    method: \"POST\",\n  })\n    .then((res) => res.json())\n    .then((res) => {\n      if (res.status === 0) {\n        if (res.type === 2) {\n          return res.data?.[0].dst\n        } else if (res.type === 1) {\n          const data = JSON.parse(res.result)\n          const mean = data.content[0].mean\n          const result = mean\n            .map((item) => {\n              const cont = Object.keys(item.cont).join(\"; \")\n\n              if (item.pre) {\n                return `${item.pre} ${cont}`\n              } else {\n                return cont\n              }\n            })\n            .join(\"\\n\")\n          return result\n        } else {\n          $message.error(\"未支持的翻译类型\")\n          return\n        }\n      } else {\n        $message.error(\"翻译失败\")\n        return null\n      }\n    })\n    .catch((e) => {\n      $message.error(\"翻译失败\")\n      return null\n    })\n}\n\nlet lastText = null\nconst handleTranslate = async (e) => {\n  const toLanguage = $self\n    .query(`${$self.parent.address.entire}.toLanguage`)\n    .take()\n\n  const text = e.target.value\n  if (!text) {\n    toLanguage.value = \"\"\n    return\n  }\n  if (text === lastText) {\n    return\n  }\n\n  lastText = text\n\n  const lan = await getLan(text)\n  if (!lan) {\n    toLanguage.value = \"\"\n    return\n  }\n\n  const result = await getToLanguage(lan, text)\n  if (!result) {\n    toLanguage.value = \"\"\n    return\n  }\n\n  toLanguage.value = result\n}\n\n$props({\n  onChange: (e) => {\n    const text = e.target.value\n    if (!text) {\n      const toLanguage = $self\n        .query(`${$self.parent.address.entire}.toLanguage`)\n        .take()\n      toLanguage.value = \"\"\n    }\n  },\n  onPressEnter: (e) => {\n    e.preventDefault()\n\n    handleTranslate(e)\n  },\n  onBlur: (e) => {\n    handleTranslate(e)\n  },\n})\n"
+          "run": "const rootName = \"translateCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n// 使用 AI API 进行翻译\nconst translateWithAI = async (settings, text) => {\n  // 如果没有配置 apiKey 返回错误提示\n  if (!settings.apiKey) {\n    $message.error(\"请先在插件配置页面设置 apiKey\")\n    return null\n  }\n\n  try {\n    const response = await fetch(settings.apiUrl, {\n      method: \"POST\",\n      headers: {\n        \"Content-Type\": \"application/json\",\n        Authorization: `Bearer ${settings.apiKey}`,\n      },\n      body: JSON.stringify({\n        model: settings.model,\n        messages: [\n          {\n            role: \"system\",\n            content:\n              \"你是一个专业的翻译助手，请将用户提供的文本翻译成中文。如果原文已经是中文，则翻译成英文。\",\n          },\n          {\n            role: \"user\",\n            content: text,\n          },\n        ],\n        stream: false,\n      }),\n    })\n\n    if (!response.ok) {\n      $message.error(`翻译失败: ${response.statusText}`)\n      return null\n    }\n\n    const data = await response.json()\n    return data.choices[0].message.content\n  } catch (error) {\n    $message.error(`翻译失败: ${error.message}`)\n    return null\n  }\n}\n\n// 通过百度获取原文语言类型\nconst getLan = (text) => {\n  return fetch(\"https://fanyi.baidu.com/langdetect\", {\n    headers: {\n      \"content-type\": \"application/x-www-form-urlencoded\",\n    },\n    body: `query=${encodeURIComponent(text)}`,\n    method: \"POST\",\n  })\n    .then((res) => res.json())\n    .then((res) => {\n      if (res.error === 0) {\n        return res.lan\n      } else {\n        $message.error(`自动检测当前语言失败 ${res.msg}`)\n        return null\n      }\n    })\n    .catch((e) => {\n      $message.error(\"自动检测当前语言失败\")\n      return null\n    })\n}\n\n// 通过百度翻译为目标语言\nconst getToLanguage = (from, text) => {\n  let to = \"zh\"\n  if (from === \"zh\") {\n    to = \"en\"\n  }\n  return fetch(\"https://fanyi.baidu.com/transapi\", {\n    headers: {\n      \"content-type\": \"application/x-www-form-urlencoded\",\n    },\n    body: `from=${from}&query=${encodeURIComponent(text)}&source=txt&to=${to}`,\n    method: \"POST\",\n  })\n    .then((res) => res.json())\n    .then((res) => {\n      if (res.status === 0) {\n        if (res.type === 2) {\n          return res.data?.[0].dst\n        } else if (res.type === 1) {\n          const data = JSON.parse(res.result)\n          const mean = data.content[0].mean\n          const result = mean\n            .map((item) => {\n              const cont = Object.keys(item.cont).join(\"; \")\n\n              if (item.pre) {\n                return `${item.pre} ${cont}`\n              } else {\n                return cont\n              }\n            })\n            .join(\"\\n\")\n          return result\n        } else {\n          $message.error(\"未支持的翻译类型\")\n          return\n        }\n      } else {\n        $message.error(\"翻译失败\")\n        return null\n      }\n    })\n    .catch((e) => {\n      $message.error(\"翻译失败\")\n      return null\n    })\n}\n\n// 使用百度 API 进行翻译\nconst translateWithBaiDu = async (text) => {\n  const lan = await getLan(text)\n  if (!lan) {\n    return null\n  }\n\n  const result = await getToLanguage(lan, text)\n  return result\n}\n\nlet lastText = null\nconst handleTranslate = async (e) => {\n  const toLanguage = $self\n    .query(`${$self.parent.address.entire}.toLanguage`)\n    .take()\n\n  const text = e.target.value\n  if (!text) {\n    toLanguage.value = \"\"\n    return\n  }\n  if (text === lastText) {\n    return\n  }\n\n  lastText = text\n\n  const settings = await rootField.getSettings()\n  let result = null\n  if (settings.apiUrl) {\n    result = await translateWithAI(settings, text)\n  } else {\n    result = await translateWithBaiDu(text)\n  }\n\n  if (!result) {\n    toLanguage.value = \"\"\n    return\n  }\n\n  toLanguage.value = result\n}\n\n$props({\n  onChange: (e) => {\n    const text = e.target.value\n    if (!text) {\n      const toLanguage = $self\n        .query(`${$self.parent.address.entire}.toLanguage`)\n        .take()\n      toLanguage.value = \"\"\n    }\n  },\n  onPressEnter: (e) => {\n    e.preventDefault()\n\n    handleTranslate(e)\n  },\n  onBlur: (e) => {\n    handleTranslate(e)\n  },\n})\n"
         }
       }
     },
@@ -158,6 +185,158 @@
       "x-designable-id": "ilgw9xcvvz1",
       "x-index": 3,
       "x-pattern": "readOnly"
+    },
+    "translateSettingsDialog": {
+      "type": "object",
+      "x-component": "Modal",
+      "x-reactions": {
+        "fulfill": {
+          "run": "const rootName = \"translateCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n\n// 回显数据\n$effect(() => {\n  if (!$self.componentProps.open) {\n    return\n  }\n\n  rootField.getSettings().then((settings) => {\n    $self.value = settings\n    // const vendorField = $self.query(`${$self.address.entire}.vendor`).take()\n    // vendorField.value = settings.vendor\n    // const modelField = $self.query(`${$self.address.entire}.model`).take()\n    // modelField.value = settings.model\n    // setTimeout(() => {\n    //   modelField.value = settings.model\n    // }, 100)\n  })\n}, [$self.componentProps.open])\n\n$props({\n  // 点击取消按钮\n  onCancel: () => {\n    $self.componentProps.open = false\n  },\n  // 点击确认按钮\n  onOk: async () => {\n    try {\n      await $self.validate()\n    } catch (e) {\n      $logger.info(\"表单校验失败\", e)\n      return\n    }\n\n    const vendorField = $self.query(`${$self.address.entire}.vendor`).take()\n\n    const dataSource = vendorField.dataSource\n    const vendorItem = dataSource.find(\n      (item) => item.value === vendorField.value\n    )\n\n    const settings = {\n      ...$self.value,\n      apiUrl: vendorItem.apiUrl,\n    }\n    $logger.info(\"settings\", settings)\n\n    try {\n      await rootField.updateSettings({\n        settings,\n      })\n    } catch (e) {\n      $logger.info(\"更新翻译设置失败\", e)\n    }\n\n    // 关闭当前对话框\n    $self.componentProps.open = false\n  },\n})\n"
+        },
+        "dependencies": [
+          {
+            "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+            "property": "value",
+            "type": "any"
+          }
+        ]
+      },
+      "x-component-props": {
+        "cancelButtonProps": {
+          "hidden": true
+        },
+        "cancelText": "取消",
+        "okButtonProps": {},
+        "okText": "确定",
+        "classNames": {},
+        "styles": {},
+        "title": "翻译设置",
+        "width": 700
+      },
+      "name": "translateSettingsDialog",
+      "x-designable-id": "ogf1tgkr56y",
+      "x-index": 4,
+      "properties": {
+        "vendor": {
+          "title": "翻译厂商",
+          "x-decorator": "FormItem",
+          "x-component": "Select",
+          "x-validator": [],
+          "x-component-props": {
+            "placeholder": "请选择翻译厂商"
+          },
+          "x-decorator-props": {},
+          "name": "vendor",
+          "enum": [
+            {
+              "children": [],
+              "label": "DeepSeek",
+              "value": "DeepSeek",
+              "apiUrl": "https://api.deepseek.com/v1/chat/completions",
+              "modelDatasource": [
+                {
+                  "title": "deepseek-chat",
+                  "value": "deepseek-chat"
+                },
+                {
+                  "title": "deepseek-reasoner",
+                  "value": "deepseek-reasoner"
+                }
+              ]
+            },
+            {
+              "children": [],
+              "label": "硅基流动",
+              "value": "硅基流动",
+              "apiUrl": "https://api.siliconflow.cn/v1/chat/completions",
+              "modelDatasource": [
+                {
+                  "title": "deepseek-ai/DeepSeek-V3",
+                  "value": "deepseek-ai/DeepSeek-V3"
+                },
+                {
+                  "title": "deepseek-ai/DeepSeek-R1",
+                  "value": "deepseek-ai/DeepSeek-R1"
+                }
+              ]
+            },
+            {
+              "children": [],
+              "label": "百度",
+              "value": "百度"
+            }
+          ],
+          "x-reactions": {
+            "dependencies": [
+              {
+                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                "property": "value",
+                "type": "any"
+              }
+            ],
+            "fulfill": {
+              "run": "const rootName = \"translateCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\nconst parentEntire = $self.parent.address.entire\n\n$props({\n  // 通过 onChange 来实现联动，避免通过 $effect 监听 $self.value 实现联动，不然首次打开时联动项会被清空\n  onChange: (value, option) => {\n    const modelField = $self.query(`${parentEntire}.model`).take()\n    const apiKeyField = $self.query(`${parentEntire}.apiKey`).take()\n\n    if (option.apiUrl) {\n      window.$test = $self\n      modelField.visible = true\n      apiKeyField.visible = true\n\n      modelField.value = undefined\n      apiKeyField.value = undefined\n      modelField.dataSource = option.modelDatasource\n    } else {\n      modelField.visible = false\n      apiKeyField.visible = false\n\n      modelField.value = undefined\n      apiKeyField.value = undefined\n      modelField.dataSource = []\n    }\n  },\n})\n"
+            }
+          },
+          "x-designable-id": "v94l3qxlo7f",
+          "x-index": 0,
+          "required": true
+        },
+        "model": {
+          "title": "模型",
+          "x-decorator": "FormItem",
+          "x-component": "Select",
+          "x-validator": [],
+          "x-component-props": {
+            "placeholder": "请选择模型"
+          },
+          "x-decorator-props": {},
+          "name": "model",
+          "enum": [],
+          "x-reactions": {
+            "dependencies": [
+              {
+                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                "property": "value",
+                "type": "any"
+              }
+            ],
+            "fulfill": {
+              "run": "const rootName = \"translateCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n"
+            }
+          },
+          "x-designable-id": "lsw2ody6jt7",
+          "x-index": 1,
+          "required": true
+        },
+        "apiKey": {
+          "type": "string",
+          "title": "apiKey",
+          "x-decorator": "FormItem",
+          "x-component": "Input",
+          "x-validator": [],
+          "x-component-props": {
+            "placeholder": "请输入 apiKey"
+          },
+          "x-decorator-props": {},
+          "name": "apiKey",
+          "x-reactions": {
+            "dependencies": [
+              {
+                "__DO_NOT_USE_THIS_PROPERTY_index__": 0,
+                "property": "value",
+                "type": "any"
+              }
+            ],
+            "fulfill": {
+              "run": "const rootName = \"translateCardDiv\"\nconst rootEntire = $self.address.entire.substring(\n  0,\n  $self.address.entire.lastIndexOf(rootName) + rootName.length\n)\nconst rootField = $self.query(rootEntire).take()\n"
+            }
+          },
+          "x-designable-id": "rptp1m6z6zf",
+          "x-index": 2,
+          "required": true
+        }
+      }
     }
   }
 }

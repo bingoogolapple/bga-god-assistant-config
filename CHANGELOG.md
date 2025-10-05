@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.2.1 - 2025-10-05
+
+- 翻译卡片支持调用 AI 大模型
+- 打通 userScript 中的 chrome.storage.local 和 chrome.storage.sync
+
 ## 0.2.0 - 2025-04-12
 
 - 修复网络请求 403 错误
