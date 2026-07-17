@@ -57,25 +57,32 @@
       "order": 3
     },
     {
+      "key": "CorsSettings",
+      "title": "跨域配置",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/CorsSettings.json",
+      "showInOptionsMenu": true,
+      "order": 4
+    },
+    {
       "key": "SettingAssistant",
       "title": "扩展选项设置",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/SettingAssistant.json",
       "showInOptionsMenu": true,
-      "order": 4
+      "order": 5
     },
     {
       "key": "About",
       "title": "关于",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/About.json",
       "showInOptionsMenu": true,
-      "order": 5
+      "order": 6
     },
     {
       "key": "Privacy",
       "title": "隐私声明",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/Privacy.json",
       "showInOptionsMenu": true,
-      "order": 6
+      "order": 7
     }
   ]
 }

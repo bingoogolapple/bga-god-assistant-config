@@ -1,0 +1,572 @@
+{
+  "form": {
+    "layout": "vertical"
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "corsSettingsDiv": {
+        "type": "void",
+        "x-component": "Div",
+        "x-reactions": {
+          "fulfill": {
+            "run": "const re = $self.address.entire\nconst STORAGE_KEY = 'devtool_cors'\n$self.state = $observable({ enabled: false, list: [] })\n$self.buildSummary = (d) => {\n  const p = []\n  if (d.excludeDomains && d.excludeDomains.length > 0) p.push('排除: ' + d.excludeDomains.join(', '))\n  if (d.urlFilter) p.push((d.urlFilterIsRegex ? '正则' : 'URL') + ': ' + d.urlFilter)\n  if (d.methods && d.methods.length > 0) p.push('方法: ' + d.methods.join('/'))\n  if (d.resourceTypes && d.resourceTypes.length > 0) p.push('类型: ' + d.resourceTypes.join('/'))\n  if (d.domainType) p.push(d.domainType === 'firstParty' ? '第一方' : '第三方')\n  return p.length > 0 ? p.join('  ') : '—'\n}\n$self.loadCors = async () => {\n  try {\n    const res = await $chrome.storage.local.get(STORAGE_KEY)\n    const state = res[STORAGE_KEY] || { enabled: false, domains: [] }\n    const list = (state.domains || []).map((d) => ({ ...d, matchScope: d.matchScope || 'request', conditionSummary: $self.buildSummary(d) }))\n    $self.state.enabled = state.enabled\n    $self.state.list = list\n  } catch (e) {\n    $logger.error('加载跨域配置失败', e)\n    $message.error('加载跨域配置失败')\n  }\n}\n$self.saveCors = async (enabled, displayList) => {\n  const clean = JSON.parse(JSON.stringify(displayList || [])).map((d) => { const c = {}; Object.keys(d).forEach((k) => { if (k !== 'conditionSummary') c[k] = d[k] }); return c })\n  await $chrome.storage.local.set({ [STORAGE_KEY]: { enabled, domains: clean } })\n}\n$self.showAddOrUpdateDialog = (row) => {\n  const dialog = $self.query(re + '.editDialog').take()\n  if (dialog) {\n    dialog.value = row ? { ...row } : { matchScope: 'request', urlFilterIsRegex: false, domainType: '' }\n    dialog.setComponentProps({ open: true, title: row ? '编辑规则' : '新增规则' })\n  }\n}\n$effect(() => { $self.loadCors() }, [])\n"
+          }
+        },
+        "properties": {
+          "descAlert": {
+            "type": "string",
+            "x-component": "Alert",
+            "x-component-props": {
+              "type": "info",
+              "showIcon": true,
+              "style": {
+                "marginBottom": 16
+              },
+              "message": "跨域域名放宽说明",
+              "description": "1. 每条规则可配置多种匹配维度。核心区分：requestDomains 是「被请求的接口域名」（即你实际请求的接口，默认）；initiatorDomains 是「发起请求的页面域名」，用于放宽该页面里发起的所有跨域请求。\n2. 规则按域名（或页面）匹配，因此对 content-script / user-script 以及页面自身的请求都生效，请只添加你信任的域名。\n3. 还可叠加：URL 过滤（通配符 / 正则）、排除域名、限定请求方法、限定资源类型、限定一/三方。带凭据（withCredentials）的请求不受通配放行影响。"
+            }
+          },
+          "switchSpace": {
+            "type": "void",
+            "x-component": "Div",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "space-between",
+                "alignItems": "center",
+                "marginBottom": 16,
+                "width": "100%"
+              }
+            },
+            "properties": {
+              "leftGroup": {
+                "type": "void",
+                "x-component": "Space",
+                "x-component-props": {
+                  "wrap": true
+                },
+                "properties": {
+                  "enabledLabel": {
+                    "type": "string",
+                    "x-component": "Text",
+                    "x-component-props": {
+                      "content": "跨域放宽总开关："
+                    }
+                  },
+                  "enabledSwitch": {
+                    "type": "boolean",
+                    "x-component": "Switch",
+                    "x-component-props": {
+                      "checkedChildren": "开启",
+                      "unCheckedChildren": "关闭"
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => { $self.value = rf.state.enabled }, [rf.state.enabled])\n$props({\n  onChange: (checked) => {\n    rf.state.enabled = checked\n    rf.saveCors(checked, rf.state.list).then(() => $message.success(checked ? '跨域放宽已开启' : '跨域放宽已关闭'))\n  },\n})\n"
+                      }
+                    }
+                  },
+                  "enabledHint": {
+                    "type": "string",
+                    "x-component": "Text",
+                    "x-component-props": {
+                      "type": "secondary"
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const en = rf.state.enabled\n  $self.value = en ? '' : '关闭后不会生成任何放宽 CORS 的规则'\n  $self.display = en ? 'none' : 'visible'\n}, [rf.state.enabled])\n"
+                      }
+                    }
+                  }
+                }
+              },
+              "addRuleBtn": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "children": "新增规则",
+                  "type": "primary",
+                  "icon": "PlusCircleOutlined"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({ onClick: () => rf.showAddOrUpdateDialog(null) })\n"
+                  }
+                }
+              }
+            }
+          },
+          "ruleTable": {
+            "type": "array",
+            "x-decorator": "FormItem",
+            "x-component": "ArrayTable",
+            "x-component-props": {
+              "bordered": true,
+              "pagination": false,
+              "locale": {
+                "emptyText": "暂无规则，点击「新增规则」添加"
+              }
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => { $self.value = rf.state.list }, [rf.state.list])\n"
+              }
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "domainColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "域名"
+                  },
+                  "properties": {
+                    "domainText": {
+                      "type": "string",
+                      "x-component": "Text",
+                      "x-component-props": {
+                        "code": true
+                      },
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  $self.value = row ? row.domain : ''\n}, [rf.state.list])\n"
+                        }
+                      }
+                    }
+                  }
+                },
+                "scopeColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "作用域",
+                    "width": 120
+                  },
+                  "properties": {
+                    "scopeTag": {
+                      "type": "string",
+                      "x-component": "Tag",
+                      "x-component-props": {
+                        "color": "geekblue"
+                      },
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const map = { request: '目标接口域名', initiator: '发起请求页面', top: '顶层 Frame' }\n  $self.value = map[row && row.matchScope] || '目标接口域名'\n}, [rf.state.list])\n"
+                        }
+                      }
+                    }
+                  }
+                },
+                "conditionColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "匹配条件"
+                  },
+                  "properties": {
+                    "conditionSpace": {
+                      "type": "void",
+                      "x-component": "Space",
+                      "x-component-props": {
+                        "size": [
+                          0,
+                          4
+                        ],
+                        "wrap": true,
+                        "style": {
+                          "fontSize": 12
+                        }
+                      },
+                      "properties": {
+                        "excTag": {
+                          "type": "string",
+                          "x-component": "Tag",
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const v = (row && row.excludeDomains && row.excludeDomains.length > 0) ? ('排除: ' + row.excludeDomains.join(', ')) : ''\n  $self.value = v\n  $self.display = v ? 'visible' : 'none'\n}, [rf.state.list])\n"
+                            }
+                          }
+                        },
+                        "urlTag": {
+                          "type": "string",
+                          "x-component": "Tag",
+                          "x-component-props": {
+                            "color": "blue"
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const v = (row && row.urlFilter && row.urlFilter.trim()) ? ((row.urlFilterIsRegex ? '正则' : 'URL') + ': ' + row.urlFilter) : ''\n  $self.value = v\n  $self.display = v ? 'visible' : 'none'\n}, [rf.state.list])\n"
+                            }
+                          }
+                        },
+                        "methodTag": {
+                          "type": "string",
+                          "x-component": "Tag",
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const v = (row && row.methods && row.methods.length > 0) ? ('方法: ' + row.methods.join('/')) : ''\n  $self.value = v\n  $self.display = v ? 'visible' : 'none'\n}, [rf.state.list])\n"
+                            }
+                          }
+                        },
+                        "rtTag": {
+                          "type": "string",
+                          "x-component": "Tag",
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const v = (row && row.resourceTypes && row.resourceTypes.length > 0) ? ('类型: ' + row.resourceTypes.join('/')) : ''\n  $self.value = v\n  $self.display = v ? 'visible' : 'none'\n}, [rf.state.list])\n"
+                            }
+                          }
+                        },
+                        "dtTag": {
+                          "type": "string",
+                          "x-component": "Tag",
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const v = (row && row.domainType) ? (row.domainType === 'firstParty' ? '第一方' : '第三方') : ''\n  $self.value = v\n  $self.display = v ? 'visible' : 'none'\n}, [rf.state.list])\n"
+                            }
+                          }
+                        },
+                        "emptyText": {
+                          "type": "string",
+                          "x-component": "Text",
+                          "x-component-props": {
+                            "type": "secondary"
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const has = !!(row && ((row.excludeDomains && row.excludeDomains.length > 0) || (row.urlFilter && row.urlFilter.trim()) || (row.methods && row.methods.length > 0) || (row.resourceTypes && row.resourceTypes.length > 0) || row.domainType))\n  $self.value = has ? '' : '—'\n  $self.display = has ? 'none' : 'visible'\n}, [rf.state.list])\n"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "operateColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "操作",
+                    "width": 180,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "operateSpace": {
+                      "type": "void",
+                      "x-component": "Space",
+                      "properties": {
+                        "editBtn": {
+                          "type": "string",
+                          "x-component": "Button",
+                          "x-component-props": {
+                            "children": "编辑",
+                            "icon": "EditOutlined"
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({ onClick: () => { const row = $utils.getArrayFieldRow($self, 'ArrayTable'); rf.showAddOrUpdateDialog(row) } })\n"
+                            }
+                          }
+                        },
+                        "deletePopconfirm": {
+                          "type": "void",
+                          "x-component": "Popconfirm",
+                          "x-component-props": {
+                            "title": "确认删除该规则吗？",
+                            "okText": "确认删除",
+                            "cancelText": "取消",
+                            "okType": "danger",
+                            "icon": "QuestionCircleOutlined"
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({ onConfirm: async () => { const row = $utils.getArrayFieldRow($self, 'ArrayTable'); rf.state.list = rf.state.list.filter((i) => i.id !== row.id); await rf.saveCors(rf.state.enabled, rf.state.list); $message.success('规则已删除') } })\n"
+                            }
+                          },
+                          "properties": {
+                            "deleteBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "删除",
+                                "danger": true,
+                                "icon": "DeleteOutlined"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "editDialog": {
+            "type": "object",
+            "x-component": "Modal",
+            "x-component-props": {
+              "title": "新增规则",
+              "okText": "保存",
+              "cancelText": "取消",
+              "width": 640,
+              "destroyOnClose": true
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('corsSettingsDiv') + 'corsSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({\n  onCancel: () => { $self.componentProps.open = false },\n  onOk: () => {\n    $self.validate().then(async () => {\n      const form = $self.value\n      const exists = rf.state.list.some((d) => d.domain === form.domain && (d.matchScope || 'request') === form.matchScope && d.id !== form.id)\n      if (exists) {\n        const dField = $self.query($self.address.entire + '.domain').take()\n        if (dField) dField.setFeedback({ type: 'error', messages: ['该域名 + 作用域组合已存在'] })\n        return\n      }\n      const optional = {}\n      if (form.excludeDomains && form.excludeDomains.length > 0) optional.excludeDomains = form.excludeDomains\n      if (form.urlFilter && form.urlFilter.trim()) {\n        optional.urlFilter = form.urlFilter.trim()\n        optional.urlFilterIsRegex = form.urlFilterIsRegex\n      }\n      if (form.methods && form.methods.length > 0) optional.methods = form.methods\n      if (form.resourceTypes && form.resourceTypes.length > 0) optional.resourceTypes = form.resourceTypes\n      if (form.domainType) optional.domainType = form.domainType\n      const list = rf.state.list.slice()\n      if (form.id) {\n        const merged = { id: form.id, domain: form.domain, matchScope: form.matchScope, ...optional }\n        merged.conditionSummary = rf.buildSummary(merged)\n        const idx = list.findIndex((i) => i.id === form.id)\n        if (idx >= 0) list[idx] = merged\n        rf.state.list = list\n        await rf.saveCors(rf.state.enabled, list)\n        $message.success('规则已更新')\n      } else {\n        const created = { domain: form.domain, matchScope: form.matchScope, ...optional }\n        created.id = 'cors_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7)\n        created.conditionSummary = rf.buildSummary(created)\n        list.push(created)\n        rf.state.list = list\n        await rf.saveCors(rf.state.enabled, list)\n        $message.success('规则已新增')\n      }\n      $self.componentProps.open = false\n    }).catch((e) => $logger.info('校验失败', e))\n  },\n})\n"
+              }
+            },
+            "properties": {
+              "matchScope": {
+                "type": "string",
+                "title": "域名作用域",
+                "required": true,
+                "x-decorator": "FormItem",
+                "x-decorator-props": {
+                  "tooltip": "决定下面的域名是「被请求的接口」还是「发起请求的页面」"
+                },
+                "x-component": "Radio.Group",
+                "default": "request",
+                "x-component-props": {
+                  "optionType": "button",
+                  "buttonStyle": "solid"
+                },
+                "enum": [
+                  {
+                    "label": "目标接口域名",
+                    "value": "request"
+                  },
+                  {
+                    "label": "发起请求页面",
+                    "value": "initiator"
+                  },
+                  {
+                    "label": "顶层 Frame",
+                    "value": "top"
+                  }
+                ],
+                "x-validator": [
+                  {
+                    "required": true,
+                    "message": "请选择域名作用域"
+                  }
+                ]
+              },
+              "domain": {
+                "type": "string",
+                "title": "域名",
+                "required": true,
+                "x-decorator": "FormItem",
+                "x-decorator-props": {
+                  "tooltip": "主匹配域名，不含协议头；会自动匹配其下所有子域名"
+                },
+                "x-component": "Input",
+                "x-component-props": {
+                  "placeholder": "例如：api.example.com 或 www.example.com"
+                },
+                "x-validator": [
+                  {
+                    "required": true,
+                    "message": "请输入域名"
+                  },
+                  {
+                    "max": 200,
+                    "message": "最多 200 个字符"
+                  },
+                  {
+                    "pattern": "^[a-zA-Z0-9._-]+$",
+                    "message": "域名格式不正确（只允许字母、数字、点号、横线和下划线）"
+                  }
+                ]
+              },
+              "excludeDomains": {
+                "type": "array",
+                "title": "排除域名",
+                "x-decorator": "FormItem",
+                "x-decorator-props": {
+                  "tooltip": "与上面域名同维度，命中这些域名时不放宽"
+                },
+                "x-component": "Select",
+                "x-component-props": {
+                  "mode": "tags",
+                  "tokenSeparators": [
+                    ",",
+                    " "
+                  ],
+                  "placeholder": "可选，回车添加需排除的域名",
+                  "open": false
+                },
+                "x-validator": []
+              },
+              "urlFilterGroup": {
+                "type": "void",
+                "x-component": "Space",
+                "x-component-props": {
+                  "style": {
+                    "width": "100%"
+                  }
+                },
+                "x-decorator": "FormItem",
+                "x-decorator-props": {
+                  "label": "URL 过滤",
+                  "tooltip": "与域名是 AND 关系，留空则只按域名匹配"
+                },
+                "properties": {
+                  "urlFilter": {
+                    "type": "string",
+                    "x-component": "Input",
+                    "x-component-props": {
+                      "placeholder": "如 ||/recommend_api/ 或完整正则",
+                      "style": {
+                        "flex": 1
+                      }
+                    }
+                  },
+                  "urlFilterIsRegex": {
+                    "type": "boolean",
+                    "x-component": "Switch",
+                    "x-component-props": {
+                      "checkedChildren": "正则",
+                      "unCheckedChildren": "通配",
+                      "style": {
+                        "minWidth": 88
+                      }
+                    }
+                  }
+                }
+              },
+              "methods": {
+                "type": "array",
+                "title": "限定请求方法",
+                "x-decorator": "FormItem",
+                "x-decorator-props": {
+                  "tooltip": "留空匹配所有方法"
+                },
+                "x-component": "Select",
+                "x-component-props": {
+                  "mode": "multiple",
+                  "allowClear": true,
+                  "placeholder": "可选，如 GET / POST"
+                },
+                "enum": [
+                  {
+                    "label": "GET",
+                    "value": "GET"
+                  },
+                  {
+                    "label": "POST",
+                    "value": "POST"
+                  },
+                  {
+                    "label": "PUT",
+                    "value": "PUT"
+                  },
+                  {
+                    "label": "DELETE",
+                    "value": "DELETE"
+                  },
+                  {
+                    "label": "PATCH",
+                    "value": "PATCH"
+                  },
+                  {
+                    "label": "HEAD",
+                    "value": "HEAD"
+                  },
+                  {
+                    "label": "OPTIONS",
+                    "value": "OPTIONS"
+                  }
+                ],
+                "x-validator": []
+              },
+              "resourceTypes": {
+                "type": "array",
+                "title": "限定资源类型",
+                "x-decorator": "FormItem",
+                "x-decorator-props": {
+                  "tooltip": "留空匹配所有类型"
+                },
+                "x-component": "Select",
+                "x-component-props": {
+                  "mode": "multiple",
+                  "allowClear": true,
+                  "placeholder": "可选，如 xmlhttprequest / fetch"
+                },
+                "enum": [
+                  {
+                    "label": "XMLHttpRequest",
+                    "value": "xmlhttprequest"
+                  },
+                  {
+                    "label": "Fetch",
+                    "value": "fetch"
+                  },
+                  {
+                    "label": "Script",
+                    "value": "script"
+                  },
+                  {
+                    "label": "Image",
+                    "value": "image"
+                  },
+                  {
+                    "label": "Stylesheet",
+                    "value": "stylesheet"
+                  },
+                  {
+                    "label": "Font",
+                    "value": "font"
+                  },
+                  {
+                    "label": "Sub Frame",
+                    "value": "sub_frame"
+                  },
+                  {
+                    "label": "Main Frame",
+                    "value": "main_frame"
+                  }
+                ],
+                "x-validator": []
+              },
+              "domainType": {
+                "type": "string",
+                "title": "限定一/三方",
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-component-props": {
+                  "style": {
+                    "maxWidth": 280
+                  }
+                },
+                "enum": [
+                  {
+                    "label": "不限",
+                    "value": ""
+                  },
+                  {
+                    "label": "第一方 (firstParty)",
+                    "value": "firstParty"
+                  },
+                  {
+                    "label": "第三方 (thirdParty)",
+                    "value": "thirdParty"
+                  }
+                ],
+                "x-validator": []
+              }
+            }
+          }
+        },
+        "x-component-props": {
+          "style": {
+            "padding": 20
+          }
+        }
+      }
+    }
+  }
+}
