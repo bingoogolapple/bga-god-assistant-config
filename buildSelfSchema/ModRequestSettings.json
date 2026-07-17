@@ -1,0 +1,395 @@
+{
+  "form": {
+    "layout": "vertical"
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "modRequestSettingsDiv": {
+        "type": "void",
+        "x-component": "Div",
+        "x-reactions": {
+          "fulfill": {
+            "run": "const re = $self.address.entire\nconst STORAGE_KEY = 'devtool_mod_request'\nconst DEFAULT_STATE = {\n  enabled: false,\n  rules: [{ id: 'custom_mod_request_gray', type: 'cookie', key: '__gray', value: '1', selected: true }],\n}\n$self.state = $observable({ enabled: false, rules: [] })\n$self.saveModRequest = async (s) => {\n  await $chrome.storage.local.set({ [STORAGE_KEY]: { enabled: s.enabled, rules: JSON.parse(JSON.stringify(s.rules || [])) } })\n}\n$self.loadModRequest = async () => {\n  try {\n    const res = await $chrome.storage.local.get(STORAGE_KEY)\n    const s = res[STORAGE_KEY] || DEFAULT_STATE\n    $self.state.enabled = !!s.enabled\n    $self.state.rules = s.rules || []\n  } catch (e) {\n    $logger.error('加载修改请求配置失败', e)\n    $message.error('加载修改请求配置失败')\n  }\n}\n$self.showAddOrUpdateDialog = (row) => {\n  const dialog = $self.query(re + '.editDialog').take()\n  if (dialog) {\n    dialog.value = row ? { id: row.id, type: row.type, key: row.key, value: row.value } : { type: 'header', key: '', value: '' }\n    dialog.setComponentProps({ open: true, title: row ? '编辑规则' : '新增规则' })\n  }\n}\n$self.handleToggleRule = async (row, selected) => {\n  if (!row) return\n  const list = $self.state.rules.map((r) => (r.id === row.id ? { ...r, selected } : r))\n  try {\n    await $self.saveModRequest({ enabled: $self.state.enabled, rules: list })\n    $self.state.rules = list\n  } catch (e) {\n    $message.error('操作失败')\n  }\n}\n$self.handleDelete = async (row) => {\n  if (!row) return\n  const list = $self.state.rules.filter((r) => r.id !== row.id)\n  try {\n    await $self.saveModRequest({ enabled: $self.state.enabled, rules: list })\n    $self.state.rules = list\n    $message.success('规则已删除')\n  } catch (e) {\n    $message.error('删除失败')\n  }\n}\n$effect(() => { $self.loadModRequest() }, [])\n"
+          }
+        },
+        "properties": {
+          "descAlert": {
+            "type": "string",
+            "x-component": "Alert",
+            "x-component-props": {
+              "type": "info",
+              "showIcon": true,
+              "style": {
+                "marginBottom": 16
+              },
+              "message": "修改请求说明",
+              "description": "1. 开启总开关后，将为所有 HTTP 请求自动追加已启用规则中配置的 Header / Cookie / Query 参数。\n2. 规则支持三种类型：Header（请求头）、Cookie（追加 Cookie）、Query（URL 查询参数）；同一类型下 Key 不可重复。\n3. 每条规则可通过「启用 / 停用」单独控制是否生效；总开关关闭时，所有规则均不生效。"
+            }
+          },
+          "switchSpace": {
+            "type": "void",
+            "x-component": "Div",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "space-between",
+                "alignItems": "center",
+                "marginBottom": 16,
+                "width": "100%"
+              }
+            },
+            "properties": {
+              "leftGroup": {
+                "type": "void",
+                "x-component": "Space",
+                "x-component-props": {
+                  "wrap": true
+                },
+                "properties": {
+                  "enabledLabel": {
+                    "type": "string",
+                    "x-component": "Text",
+                    "x-component-props": {
+                      "content": "修改请求总开关："
+                    }
+                  },
+                  "enabledSwitch": {
+                    "type": "boolean",
+                    "x-component": "Switch",
+                    "x-component-props": {
+                      "checkedChildren": "开启",
+                      "unCheckedChildren": "关闭"
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => { $self.value = rf.state.enabled }, [rf.state.enabled])\n$props({\n  onChange: async (checked) => {\n    try {\n      await rf.saveModRequest({ enabled: checked, rules: rf.state.rules })\n      rf.state.enabled = checked\n      $message.success(checked ? '修改请求已开启' : '修改请求已关闭')\n    } catch (e) {\n      $message.error('操作失败')\n    }\n  },\n})\n"
+                      }
+                    }
+                  },
+                  "enabledTag": {
+                    "type": "string",
+                    "x-component": "Tag",
+                    "x-component-props": {
+                      "color": "blue"
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const en = rf.state.enabled\n  const count = (rf.state.rules || []).filter((r) => r.selected).length\n  $self.value = en ? '生效中：' + count + ' 条规则' : ''\n  $self.display = en ? 'visible' : 'none'\n}, [rf.state.enabled, rf.state.rules])\n"
+                      }
+                    }
+                  },
+                  "disabledTag": {
+                    "type": "string",
+                    "x-component": "Tag",
+                    "x-component-props": {
+                      "color": "default"
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const en = rf.state.enabled\n  $self.value = en ? '' : '修改请求已关闭，所有规则不生效'\n  $self.display = en ? 'none' : 'visible'\n}, [rf.state.enabled])\n"
+                      }
+                    }
+                  }
+                }
+              },
+              "addRuleBtn": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "children": "新增规则",
+                  "type": "primary",
+                  "icon": "PlusCircleOutlined"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({ onClick: () => rf.showAddOrUpdateDialog(null) })\n"
+                  }
+                }
+              }
+            }
+          },
+          "ruleTable": {
+            "type": "array",
+            "x-decorator": "FormItem",
+            "x-component": "ArrayTable",
+            "x-component-props": {
+              "bordered": true,
+              "pagination": false,
+              "rowKey": "id",
+              "locale": {
+                "emptyText": "暂无规则，点击「新增规则」添加"
+              }
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => { $self.value = rf.state.rules }, [rf.state.rules])\n"
+              }
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "typeColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "类型",
+                    "width": 100
+                  },
+                  "properties": {
+                    "typeTag": {
+                      "type": "string",
+                      "x-component": "Tag",
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const TYPE_LABEL = { header: 'Header', cookie: 'Cookie', query: 'Query' }\n  const TYPE_COLOR = { header: 'blue', cookie: 'orange', query: 'purple' }\n  const t = (row && row.type) || 'header'\n  $self.value = TYPE_LABEL[t] || t\n  $props({ color: TYPE_COLOR[t] || 'default' })\n}, [rf.state.rules])\n"
+                        }
+                      }
+                    }
+                  }
+                },
+                "keyColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "Key"
+                  },
+                  "properties": {
+                    "keyText": {
+                      "type": "string",
+                      "x-component": "Text",
+                      "x-component-props": {
+                        "code": true
+                      },
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  $self.value = row ? row.key : ''\n}, [rf.state.rules])\n"
+                        }
+                      }
+                    }
+                  }
+                },
+                "valueColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "Value"
+                  },
+                  "properties": {
+                    "valueText": {
+                      "type": "string",
+                      "x-component": "Text",
+                      "x-component-props": {
+                        "code": true
+                      },
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  $self.value = row ? row.value : ''\n}, [rf.state.rules])\n"
+                        }
+                      }
+                    }
+                  }
+                },
+                "statusColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "状态",
+                    "width": 80,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "statusTag": {
+                      "type": "string",
+                      "x-component": "Tag",
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const sel = !!(row && row.selected)\n  $self.value = sel ? '生效中' : '已停用'\n  $props({ color: sel ? 'green' : 'default' })\n}, [rf.state.rules])\n"
+                        }
+                      }
+                    }
+                  }
+                },
+                "operateColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "操作",
+                    "width": 320,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "operateSpace": {
+                      "type": "void",
+                      "x-component": "Space",
+                      "properties": {
+                        "toggleBtn": {
+                          "type": "string",
+                          "x-component": "Button",
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const sel = !!(row && row.selected)\n  $props({\n    children: sel ? '停用' : '启用',\n    icon: sel ? 'MinusCircleOutlined' : 'CheckCircleOutlined',\n    type: sel ? 'default' : 'dashed',\n    onClick: () => rf.handleToggleRule(row, !sel),\n  })\n}, [rf.state.rules])\n"
+                            }
+                          }
+                        },
+                        "editBtn": {
+                          "type": "string",
+                          "x-component": "Button",
+                          "x-component-props": {
+                            "children": "编辑",
+                            "icon": "EditOutlined"
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({ onClick: () => { const row = $utils.getArrayFieldRow($self, 'ArrayTable'); rf.showAddOrUpdateDialog(row) } })\n"
+                            }
+                          }
+                        },
+                        "deletePopconfirm": {
+                          "type": "void",
+                          "x-component": "Popconfirm",
+                          "x-component-props": {
+                            "title": "确认删除该规则吗？",
+                            "okText": "确认删除",
+                            "cancelText": "取消",
+                            "okType": "danger",
+                            "icon": "QuestionCircleOutlined"
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({ onConfirm: async () => { const row = $utils.getArrayFieldRow($self, 'ArrayTable'); await rf.handleDelete(row) } })\n"
+                            }
+                          },
+                          "properties": {
+                            "deleteBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "删除",
+                                "danger": true,
+                                "icon": "DeleteOutlined"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "editDialog": {
+            "type": "object",
+            "x-component": "Modal",
+            "x-component-props": {
+              "title": "新增规则",
+              "okText": "保存",
+              "cancelText": "取消",
+              "destroyOnClose": true
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({\n  onCancel: () => { $self.componentProps.open = false },\n  onOk: () => {\n    $self.validate().then(async () => {\n      const form = $self.value\n      const TYPE_LABEL = { header: 'Header', cookie: 'Cookie', query: 'Query' }\n      const exists = rf.state.rules.some((r) => r.type === form.type && r.key === form.key && r.id !== form.id)\n      if (exists) {\n        const kField = $self.query($self.address.entire + '.key').take()\n        if (kField) kField.setFeedback({ type: 'error', messages: [(TYPE_LABEL[form.type] || form.type) + ' 类型下该 Key 已存在'] })\n        return\n      }\n      const list = rf.state.rules.slice()\n      const isEdit = !!form.id\n      if (isEdit) {\n        const old = rf.state.rules.find((r) => r.id === form.id)\n        const next = { id: form.id, type: form.type, key: form.key, value: form.value, selected: old ? old.selected : true }\n        const idx = list.findIndex((r) => r.id === form.id)\n        if (idx >= 0) list[idx] = next\n        else list.push(next)\n      } else {\n        list.push({ id: 'custom_mod_request_' + Date.now() + Math.random().toString(36).slice(2, 7), type: form.type, key: form.key, value: form.value, selected: true })\n      }\n      try {\n        await rf.saveModRequest({ enabled: rf.state.enabled, rules: list })\n        rf.state.rules = list\n        $message.success(isEdit ? '规则已更新' : '规则已新增')\n        $self.componentProps.open = false\n      } catch (e) {\n        $message.error('保存失败')\n      }\n    }).catch((e) => $logger.info('校验失败', e))\n  },\n})\n"
+            }
+            },
+            "properties": {
+              "type": {
+                "type": "string",
+                "title": "规则类型",
+                "required": true,
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "default": "header",
+                "enum": [
+                  {
+                    "label": "Header（请求头）",
+                    "value": "header"
+                  },
+                  {
+                    "label": "Cookie（追加 Cookie）",
+                    "value": "cookie"
+                  },
+                  {
+                    "label": "Query（URL 查询参数）",
+                    "value": "query"
+                  }
+                ],
+                "x-validator": [
+                  {
+                    "required": true,
+                    "message": "请选择类型"
+                  }
+                ],
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst dlg = $self.query(re + '.editDialog').take()\n$effect(() => {\n  $props({ disabled: !!(dlg && dlg.value && dlg.value.id) })\n}, [dlg && dlg.value])\n"
+                  }
+                }
+              },
+              "key": {
+                "type": "string",
+                "title": "Header 名称",
+                "required": true,
+                "x-decorator": "FormItem",
+                "x-component": "Input",
+                "x-component-props": {
+                  "placeholder": "例如：x-debug-uid"
+                },
+                "x-validator": [
+                  {
+                    "required": true,
+                    "message": "请输入 Key"
+                  },
+                  {
+                    "max": 100,
+                    "message": "最多 100 个字符"
+                  },
+                  {
+                    "pattern": "^[^\\s]+$",
+                    "message": "Key 不能包含空格"
+                  }
+                ],
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst dlg = $self.query(re + '.editDialog').take()\n$effect(() => {\n  const t = (dlg && dlg.value && dlg.value.type) || 'header'\n  $self.setTitle(t === 'header' ? 'Header 名称' : t === 'cookie' ? 'Cookie Key' : 'Query 参数名')\n  $props({ placeholder: t === 'header' ? '例如：x-debug-uid' : t === 'cookie' ? '例如：__gray' : '例如：debug' })\n}, [dlg && dlg.value && dlg.value.type])\n"
+                  }
+                }
+              },
+              "value": {
+                "type": "string",
+                "title": "Header 值",
+                "required": true,
+                "x-decorator": "FormItem",
+                "x-component": "Input",
+                "x-component-props": {
+                  "placeholder": "例如：123456"
+                },
+                "x-validator": [
+                  {
+                    "required": true,
+                    "message": "请输入 Value"
+                  },
+                  {
+                    "max": 200,
+                    "message": "最多 200 个字符"
+                  }
+                ],
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('modRequestSettingsDiv') + 'modRequestSettingsDiv'.length)\nconst dlg = $self.query(re + '.editDialog').take()\n$effect(() => {\n  const t = (dlg && dlg.value && dlg.value.type) || 'header'\n  $self.setTitle(t === 'header' ? 'Header 值' : t === 'cookie' ? 'Cookie Value' : 'Query 参数值')\n  $props({ placeholder: t === 'header' ? '例如：123456' : t === 'cookie' ? '例如：1' : '例如：true' })\n}, [dlg && dlg.value && dlg.value.type])\n"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-component-props": {
+          "style": {
+            "padding": 20
+          }
+        }
+      }
+    }
+  }
+}

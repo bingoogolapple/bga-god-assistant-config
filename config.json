@@ -57,46 +57,60 @@
       "order": 3
     },
     {
+      "key": "ModRequestSettings",
+      "title": "网络请求修改配置",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/ModRequestSettings.json",
+      "showInOptionsMenu": true,
+      "order": 4
+    },
+    {
+      "key": "CookieSyncSettings",
+      "title": "Cookie 同步配置",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/CookieSyncSettings.json",
+      "showInOptionsMenu": true,
+      "order": 5
+    },
+    {
       "key": "CorsSettings",
       "title": "跨域配置",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/CorsSettings.json",
       "showInOptionsMenu": true,
-      "order": 4
+      "order": 6
     },
     {
       "key": "SwimlaneSettings",
       "title": "泳道配置",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/SwimlaneSettings.json",
       "showInOptionsMenu": true,
-      "order": 5
+      "order": 7
     },
     {
       "key": "EnvironmentMarkerSettings",
       "title": "环境角标配置",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/EnvironmentMarkerSettings.json",
       "showInOptionsMenu": true,
-      "order": 6
+      "order": 8
     },
     {
       "key": "SettingAssistant",
       "title": "扩展选项设置",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/SettingAssistant.json",
       "showInOptionsMenu": true,
-      "order": 7
+      "order": 9
     },
     {
       "key": "About",
       "title": "关于",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/About.json",
       "showInOptionsMenu": true,
-      "order": 8
+      "order": 10
     },
     {
       "key": "Privacy",
       "title": "隐私声明",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/Privacy.json",
       "showInOptionsMenu": true,
-      "order": 9
+      "order": 11
     }
   ]
 }
