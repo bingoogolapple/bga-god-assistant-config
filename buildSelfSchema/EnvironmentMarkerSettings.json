@@ -1,0 +1,525 @@
+{
+  "form": {
+    "layout": "vertical"
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "environmentMarkerSettingsDiv": {
+        "type": "void",
+        "x-component": "Div",
+        "x-reactions": {
+          "fulfill": {
+            "run": "const re = $self.address.entire\nconst STORAGE_KEY = 'devtool_environment_marker'\nconst DEFAULT_RULES = [\n  { pattern: '(\\\\.|-)(develop|development|dev)(\\\\d*)?\\\\.', env: 'Dev' },\n  { pattern: '(\\\\.|-)(testing|sit|qa|test)(\\\\d*)?\\\\.', env: 'Test' },\n  { pattern: '(\\\\.|-)(prerelease|staging|stage|stg|pre|pp|st)(\\\\d*)?\\\\.', env: 'Stage' },\n]\n$self.state = $observable({ enabled: false, urlFilters: [], rules: [] })\n$self.saveEnvMarker = async (s) => {\n  await $chrome.storage.local.set({ [STORAGE_KEY]: { enabled: s.enabled, urlFilters: JSON.parse(JSON.stringify(s.urlFilters || [])), rules: JSON.parse(JSON.stringify(s.rules || [])) } })\n}\n$self.loadEnvMarker = async () => {\n  try {\n    const res = await $chrome.storage.local.get(STORAGE_KEY)\n    const s = res[STORAGE_KEY]\n    if (!s || !s.rules || s.rules.length === 0) {\n      $self.state.enabled = false\n      $self.state.urlFilters = []\n      $self.state.rules = DEFAULT_RULES.map((r) => ({ ...r }))\n      await $self.saveEnvMarker($self.state)\n    } else {\n      $self.state.enabled = !!s.enabled\n      $self.state.urlFilters = s.urlFilters || []\n      $self.state.rules = s.rules || []\n    }\n  } catch (e) {\n    $logger.error('加载环境标记配置失败', e)\n    $message.error('加载环境标记配置失败')\n  }\n}\n$self.getRowIndex = (row) => {\n  if (!row) return -1\n  return $self.state.rules.findIndex((r) => r.pattern === row.pattern)\n}\n$self.showAddOrUpdateDialog = (row) => {\n  const dialog = $self.query(re + '.editDialog').take()\n  if (dialog) {\n    dialog.value = row ? { pattern: row.pattern, env: row.env, _originalPattern: row.pattern } : {}\n    dialog.setComponentProps({ open: true, title: row ? '编辑环境识别规则' : '新增环境识别规则' })\n  }\n}\n$self.handleMove = async (index, direction) => {\n  const list = $self.state.rules.slice()\n  const newIndex = direction === 'up' ? index - 1 : index + 1\n  if (index < 0 || newIndex < 0 || newIndex >= list.length) return\n  const tmp = list[index]\n  list[index] = list[newIndex]\n  list[newIndex] = tmp\n  try {\n    await $self.saveEnvMarker({ enabled: $self.state.enabled, urlFilters: $self.state.urlFilters, rules: list })\n    $self.state.rules = list\n  } catch (e) {\n    $message.error('操作失败')\n  }\n}\n$self.handleDeleteRule = async (row) => {\n  if (!row) return\n  const list = $self.state.rules.filter((r) => r.pattern !== row.pattern)\n  try {\n    await $self.saveEnvMarker({ enabled: $self.state.enabled, urlFilters: $self.state.urlFilters, rules: list })\n    $self.state.rules = list\n    $message.success('规则已删除')\n  } catch (e) {\n    $message.error('删除失败')\n  }\n}\n$effect(() => { $self.loadEnvMarker() }, [])\n"
+          }
+        },
+        "properties": {
+          "descAlert": {
+            "type": "string",
+            "x-component": "Alert",
+            "x-component-props": {
+              "type": "info",
+              "showIcon": true,
+              "style": {
+                "marginBottom": 16
+              },
+              "message": "环境标记说明",
+              "description": "1. 开启后，当页面 URL 匹配某条规则的正则表达式时，页面 document.title 会自动追加对应的环境标签（如 [Dev]、[Test]）。\n2. 规则按列表顺序从上到下匹配，第一条命中的规则生效，之后的规则不再匹配。\n3. 可以通过「上移 / 下移」调整规则优先级。"
+            }
+          },
+          "switchSpace": {
+            "type": "void",
+            "x-component": "Div",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "space-between",
+                "alignItems": "center",
+                "marginBottom": 16,
+                "width": "100%"
+              }
+            },
+            "properties": {
+              "leftGroup": {
+                "type": "void",
+                "x-component": "Space",
+                "x-component-props": {
+                  "wrap": true
+                },
+                "properties": {
+                  "enabledLabel": {
+                    "type": "string",
+                    "x-component": "Text",
+                    "x-component-props": {
+                      "content": "环境标记总开关："
+                    }
+                  },
+                  "enabledSwitch": {
+                    "type": "boolean",
+                    "x-component": "Switch",
+                    "x-component-props": {
+                      "checkedChildren": "开启",
+                      "unCheckedChildren": "关闭"
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => { $self.value = rf.state.enabled }, [rf.state.enabled])\n$props({\n  onChange: async (checked) => {\n    try {\n      await rf.saveEnvMarker({ enabled: checked, urlFilters: rf.state.urlFilters, rules: rf.state.rules })\n      rf.state.enabled = checked\n      $message.success(checked ? '环境标记已开启' : '环境标记已关闭')\n    } catch (e) {\n      $message.error('操作失败')\n    }\n  },\n})\n"
+                      }
+                    }
+                  },
+                  "enabledTag": {
+                    "type": "string",
+                    "x-component": "Tag",
+                    "x-component-props": {
+                      "color": "green"
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const en = rf.state.enabled\n  $self.value = en ? '已开启，' + rf.state.rules.length + ' 条规则' : ''\n  $self.display = en ? 'visible' : 'none'\n}, [rf.state.enabled, rf.state.rules])\n"
+                      }
+                    }
+                  },
+                  "disabledTag": {
+                    "type": "string",
+                    "x-component": "Tag",
+                    "x-component-props": {
+                      "color": "default"
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const en = rf.state.enabled\n  $self.value = en ? '' : '已关闭，页面 Title 不显示环境标记'\n  $self.display = en ? 'none' : 'visible'\n}, [rf.state.enabled])\n"
+                      }
+                    }
+                  }
+                }
+              },
+              "addRuleBtn": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "children": "新增环境规则",
+                  "type": "primary",
+                  "icon": "PlusCircleOutlined"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({ onClick: () => rf.showAddOrUpdateDialog(null) })\n"
+                  }
+                }
+              }
+            }
+          },
+          "ruleTable": {
+            "type": "array",
+            "x-decorator": "FormItem",
+            "x-component": "ArrayTable",
+            "x-component-props": {
+              "bordered": true,
+              "pagination": false,
+              "rowKey": "pattern",
+              "locale": {
+                "emptyText": "暂无规则，点击「新增环境规则」添加"
+              }
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => { $self.value = rf.state.rules }, [rf.state.rules])\n"
+              }
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "priorityColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "优先级",
+                    "width": 60,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "priorityText": {
+                      "type": "string",
+                      "x-component": "Text",
+                      "x-component-props": {
+                        "type": "secondary"
+                      },
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const idx = rf.getRowIndex(row)\n  $self.value = idx >= 0 ? '#' + (idx + 1) : ''\n}, [rf.state.rules])\n"
+                        }
+                      }
+                    }
+                  }
+                },
+                "patternColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "URL 正则（pattern）"
+                  },
+                  "properties": {
+                    "patternText": {
+                      "type": "string",
+                      "x-component": "Text",
+                      "x-component-props": {
+                        "code": true
+                      },
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  $self.value = row ? row.pattern : ''\n}, [rf.state.rules])\n"
+                        }
+                      }
+                    }
+                  }
+                },
+                "envColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "环境标签",
+                    "width": 120
+                  },
+                  "properties": {
+                    "envTag": {
+                      "type": "string",
+                      "x-component": "Tag",
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const env = (row && row.env) || ''\n  const lower = env.toLowerCase()\n  let color = 'default'\n  if (lower.includes('dev')) color = 'blue'\n  else if (lower.includes('test')) color = 'orange'\n  else if (lower.includes('st') || lower.includes('stage')) color = 'gold'\n  else if (lower.includes('pre') || lower.includes('prod')) color = 'red'\n  $self.value = env\n  $props({ color: color })\n}, [rf.state.rules])\n"
+                        }
+                      }
+                    }
+                  }
+                },
+                "operateColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "操作",
+                    "width": 260,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "operateSpace": {
+                      "type": "void",
+                      "x-component": "Space",
+                      "properties": {
+                        "moveUpBtn": {
+                          "type": "string",
+                          "x-component": "Button",
+                          "x-component-props": {
+                            "size": "small",
+                            "icon": "ArrowUpOutlined",
+                            "title": "上移（提高优先级）"
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const idx = rf.getRowIndex(row)\n  $props({\n    disabled: idx <= 0,\n    onClick: () => rf.handleMove(idx, 'up'),\n  })\n}, [rf.state.rules])\n"
+                            }
+                          }
+                        },
+                        "moveDownBtn": {
+                          "type": "string",
+                          "x-component": "Button",
+                          "x-component-props": {
+                            "size": "small",
+                            "icon": "ArrowDownOutlined",
+                            "title": "下移（降低优先级）"
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const idx = rf.getRowIndex(row)\n  $props({\n    disabled: idx < 0 || idx >= rf.state.rules.length - 1,\n    onClick: () => rf.handleMove(idx, 'down'),\n  })\n}, [rf.state.rules])\n"
+                            }
+                          }
+                        },
+                        "editBtn": {
+                          "type": "string",
+                          "x-component": "Button",
+                          "x-component-props": {
+                            "children": "编辑",
+                            "icon": "EditOutlined"
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({ onClick: () => { const row = $utils.getArrayFieldRow($self, 'ArrayTable'); rf.showAddOrUpdateDialog(row) } })\n"
+                            }
+                          }
+                        },
+                        "deletePopconfirm": {
+                          "type": "void",
+                          "x-component": "Popconfirm",
+                          "x-component-props": {
+                            "title": "确认删除该规则吗？",
+                            "okText": "确认删除",
+                            "cancelText": "取消",
+                            "okType": "danger",
+                            "icon": "QuestionCircleOutlined"
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({ onConfirm: async () => { const row = $utils.getArrayFieldRow($self, 'ArrayTable'); await rf.handleDeleteRule(row) } })\n"
+                            }
+                          },
+                          "properties": {
+                            "deleteBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "删除",
+                                "danger": true,
+                                "icon": "DeleteOutlined"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "urlFilterSection": {
+            "type": "void",
+            "x-component": "Div",
+            "x-component-props": {
+              "style": {
+                "marginTop": 16,
+                "border": "1px solid #f0f0f0",
+                "borderRadius": 8,
+                "padding": 16
+              }
+            },
+            "properties": {
+              "urlFilterTitle": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "触发生效 URL 范围",
+                  "strong": true,
+                  "style": {
+                    "fontSize": 16,
+                    "display": "block",
+                    "marginBottom": 12
+                  }
+                }
+              },
+              "filterAlert": {
+                "type": "string",
+                "x-component": "Alert",
+                "x-component-props": {
+                  "type": "info",
+                  "showIcon": true,
+                  "style": {
+                    "marginBottom": 12
+                  },
+                  "message": "仅命中以下规则的页面才会显示环境标记；不配置时所有 HTTP 页面都生效。",
+                  "description": "1. hostSuffix：页面域名以该后缀结尾即命中（如 .example.com）。\n2. urlContains：页面 URL 包含该字符串即命中（如 /admin）。\n3. 多条规则为「或」关系；每条可只填其中一项。"
+                }
+              },
+              "addFilterRow": {
+                "type": "void",
+                "x-component": "Div",
+                "x-component-props": {
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-end",
+                    "marginBottom": 12
+                  }
+                },
+                "properties": {
+                  "addFilterBtn": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-component-props": {
+                      "children": "新增生效 URL 范围",
+                      "type": "primary",
+                      "icon": "PlusCircleOutlined"
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\n$props({\n  onClick: () => {\n    const t = $self.query(re + '.urlFilterSection.urlFilterTable').take()\n    if (t) t.value = [...(t.value || []), { hostSuffix: '', urlContains: '' }]\n  },\n})\n"
+                      }
+                    }
+                  }
+                }
+              },
+              "urlFilterTable": {
+                "type": "array",
+                "x-decorator": "FormItem",
+                "x-component": "ArrayTable",
+                "x-component-props": {
+                  "bordered": true,
+                  "pagination": false,
+                  "locale": {
+                    "emptyText": "暂无生效 URL 范围限制，所有 HTTP 页面都显示环境标记"
+                  }
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$effect(() => { $self.value = JSON.parse(JSON.stringify(rf.state.urlFilters || [])) }, [rf.state.urlFilters])\n"
+                  }
+                },
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "hostSuffixColumn": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "hostSuffix"
+                      },
+                      "properties": {
+                        "hostSuffix": {
+                          "type": "string",
+                          "x-component": "Input",
+                          "x-component-props": {
+                            "placeholder": "hostSuffix，如 .example.com",
+                            "style": {
+                              "fontFamily": "monospace"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "urlContainsColumn": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "urlContains"
+                      },
+                      "properties": {
+                        "urlContains": {
+                          "type": "string",
+                          "x-component": "Input",
+                          "x-component-props": {
+                            "placeholder": "urlContains，如 /admin",
+                            "style": {
+                              "fontFamily": "monospace"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "filterOperateColumn": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "操作",
+                        "width": 80,
+                        "align": "center"
+                      },
+                      "properties": {
+                        "deleteFilterBtn": {
+                          "type": "string",
+                          "x-component": "Button",
+                          "x-component-props": {
+                            "danger": true,
+                            "icon": "DeleteOutlined"
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\n$props({\n  onClick: () => {\n    const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n    const t = $self.query(re + '.urlFilterSection.urlFilterTable').take()\n    if (!t || !row) return\n    const idx = (t.value || []).indexOf(row)\n    if (idx >= 0) t.value = t.value.filter((_, i) => i !== idx)\n  },\n})\n"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "saveFilterBtn": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "children": "保存生效 URL 范围",
+                  "type": "primary",
+                  "style": {
+                    "marginTop": 12
+                  }
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\nconst t = $self.query(re + '.urlFilterSection.urlFilterTable').take()\n$props({\n  onClick: async () => {\n    const filters = ((t && t.value) || []).map((f) => ({ hostSuffix: (f.hostSuffix || '').trim(), urlContains: (f.urlContains || '').trim() }))\n    if (filters.some((f) => !f.hostSuffix && !f.urlContains)) {\n      $message.warning('每条生效 URL 范围至少填写 hostSuffix 或 urlContains 之一')\n      return\n    }\n    try {\n      await rf.saveEnvMarker({ enabled: rf.state.enabled, urlFilters: filters, rules: rf.state.rules })\n      rf.state.urlFilters = filters\n      $message.success('触发生效 URL 范围已保存')\n    } catch (e) {\n      $message.error('保存失败')\n    }\n  },\n})\n"
+                  }
+                }
+              }
+            }
+          },
+          "editDialog": {
+            "type": "object",
+            "x-component": "Modal",
+            "x-component-props": {
+              "title": "新增环境识别规则",
+              "okText": "保存",
+              "cancelText": "取消",
+              "destroyOnClose": true
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('environmentMarkerSettingsDiv') + 'environmentMarkerSettingsDiv'.length)\nconst rf = $self.query(re).take()\n$props({\n  onCancel: () => { $self.componentProps.open = false },\n  onOk: () => {\n    $self.validate().then(async () => {\n      const form = $self.value\n      const pField = $self.query($self.address.entire + '.pattern').take()\n      try {\n        new RegExp(form.pattern)\n      } catch (err) {\n        if (pField) pField.setFeedback({ type: 'error', messages: ['正则表达式格式有误'] })\n        return\n      }\n      const exists = rf.state.rules.some((r) => r.pattern === form.pattern && r.pattern !== form._originalPattern)\n      if (exists) {\n        if (pField) pField.setFeedback({ type: 'error', messages: ['该正则已存在，请使用不同的表达式'] })\n        return\n      }\n      const list = rf.state.rules.slice()\n      const next = { pattern: form.pattern, env: form.env }\n      const isEdit = !!form._originalPattern\n      if (isEdit) {\n        const idx = list.findIndex((r) => r.pattern === form._originalPattern)\n        if (idx >= 0) list[idx] = next\n        else list.push(next)\n      } else {\n        list.push(next)\n      }\n      try {\n        await rf.saveEnvMarker({ enabled: rf.state.enabled, urlFilters: rf.state.urlFilters, rules: list })\n        rf.state.rules = list\n        $message.success(isEdit ? '规则已更新' : '规则已新增')\n        $self.componentProps.open = false\n      } catch (e) {\n        $message.error('保存失败')\n      }\n    }).catch((e) => $logger.info('校验失败', e))\n  },\n})\n"
+              }
+            },
+            "properties": {
+              "pattern": {
+                "type": "string",
+                "title": "URL 正则（pattern）",
+                "required": true,
+                "x-decorator": "FormItem",
+                "x-decorator-props": {
+                  "tooltip": "用于匹配页面 URL 的正则表达式，匹配到后将在页面标题追加环境标签"
+                },
+                "x-component": "Input",
+                "x-component-props": {
+                  "placeholder": "例如：(\\.\\|-)dev(\\d*)?\\.",
+                  "style": {
+                    "fontFamily": "monospace"
+                  }
+                },
+                "x-validator": [
+                  {
+                    "required": true,
+                    "message": "请输入正则表达式"
+                  },
+                  {
+                    "max": 200,
+                    "message": "最多 200 个字符"
+                  }
+                ]
+              },
+              "env": {
+                "type": "string",
+                "title": "环境标签",
+                "required": true,
+                "x-decorator": "FormItem",
+                "x-decorator-props": {
+                  "tooltip": "显示在页面 Title 中的标签文字，例如 Dev、Test、Stage"
+                },
+                "x-component": "Input",
+                "x-component-props": {
+                  "placeholder": "例如：Dev 或 Test 或 Stage"
+                },
+                "x-validator": [
+                  {
+                    "required": true,
+                    "message": "请输入环境标签"
+                  },
+                  {
+                    "max": 20,
+                    "message": "最多 20 个字符"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "x-component-props": {
+          "style": {
+            "padding": 20
+          }
+        }
+      }
+    }
+  }
+}

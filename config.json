@@ -71,25 +71,32 @@
       "order": 5
     },
     {
+      "key": "EnvironmentMarkerSettings",
+      "title": "环境角标配置",
+      "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/EnvironmentMarkerSettings.json",
+      "showInOptionsMenu": true,
+      "order": 6
+    },
+    {
       "key": "SettingAssistant",
       "title": "扩展选项设置",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/SettingAssistant.json",
       "showInOptionsMenu": true,
-      "order": 6
+      "order": 7
     },
     {
       "key": "About",
       "title": "关于",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/About.json",
       "showInOptionsMenu": true,
-      "order": 7
+      "order": 8
     },
     {
       "key": "Privacy",
       "title": "隐私声明",
       "schemaUrl": "https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/buildSelfSchema/Privacy.json",
       "showInOptionsMenu": true,
-      "order": 8
+      "order": 9
     }
   ]
 }
