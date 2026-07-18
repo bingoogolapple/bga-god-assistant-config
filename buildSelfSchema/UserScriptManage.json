@@ -1,0 +1,795 @@
+{
+  "form": {
+    "layout": "vertical"
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "userScriptManageDiv": {
+        "type": "void",
+        "x-component": "Div",
+        "x-component-props": {
+          "style": {
+            "padding": 20
+          }
+        },
+        "x-reactions": {
+          "fulfill": {
+            "run": "$utils.setAsBlockRoot($self)\n\nconst re = $self.address.entire\nconst INDEX_KEY = '__DO_NOT_USE_THIS_PROPERTY_index__'\n$self.state = $observable({ loading: false, devModeEnabled: null, browserName: 'Chrome', extensionDetailUrl: '', list: [], drawerStatus: '隐藏', currentItem: null })\n$self.cleanRow = (row) => {\n  if (!row) return row\n  const plain = JSON.parse(JSON.stringify(row))\n  const c = {}\n  Object.keys(plain).forEach((k) => {\n    if (k !== INDEX_KEY && !k.endsWith('Display')) c[k] = plain[k]\n  })\n  return c\n}\n$self.getScripts = async (filter) => {\n  await $chrome.userScripts.configureWorld({ messaging: true })\n  return await $chrome.userScripts.getScripts(filter)\n}\n$self.refreshList = async () => {\n  try {\n    $self.state.loading = true\n    const registered = (await $self.getScripts()) || []\n    const registeredIds = registered.map((item) => item.id)\n    const record = (await $chrome.storage.local.get()) || {}\n    const result = []\n    Object.keys(record).forEach((key) => {\n      if (key.startsWith('userScriptId_')) {\n        const userScript = record[key]\n        userScript.enabled = registeredIds.includes(userScript.id)\n        result.push(userScript)\n      }\n    })\n    $self.state.list = result\n      .sort((a, b) => (b.updateTime || 0) - (a.updateTime || 0))\n      .filter((item) => item.id !== '-user-script-isolated' && item.id !== '-user-script-main')\n      .map((item) => ({ ...item, updateTimeDisplay: item.updateTime ? $dayjs(item.updateTime).format('YYYY-MM-DD HH:mm:ss') : '', enabledDisplay: item.enabled ? '已启用' : '已停用' }))\n  } catch (e) {\n    $logger.error('请求用户脚本列表失败', e)\n    $message.error('请求用户脚本列表失败')\n  } finally {\n    $self.state.loading = false\n  }\n}\n$self.saveUserScript = async (userScript) => {\n  userScript = $self.cleanRow(userScript)\n  const toMatchArr = (arr) => Array.isArray(arr) ? arr.map((m) => (m && typeof m === 'object' ? (m.value != null ? m.value : (m.code != null ? m.code : '')) : m)) : []\n  const toJsArr = (arr) => Array.isArray(arr) ? arr.map((b) => ({ code: (b && typeof b === 'object' ? (b.code != null ? b.code : '') : b) || '' })) : []\n  userScript = { ...userScript, matches: toMatchArr(userScript.matches), excludeMatches: toMatchArr(userScript.excludeMatches), js: toJsArr(userScript.js) }\n  const { name, desc, enabled, updateTime, isBuiltIn, ...registeredUserScript } = userScript\n  const storageKey = 'userScriptId_' + userScript.id\n  const registeredList = await $self.getScripts({ ids: [userScript.id] })\n  const wasRegistered = registeredList && registeredList.length > 0\n  await $chrome.storage.local.set({ [storageKey]: { ...userScript, updateTime: Date.now() } })\n  try {\n    if (wasRegistered) {\n      if (userScript.enabled) {\n        await $chrome.userScripts.update([registeredUserScript])\n      } else {\n        await $chrome.userScripts.unregister({ ids: [userScript.id] })\n      }\n    } else if (userScript.enabled) {\n      await $chrome.userScripts.register([registeredUserScript])\n    }\n  } catch (e) {\n    await $chrome.storage.local.remove(storageKey)\n    throw e\n  }\n}\n$self.removeUserScript = async (id) => {\n  const registeredList = await $self.getScripts({ ids: [id] })\n  const wasRegistered = registeredList && registeredList.length > 0\n  await $chrome.storage.local.remove('userScriptId_' + id)\n  if (wasRegistered) {\n    try {\n      await $chrome.userScripts.unregister({ ids: [id] })\n    } catch (e) {\n      $logger.error('注销用户脚本失败', e)\n      throw e\n    }\n  }\n}\n$self.showDrawer = (row, status) => {\n  const dialog = $self.query(re + '.editDrawer').take()\n  if (!dialog) return\n  $self.state.currentItem = row ? $self.cleanRow(row) : null\n  $self.state.drawerStatus = status\n  if (status === '新增') {\n    dialog.value = { name: '', desc: '', enabled: false, allFrames: false, excludeGlobs: [], includeGlobs: [], matches: [{ value: '*://*/*' }], excludeMatches: [], js: [{ code: '' }], runAt: 'document_idle', world: 'USER_SCRIPT' }\n  } else {\n    const item = $self.cleanRow(row)\n    dialog.value = { ...item, matches: (item.matches || []).map((v) => ({ value: v })), excludeMatches: (item.excludeMatches || []).map((v) => ({ value: v })), js: (item.js || []).map((b) => ({ code: (b && b.code) || '' })) }\n  }\n  dialog.setPattern(status === '查看' ? 'disabled' : 'editable')\n  dialog.setComponentProps({ open: true, title: status + '用户脚本' })\n}\n$self.dismissDrawer = () => {\n  $self.state.drawerStatus = '隐藏'\n  $self.state.currentItem = null\n  const dialog = $self.query(re + '.editDrawer').take()\n  if (dialog) dialog.componentProps.open = false\n}\n$self.handleSaveDrawer = () => {\n  const dialog = $self.query(re + '.editDrawer').take()\n  if (!dialog) return\n  dialog\n    .validate()\n    .then(async () => {\n      const form = dialog.value || {}\n      const matches = (form.matches || []).map((r) => (r && typeof r === 'object' ? r.value : r))\n      if (matches.length < 1) {\n        $message.error('至少填一个匹配模式')\n        return\n      }\n      if (matches.some((v) => !v || !String(v).trim())) {\n        $message.error(matches.length > 1 ? '请输入包含匹配模式或删除当前行' : '请输入包含匹配模式')\n        return\n      }\n      const excludeMatches = (form.excludeMatches || []).map((r) => (r && typeof r === 'object' ? r.value : r))\n      if (excludeMatches.some((v) => !v || !String(v).trim())) {\n        $message.error('请输入排除匹配模式或删除当前行')\n        return\n      }\n      const jsRows = form.js || []\n      if (jsRows.length < 1) {\n        $message.error('至少填一个代码块')\n        return\n      }\n      if (jsRows.some((b) => !b || !b.code || !String(b.code).trim())) {\n        $message.error(jsRows.length > 1 ? '请输入代码块或删除当前行' : '请输入代码块')\n        return\n      }\n      const js = jsRows.map((b) => ({ code: b.code }))\n      const status = $self.state.drawerStatus\n      if (status === '新增') {\n        try {\n          await $self.saveUserScript({ name: form.name, desc: form.desc, enabled: !!form.enabled, allFrames: !!form.allFrames, runAt: form.runAt, world: form.world, matches: matches, excludeMatches: excludeMatches, includeGlobs: [], excludeGlobs: [], js: js, id: $dayjs().format('YYYYMMDDHHmmss'), isBuiltIn: false })\n          $message.success('新增用户脚本成功')\n          $self.dismissDrawer()\n          $self.refreshList()\n        } catch (e) {\n          $logger.error('新增用户脚本失败', e)\n        $message.error('新增用户脚本失败：' + (e && e.message ? e.message : String(e)))\n        }\n      } else if (status === '编辑') {\n        try {\n          await $self.saveUserScript({ ...$self.state.currentItem, ...form, matches: matches, excludeMatches: excludeMatches, js: js })\n          $message.success('编辑用户脚本成功')\n          $self.dismissDrawer()\n          $self.refreshList()\n        } catch (e) {\n          $logger.error('编辑用户脚本失败', e)\n        $message.error('编辑用户脚本失败：' + (e && e.message ? e.message : String(e)))\n        }\n      }\n    })\n    .catch((e) => $logger.info('校验失败', e))\n}\n$self.init = async () => {\n  try {\n    const scheme = navigator.userAgent.includes('Edg/') ? 'edge' : 'chrome'\n    $self.state.browserName = scheme === 'edge' ? 'Edge' : 'Chrome'\n    const extId = await $chrome.runtime.getId()\n    $self.state.extensionDetailUrl = scheme + '://extensions/?id=' + extId\n  } catch (e) {\n    $logger.error('获取浏览器信息失败', e)\n  }\n  try {\n    await $self.getScripts()\n    $self.state.devModeEnabled = true\n  } catch (e) {\n    $self.state.devModeEnabled = false\n  }\n  $self.refreshList()\n  try {\n    $utils.getVipConfig()\n  } catch (e) {}\n}\n$effect(() => { $self.init() }, [])\n"
+          }
+        },
+        "properties": {
+          "devModeAlert": {
+            "type": "string",
+            "x-component": "Alert",
+            "x-component-props": {
+              "type": "warning",
+              "showIcon": true,
+              "style": {
+                "marginBottom": 16
+              },
+              "message": "用户脚本功能需要开启「允许用户脚本」"
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$effect(() => {\n  $self.display = rf.state.devModeEnabled === false ? 'visible' : 'none'\n}, [rf.state.devModeEnabled])\n$effect(() => {\n  const url = rf.state.extensionDetailUrl\n  if (!url) return\n  const browserName = rf.state.browserName\n  $props({\n    description: $React.createElement(\n      'span',\n      null,\n      'chrome.userScripts API 需要在 ' + browserName + ' 扩展管理页中手动开启「允许用户脚本」才能使用。请前往 ',\n      $React.createElement('a', { href: url, onClick: (e) => { e.preventDefault(); $chrome.tabs.create({ url: url }) } }, url),\n      ' 页面，开启「允许用户脚本」开关后刷新本页。',\n      $React.createElement('button', { style: { marginTop: 8, marginLeft: 8, padding: '0 7px', height: 24, fontSize: 14, lineHeight: '22px', color: 'rgba(0, 0, 0, 0.88)', border: '1px solid #d9d9d9', borderRadius: 6, background: '#ffffff', cursor: 'pointer' }, onClick: () => { $chrome.tabs.create({ url: url }) } }, '前往扩展详情页开启')\n    ),\n  })\n}, [rf.state.extensionDetailUrl, rf.state.browserName])\n"
+              }
+            }
+          },
+          "topSpace": {
+            "type": "void",
+            "x-component": "Space",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "end"
+              }
+            },
+            "properties": {
+              "batchImportBtn": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "children": "从文件批量导入用户脚本（覆盖 ID）",
+                  "size": "middle",
+                  "icon": "ImportOutlined"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$props({\n  onClick: async () => {\n    const { canceled, result } = await $utils.importJsonFromFile()\n    if (canceled || !result) return\n    const arr = Array.isArray(result) ? result : [result]\n    if (arr.length === 0) {\n      $message.error('从文件导入的内容为空')\n      return\n    }\n    for (let i = 0; i < arr.length; i++) {\n      const s = arr[i]\n      if (!s || !s.id || !s.name || !s.desc || !Array.isArray(s.matches) || s.matches.length === 0 || !Array.isArray(s.js) || s.js.length === 0) {\n        $message.error('第 ' + (i + 1) + ' 个用户脚本格式错误，已终止导入')\n        return\n      }\n    }\n    try {\n      for (const s of arr) {\n        await rf.saveUserScript(s)\n      }\n      await rf.refreshList()\n      $message.success('批量导入用户脚本成功，共 ' + arr.length + ' 个')\n    } catch (e) {\n      $logger.error('批量导入用户脚本失败', e)\n      $message.error('批量导入用户脚本失败：' + (e && e.message ? e.message : String(e)))\n    }\n  },\n})"
+                  }
+                }
+              },
+              "batchExportBtn": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "children": "批量导出用户脚本到文件",
+                  "size": "middle",
+                  "icon": "ExportOutlined"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$props({\n  onClick: async () => {\n    const list = rf.state.list || []\n    if (list.length === 0) {\n      $message.error('没有可导出的用户脚本')\n      return\n    }\n    let extName = '上帝小助手'\n    try {\n      const manifest = await $chrome.runtime.getManifest()\n      extName = (manifest && manifest.name) || extName\n    } catch (e) {}\n    const data = list.map((item) => ({ ...rf.cleanRow(item), enabled: false }))\n    $utils.exportJsonToFile(JSON.stringify(data), extName + '导出用户脚本-' + list.length + '个-' + $dayjs().format('YYYYMMDD_HHmmss') + '.json')\n  },\n})"
+                  }
+                }
+              },
+              "addBtn": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "children": "新增用户脚本",
+                  "type": "primary",
+                  "size": "middle",
+                  "icon": "PlusCircleOutlined"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$props({ onClick: () => rf.showDrawer(null, '新增') })\n"
+                  }
+                }
+              }
+            }
+          },
+          "scriptTable": {
+            "type": "array",
+            "x-decorator": "FormItem",
+            "x-component": "ArrayTable",
+            "x-component-props": {
+              "bordered": true,
+              "rowKey": "id",
+              "size": "large",
+              "pagination": {
+                "pageSize": 20
+              },
+              "style": {
+                "marginTop": 20,
+                "height": "100%"
+              }
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$effect(() => { $self.value = rf.state.list }, [rf.state.list])\n$effect(() => { $props({ loading: rf.state.loading }) }, [rf.state.loading])\n"
+              }
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "idColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "用户脚本 ID",
+                    "width": 174,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "x-component": "Text"
+                    }
+                  }
+                },
+                "nameColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "用户脚本名称",
+                    "align": "center"
+                  },
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "x-component": "Text"
+                    }
+                  }
+                },
+                "descColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "描述",
+                    "align": "center"
+                  },
+                  "properties": {
+                    "desc": {
+                      "type": "string",
+                      "x-component": "Text"
+                    }
+                  }
+                },
+                "updateTimeColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "更新时间",
+                    "width": 175,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "updateTimeDisplay": {
+                      "type": "string",
+                      "x-component": "Text"
+                    }
+                  }
+                },
+                "statusColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "状态",
+                    "width": 80,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "enabledDisplay": {
+                      "type": "string",
+                      "x-component": "Tag",
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "$effect(() => { const v = $self.value; $props({ color: v === '已启用' ? 'green' : 'default' }) }, [$self.value])"
+                        }
+                      }
+                    }
+                  }
+                },
+                "operateColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "操作",
+                    "width": 320,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "operateSpace": {
+                      "type": "void",
+                      "x-component": "Space",
+                      "x-component-props": {
+                        "direction": "vertical"
+                      },
+                      "properties": {
+                        "rowSpace1": {
+                          "type": "void",
+                          "x-component": "Space",
+                          "properties": {
+                            "deletePopconfirm": {
+                              "type": "void",
+                              "x-component": "Popconfirm",
+                              "x-component-props": {
+                                "title": "确认删除该用户脚本吗？",
+                                "okText": "确认删除",
+                                "cancelText": "取消",
+                                "okType": "danger",
+                                "icon": "QuestionCircleOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  $props({ disabled: !!(row && row.isBuiltIn) })\n}, [rf.state.list])\n$props({\n  onConfirm: async () => {\n    const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n    if (!row) return\n    try {\n      await rf.removeUserScript(row.id)\n      $message.success('删除用户脚本成功')\n      rf.refreshList()\n    } catch (e) {\n      $logger.error('删除用户脚本失败', e)\n    $message.error('删除用户脚本失败：' + (e && e.message ? e.message : String(e)))\n    }\n  },\n})\n"
+                                }
+                              },
+                              "properties": {
+                                "deleteBtn": {
+                                  "type": "string",
+                                  "x-component": "Button",
+                                  "x-component-props": {
+                                    "children": "删除",
+                                    "danger": true,
+                                    "icon": "DeleteOutlined"
+                                  },
+                                  "x-reactions": {
+                                    "fulfill": {
+                                      "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  $props({ disabled: !!(row && row.isBuiltIn) })\n}, [rf.state.list])\n"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "toggleBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  const enabled = !!(row && row.enabled)\n  $props({\n    children: enabled ? '停用' : '启用',\n    icon: enabled ? 'MinusCircleOutlined' : 'CheckCircleOutlined',\n    type: enabled ? 'default' : 'dashed',\n    danger: !enabled,\n    onClick: async () => {\n      if (!row) return\n      try {\n        await rf.saveUserScript({ ...row, enabled: !row.enabled })\n        row.enabled = !row.enabled\n        row.enabledDisplay = row.enabled ? '已启用' : '已停用'\n        $message.success(row.enabled ? '启用用户脚本成功' : '停用用户脚本成功')\n      } catch (e) {\n        $logger.error('saveUserScript 失败', e)\n        $message.error((!row.enabled ? '启用用户脚本失败' : '停用用户脚本失败') + '：' + (e && e.message ? e.message : String(e)))\n      }\n    },\n  })\n}, [rf.state.list, ($utils.getArrayFieldRow($self, 'ArrayTable') || {}).enabled])"
+                                }
+                              }
+                            },
+                            "viewBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "查看用户脚本",
+                                "type": "primary",
+                                "icon": "EyeOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$props({ onClick: () => { const row = $utils.getArrayFieldRow($self, 'ArrayTable'); if (row) rf.showDrawer(row, '查看') } })\n"
+                                }
+                              }
+                            },
+                            "editBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "编辑用户脚本",
+                                "type": "primary",
+                                "icon": "EditOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$props({ onClick: () => { const row = $utils.getArrayFieldRow($self, 'ArrayTable'); if (row) rf.showDrawer(row, '编辑') } })\n"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "rowSpace2": {
+                          "type": "void",
+                          "x-component": "Space",
+                          "properties": {
+                            "copyBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "复制用户脚本",
+                                "icon": "CopyOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$props({\n  onClick: async () => {\n    const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n    if (!row) return\n    try {\n      const newUserScript = { ...rf.cleanRow(row), enabled: false, name: row.name + '-副本', desc: row.desc + '-副本', id: $dayjs().format('YYYYMMDDHHmmss'), isBuiltIn: false }\n      await rf.saveUserScript(newUserScript)\n      $message.success('复制用户脚本成功')\n      await rf.refreshList()\n      rf.showDrawer(newUserScript, '编辑')\n    } catch (e) {\n      $logger.error('复制用户脚本失败', e)\n    $message.error('复制用户脚本失败：' + (e && e.message ? e.message : String(e)))\n    }\n  },\n})\n"
+                                }
+                              }
+                            },
+                            "exportBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "导出用户脚本到文件",
+                                "icon": "ExportOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$props({\n  onClick: async () => {\n    const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n    if (!row) return\n    let extName = '上帝小助手'\n    try {\n      const manifest = await $chrome.runtime.getManifest()\n      extName = (manifest && manifest.name) || extName\n    } catch (e) {}\n    $utils.exportJsonToFile(JSON.stringify({ ...rf.cleanRow(row), enabled: false }), extName + '导出用户脚本-' + row.id + '-' + row.name + '-' + $dayjs().format('YYYYMMDD_HHmmss') + '.json')\n  },\n})\n"
+                                }
+                              }
+                            },
+                            "importBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "从文件导入用户脚本（不覆盖 ID）",
+                                "icon": "ImportOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$props({\n  onClick: async () => {\n    const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n    if (!row) return\n    const { canceled, result } = await $utils.importJsonFromFile()\n    if (canceled) return\n    if (!result || !result.id || !result.name || !result.desc || !result.updateTime || !result.world || !result.runAt || !result.matches || !result.matches.length || !result.js || !result.js.length) {\n      $message.error('从文件导入的内容格式错误')\n      return\n    }\n    if (result.id === row.id) {\n      try {\n        await rf.saveUserScript({ ...result, enabled: false, isBuiltIn: row.isBuiltIn })\n        $message.success('从文件导入用户脚本成功')\n        rf.refreshList()\n      } catch (e) {\n        $message.error('从文件导入用户脚本失败')\n      }\n    } else {\n      $modal.confirm({\n        title: '从文件导入用户脚本「' + result.name + '」的 id「' + result.id + '」和当前选中的用户脚本「' + row.name + '」的 id「' + row.id + '」不同，确认导入除 id 以外的用户脚本信息吗？',\n        okText: '确认',\n        onOk: async () => {\n          try {\n            await rf.saveUserScript({ ...result, enabled: row.enabled, id: row.id, isBuiltIn: row.isBuiltIn })\n            $message.success('从文件导入用户脚本成功')\n            rf.refreshList()\n          } catch (e) {\n            $logger.error('从文件导入用户脚本失败', e)\n          $message.error('从文件导入用户脚本失败：' + (e && e.message ? e.message : String(e)))\n          }\n        },\n      })\n    }\n  },\n})\n"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "editDrawer": {
+            "type": "object",
+            "x-component": "Drawer",
+            "x-component-props": {
+              "title": "新增用户脚本",
+              "width": "75vw",
+              "destroyOnClose": true
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$props({ onClose: () => rf.dismissDrawer() })\n"
+              }
+            },
+            "properties": {
+              "formLayout": {
+                "type": "void",
+                "x-component": "FormLayout",
+                "x-component-props": {
+                  "layout": "horizontal",
+                  "labelCol": 6,
+                  "wrapperCol": 18
+                },
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "用户脚本名称",
+                    "required": true,
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "x-component-props": {
+                      "placeholder": "请输入用户脚本名称，最大长度为 15"
+                    },
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请输入用户脚本名称，最大长度为 15"
+                      },
+                      {
+                        "max": 15,
+                        "message": "请输入用户脚本名称，最大长度为 15"
+                      }
+                    ]
+                  },
+                  "desc": {
+                    "type": "string",
+                    "title": "用户脚本描述",
+                    "required": true,
+                    "x-decorator": "FormItem",
+                    "x-component": "Input.TextArea",
+                    "x-component-props": {
+                      "placeholder": "请输入用户脚本描述，最大长度为 30"
+                    },
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请输入用户脚本描述，最大长度为 30"
+                      },
+                      {
+                        "max": 30,
+                        "message": "请输入用户脚本描述，最大长度为 30"
+                      }
+                    ]
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "title": "是否启用",
+                    "required": true,
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "tooltip": "enabled 启用后用户脚本将自动注入到匹配的页面中，关闭后用户脚本不会自动注入到匹配的页面中"
+                    },
+                    "x-component": "Switch",
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请选择是否启用"
+                      }
+                    ]
+                  },
+                  "allFrames": {
+                    "type": "boolean",
+                    "title": "是否注入到页面的所有框架",
+                    "required": true,
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "tooltip": "allFrames 这个选项决定了用户脚本是否应该注入到页面的所有框架（frames）中，包括嵌套的 iframe"
+                    },
+                    "x-component": "Switch",
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请选择是否注入到页面的所有框架"
+                      }
+                    ]
+                  },
+                  "runAt": {
+                    "type": "string",
+                    "title": "注入时机",
+                    "required": true,
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "tooltip": "runAt 指定用户脚本在页面生命周期的哪个阶段执行，可选 document_start（DOM 构建前尽可能早执行）/ document_end（DOM 加载完成、子资源加载前）/ document_idle（页面及资源加载完成后，由浏览器决定具体时机）"
+                    },
+                    "x-component": "Select",
+                    "enum": [
+                      {
+                        "label": "document_start 执行时机：在任何 DOM 构建之前，尽可能早地执行；页面状态：此时DOM还未开始构建",
+                        "value": "document_start"
+                      },
+                      {
+                        "label": "document_end 执行时机：在 DOM 加载完成后，但在加载子资源（如图片和框架）之前执行；页面状态：DOM 已完全构建，但页面可能还未完全加载",
+                        "value": "document_end"
+                      },
+                      {
+                        "label": "document_idle 执行时机：在页面加载完成后执行，具体时间由浏览器决定；页面状态：页面及其资源已经加载完成",
+                        "value": "document_idle"
+                      }
+                    ],
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请选择注入时机"
+                      }
+                    ]
+                  },
+                  "world": {
+                    "type": "string",
+                    "title": "执行环境",
+                    "required": true,
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "tooltip": "world 指定用户脚本的执行环境：MAIN 与页面共享 JavaScript 上下文、可直接访问/修改页面 DOM，但不能访问插件特有 API；USER_SCRIPT 为隔离环境、可访问插件特有 API，但访问页面受限"
+                    },
+                    "x-component": "Select",
+                    "enum": [
+                      {
+                        "label": "MAIN 页面的主 JavaScript 环境，不可访问插件特有 API；上下文：与页面共享相同的 JavaScript 上下文；访问权限：可以直接访问和修改页面的 DOM 和 JavaScript 对象；使用场景：需要直接操作页面内容或与页面脚本交互时使用",
+                        "value": "MAIN"
+                      },
+                      {
+                        "label": "USER_SCRIPT 独立的 JavaScript 环境，可访问插件特有 API；上下文：与页面的 JavaScript 上下文隔离；有限制的页面访问，通常通过特定的 API 进行交互；使用场景：需要更安全的执行环境，或者不需要直接访问页面内容时使用",
+                        "value": "USER_SCRIPT"
+                      }
+                    ],
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请选择执行环境"
+                      }
+                    ]
+                  },
+                  "matches": {
+                    "type": "array",
+                    "title": "包含匹配模式",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "tooltip": "matches 指定哪些页面的 URL 能够触发用户脚本的注入。是一个字符串数组，每个字符串都是一个匹配模式，用于定义脚本应当注入的页面"
+                    },
+                    "x-component": "ArrayTable",
+                    "x-component-props": {
+                      "bordered": false,
+                      "showHeader": false,
+                      "pagination": false,
+                      "size": "middle"
+                    },
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "valueColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": ""
+                          },
+                          "properties": {
+                            "value": {
+                              "type": "string",
+                              "x-component": "Input",
+                              "x-component-props": {
+                                "placeholder": "请输入包含匹配模式"
+                              }
+                            }
+                          }
+                        },
+                        "removeColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "",
+                            "width": 40,
+                            "align": "center"
+                          },
+                          "properties": {
+                            "removeBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "type": "text",
+                                "size": "small",
+                                "icon": "MinusCircleOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('matches') + 'matches'.length)\nconst af = $self.query(re).take()\n$props({\n  onClick: () => {\n    const result = $utils.getArrayFieldRowAndIndex($self, 'ArrayTable')\n    if (af && af.value && result.index != null) {\n      af.value = af.value.filter((_, i) => i !== result.index)\n    }\n  },\n})\n$effect(() => {\n  $self.display = af && af.value && af.value.length >= 1 ? 'visible' : 'none'\n}, [af && af.value ? af.value.length : 0])\n"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "properties": {
+                      "addition": {
+                        "type": "void",
+                        "x-component": "ArrayTable.Addition",
+                        "title": "新增包含匹配模式",
+                        "x-component-props": {
+                          "title": "新增包含匹配模式",
+                          "type": "dashed",
+                          "block": false,
+                          "defaultValue": {
+                            "value": ""
+                          },
+                          "style": {
+                            "width": 200
+                          }
+                        }
+                      }
+                    },
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请至少添加一个包含匹配模式"
+                      }
+                    ]
+                  },
+                  "excludeMatches": {
+                    "type": "array",
+                    "title": "排除匹配模式",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "tooltip": "excludeMatches 指定哪些页面的 URL 不能够触发用户脚本的注入。是一个字符串数组，每个字符串都是一个排除匹配模式，用于定义脚本不应当注入的页面"
+                    },
+                    "x-component": "ArrayTable",
+                    "x-component-props": {
+                      "bordered": false,
+                      "showHeader": false,
+                      "pagination": false,
+                      "size": "middle"
+                    },
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "valueColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": ""
+                          },
+                          "properties": {
+                            "value": {
+                              "type": "string",
+                              "x-component": "Input",
+                              "x-component-props": {
+                                "placeholder": "请输入排除匹配模式"
+                              }
+                            }
+                          }
+                        },
+                        "removeColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "",
+                            "width": 40,
+                            "align": "center"
+                          },
+                          "properties": {
+                            "removeBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "type": "text",
+                                "size": "small",
+                                "icon": "MinusCircleOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('excludeMatches') + 'excludeMatches'.length)\nconst af = $self.query(re).take()\n$props({\n  onClick: () => {\n    const result = $utils.getArrayFieldRowAndIndex($self, 'ArrayTable')\n    if (af && af.value && result.index != null) {\n      af.value = af.value.filter((_, i) => i !== result.index)\n    }\n  },\n})\n$effect(() => {\n  $self.display = af && af.value && af.value.length >= 1 ? 'visible' : 'none'\n}, [af && af.value ? af.value.length : 0])\n"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "properties": {
+                      "addition": {
+                        "type": "void",
+                        "x-component": "ArrayTable.Addition",
+                        "title": "新增排除匹配模式",
+                        "x-component-props": {
+                          "title": "新增排除匹配模式",
+                          "type": "dashed",
+                          "block": false,
+                          "defaultValue": {
+                            "value": ""
+                          },
+                          "style": {
+                            "width": 200
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "js": {
+                    "type": "array",
+                    "title": "代码块",
+                    "x-decorator": "FormItem",
+                    "x-decorator-props": {
+                      "tooltip": "js 要注入的代码块"
+                    },
+                    "x-component": "ArrayTable",
+                    "x-component-props": {
+                      "bordered": false,
+                      "showHeader": false,
+                      "pagination": false,
+                      "size": "middle"
+                    },
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "codeColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": ""
+                          },
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "x-component": "CodeEditor",
+                              "x-component-props": {
+                                "language": "javascript",
+                                "height": 300
+                              }
+                            }
+                          }
+                        },
+                        "removeColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "",
+                            "width": 40,
+                            "align": "center"
+                          },
+                          "properties": {
+                            "removeBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "type": "text",
+                                "size": "small",
+                                "icon": "MinusCircleOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const re = $self.address.entire.substring(0, $self.address.entire.lastIndexOf('js') + 'js'.length)\nconst af = $self.query(re).take()\n$props({\n  onClick: () => {\n    const result = $utils.getArrayFieldRowAndIndex($self, 'ArrayTable')\n    if (af && af.value && result.index != null) {\n      af.value = af.value.filter((_, i) => i !== result.index)\n    }\n  },\n})\n$effect(() => {\n  $self.display = af && af.value && af.value.length >= 1 ? 'visible' : 'none'\n}, [af && af.value ? af.value.length : 0])\n"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "properties": {
+                      "addition": {
+                        "type": "void",
+                        "x-component": "ArrayTable.Addition",
+                        "title": "新增代码块",
+                        "x-component-props": {
+                          "title": "新增代码块",
+                          "type": "dashed",
+                          "block": false,
+                          "defaultValue": {
+                            "code": ""
+                          },
+                          "style": {
+                            "width": 200
+                          }
+                        }
+                      }
+                    },
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请至少添加一个代码块"
+                      }
+                    ]
+                  }
+                }
+              },
+              "actionBar": {
+                "type": "void",
+                "x-component": "Div",
+                "x-component-props": {
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-end",
+                    "marginTop": 16
+                  }
+                },
+                "properties": {
+                  "actionSpace": {
+                    "type": "void",
+                    "x-component": "Space",
+                    "properties": {
+                      "cancelBtn": {
+                        "type": "string",
+                        "x-component": "Button",
+                        "x-component-props": {
+                          "children": "取消",
+                          "size": "large"
+                        },
+                        "x-reactions": {
+                          "fulfill": {
+                            "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$props({ onClick: () => rf.dismissDrawer() })\n"
+                          }
+                        }
+                      },
+                      "saveBtn": {
+                        "type": "string",
+                        "x-component": "Button",
+                        "x-component-props": {
+                          "children": "保存",
+                          "type": "primary",
+                          "size": "large",
+                          "icon": "SaveOutlined"
+                        },
+                        "x-reactions": {
+                          "fulfill": {
+                            "run": "const rf = $utils.getBlockRootField($self)\n\nif (!rf || !rf.state) return\n\n$props({ onClick: () => rf.handleSaveDrawer() })\n$effect(() => {\n  $self.display = rf.state.drawerStatus === '查看' ? 'none' : 'visible'\n}, [rf.state.drawerStatus])\n"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

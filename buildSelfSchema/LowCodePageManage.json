@@ -1,0 +1,426 @@
+{
+  "form": {
+    "layout": "vertical"
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "lowCodePageManageDiv": {
+        "type": "void",
+        "x-component": "Div",
+        "x-component-props": {
+          "style": {
+            "padding": 20
+          }
+        },
+        "x-reactions": {
+          "fulfill": {
+            "run": "const re = $self.address.entire; $utils.setAsBlockRoot($self)\nconst INDEX_KEY = '__DO_NOT_USE_THIS_PROPERTY_index__'\nconst PAGE_ID_PREFIX = 'pageId_'\n$self.state = $observable({ loading: false, list: [], drawerStatus: '隐藏', currentItem: null })\n$self.cleanRow = (row) => {\n  const c = {}\n  Object.keys(row || {}).forEach((k) => {\n    if (k !== INDEX_KEY && !k.endsWith('Display')) c[k] = row[k]\n  })\n  return c\n}\n$self.getNewPageDefaultSchema = async (pageId) => {\n  const assistantConfig = await $utils.getAssistantConfig()\n  if (!assistantConfig) {\n    $message.error('获取扩展配置信息失败')\n    throw new Error('获取扩展配置信息失败')\n  }\n  const defaultSchemaMap = assistantConfig.defaultSchema || {}\n  const url = defaultSchemaMap[pageId] || defaultSchemaMap['demo']\n  if (!url) {\n    $message.error('未找到默认页面配置，请检查扩展配置中的 defaultSchema')\n    throw new Error('未找到默认页面配置')\n  }\n  try {\n    return await (await $chrome.fetch(url)).json()\n  } catch (e) {\n    $message.error('获取默认页面配置失败')\n    throw new Error('获取默认页面配置失败')\n  }\n}\n$self.refreshList = async () => {\n  try {\n    $self.state.loading = true\n    const record = (await $chrome.storage.local.get()) || {}\n    const result = []\n    Object.keys(record).forEach((key) => {\n      if (key.startsWith(PAGE_ID_PREFIX)) {\n        result.push(record[key])\n      }\n    })\n    const knownPages = [\n      ['elementsSidebarPane', '元素边栏面板页'],\n      ['devtoolsPanel', '开发者面板页'],\n      ['sidePanel', '边栏页'],\n      ['popup', '弹出式窗口'],\n      ['newtab', '新标签页'],\n      ['demo', '各种示例(待完善)'],\n    ]\n    const createPromises = knownPages.map(([pageId, name]) => {\n      if (result.find((p) => p.id === pageId)) return Promise.resolve(null)\n      return $self.getNewPageDefaultSchema(pageId)\n        .then((defaultSchema) => {\n          const newPage = { id: pageId, name: name, desc: name, jsonSchema: JSON.stringify(defaultSchema), isBuiltIn: true }\n          return $chrome.storage.local.set({ [PAGE_ID_PREFIX + pageId]: newPage }).then(() => newPage)\n        })\n        .catch((e) => {\n          $logger.warn('创建内置页面失败: ' + pageId, e)\n          return null\n        })\n    })\n    const createdPages = (await Promise.all(createPromises)).filter(Boolean)\n    createdPages.forEach((p) => result.unshift(p))\n    $self.state.list = result\n      .sort((a, b) => (b.updateTime || 0) - (a.updateTime || 0))\n      .map((p) => ({\n        ...p,\n        updateTimeDisplay: p.updateTime ? $dayjs(p.updateTime).format('YYYY-MM-DD HH:mm:ss') : '',\n      }))\n  } catch (e) {\n    $logger.error('请求页面列表失败', e)\n    $message.error('请求页面列表失败')\n  } finally {\n    $self.state.loading = false\n  }\n}\n$self.savePage = async (page) => {\n  page = $self.cleanRow(page)\n  await $chrome.storage.local.set({ [PAGE_ID_PREFIX + page.id]: { ...page, updateTime: Date.now() } })\n}\n$self.removePage = async (id) => {\n  await $chrome.storage.local.remove(PAGE_ID_PREFIX + id)\n}\n$self.openLowCodeEditorPage = async (lowCodeType, record) => {\n  let url = 'lowcode.html?lowCodeType=' + lowCodeType + '&pageId=' + record.id\n  const devWeb = $utils.getQueryString('devWeb')\n  if (devWeb === '1') {\n    url += '&devWeb=1'\n  }\n  url = await $chrome.runtime.getURL(url)\n  await $chrome.tabs.create({ url: url })\n}\n$self.showDrawer = (row, status) => {\n  const dialog = $self.query(re + '.editDrawer').take()\n  if (!dialog) return\n  $self.state.currentItem = row ? $self.cleanRow(row) : null\n  $self.state.drawerStatus = status\n  dialog.value = row ? { name: row.name, desc: row.desc } : { name: '', desc: '' }\n  dialog.setPattern('editable')\n  dialog.setComponentProps({ open: true, title: status + '页面' })\n}\n$self.dismissDrawer = () => {\n  $self.state.drawerStatus = '隐藏'\n  $self.state.currentItem = null\n  const dialog = $self.query(re + '.editDrawer').take()\n  if (dialog) dialog.componentProps.open = false\n}\n$self.handleSaveDrawer = () => {\n  const dialog = $self.query(re + '.editDrawer').take()\n  if (!dialog) return\n  dialog\n    .validate()\n    .then(async () => {\n      const form = dialog.value || {}\n      const status = $self.state.drawerStatus\n      if (status === '新增') {\n        try {\n          const defaultSchema = await $self.getNewPageDefaultSchema(form.name)\n          await $self.savePage({ name: form.name, desc: form.desc, id: $dayjs().format('YYYYMMDDHHmmssSSS'), jsonSchema: JSON.stringify(defaultSchema), isBuiltIn: false })\n          $message.success('新增页面成功')\n          $self.dismissDrawer()\n          $self.refreshList()\n        } catch (e) {\n          $message.error('新增页面失败')\n        }\n      } else if (status === '编辑') {\n        try {\n          await $self.savePage({ ...$self.state.currentItem, ...form })\n          $message.success('编辑页面基础信息成功')\n          $self.dismissDrawer()\n          $self.refreshList()\n        } catch (e) {\n          $message.error('编辑页面基础信息失败')\n        }\n      }\n    })\n    .catch((e) => $logger.info('校验失败', e))\n}\n$effect(() => {\n  $self.refreshList()\n  try {\n    $utils.getVipConfig()\n  } catch (e) {}\n}, [])\n"
+          }
+        },
+        "properties": {
+          "topSpace": {
+            "type": "void",
+            "x-component": "Space",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "end"
+              }
+            },
+            "properties": {
+              "batchImportBtn": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "children": "从文件批量导入页面（覆盖 ID）",
+                  "size": "middle",
+                  "icon": "ImportOutlined"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({\n  onClick: async () => {\n    const { canceled, result } = await $utils.importJsonFromFile()\n    if (canceled || !result) return\n    const arr = Array.isArray(result) ? result : [result]\n    if (arr.length === 0) {\n      $message.error('从文件导入的内容为空')\n      return\n    }\n    for (let i = 0; i < arr.length; i++) {\n      const p = arr[i]\n      if (!p || !p.id || !p.name || !p.desc || !p.jsonSchema) {\n        $message.error('第 ' + (i + 1) + ' 个页面格式错误，已终止导入')\n        return\n      }\n      try {\n        JSON.parse(p.jsonSchema)\n      } catch (e) {\n        $message.error('第 ' + (i + 1) + ' 个页面的 jsonSchema 格式错误，已终止导入')\n        return\n      }\n    }\n    try {\n      for (const p of arr) {\n        await rf.savePage(p)\n      }\n      await rf.refreshList()\n      $message.success('批量导入页面成功，共 ' + arr.length + ' 个')\n    } catch (e) {\n      $logger.error('批量导入页面失败', e)\n      $message.error('批量导入页面失败：' + (e && e.message ? e.message : String(e)))\n    }\n  },\n})\n"
+                  }
+                }
+              },
+              "batchExportBtn": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "children": "批量导出页面到文件",
+                  "size": "middle",
+                  "icon": "ExportOutlined"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({\n  onClick: async () => {\n    const list = rf.state.list || []\n    if (list.length === 0) {\n      $message.error('没有可导出的页面')\n      return\n    }\n    let extName = '上帝小助手'\n    try {\n      const manifest = await $chrome.runtime.getManifest()\n      extName = (manifest && manifest.name) || extName\n    } catch (e) {}\n    const data = list.map((item) => rf.cleanRow(item))\n    $utils.exportJsonToFile(JSON.stringify(data), extName + '导出页面-' + list.length + '个-' + $dayjs().format('YYYYMMDD_HHmmss') + '.json')\n  },\n})\n"
+                  }
+                }
+              },
+              "addBtn": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "children": "新增页面",
+                  "type": "primary",
+                  "size": "middle",
+                  "icon": "PlusCircleOutlined"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({ onClick: () => rf.showDrawer(null, '新增') })\n"
+                  }
+                }
+              }
+            }
+          },
+          "pageTable": {
+            "type": "array",
+            "x-decorator": "FormItem",
+            "x-component": "ArrayTable",
+            "x-component-props": {
+              "bordered": true,
+              "rowKey": "id",
+              "size": "large",
+              "pagination": {
+                "pageSize": 20
+              },
+              "style": {
+                "marginTop": 20,
+                "height": "100%"
+              }
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$effect(() => { $self.value = rf.state.list }, [rf.state.list])\n$effect(() => { $props({ loading: rf.state.loading }) }, [rf.state.loading])\n"
+              }
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "idColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "页面 ID",
+                    "width": 174,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "name": "id",
+                      "x-component": "Text",
+                      "x-component-props": {}
+                    }
+                  }
+                },
+                "nameColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "页面名称",
+                    "align": "center"
+                  },
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "name": "name",
+                      "x-component": "Text",
+                      "x-component-props": {}
+                    }
+                  }
+                },
+                "descColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "描述",
+                    "align": "center"
+                  },
+                  "properties": {
+                    "desc": {
+                      "type": "string",
+                      "name": "desc",
+                      "x-component": "Text",
+                      "x-component-props": {}
+                    }
+                  }
+                },
+                "updateTimeColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "更新时间",
+                    "width": 175,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "updateTimeDisplay": {
+                      "type": "string",
+                      "name": "updateTimeDisplay",
+                      "x-component": "Text",
+                      "x-component-props": {}
+                    }
+                  }
+                },
+                "operateColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "操作",
+                    "width": 320,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "operateSpace": {
+                      "type": "void",
+                      "x-component": "Space",
+                      "x-component-props": {
+                        "direction": "vertical"
+                      },
+                      "properties": {
+                        "rowSpace1": {
+                          "type": "void",
+                          "x-component": "Space",
+                          "properties": {
+                            "deletePopconfirm": {
+                              "type": "void",
+                              "x-component": "Popconfirm",
+                              "x-component-props": {
+                                "title": "确认删除该页面吗？",
+                                "okText": "确认删除",
+                                "cancelText": "取消",
+                                "okType": "danger",
+                                "icon": "QuestionCircleOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$effect(() => {\n  const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n  $props({ disabled: !!(row && row.isBuiltIn) })\n}, [rf.state.list])\n$props({\n  onConfirm: async () => {\n    const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n    if (!row) return\n    try {\n      await rf.removePage(row.id)\n      $message.success('删除页面成功')\n      rf.refreshList()\n    } catch (e) {\n      $message.error('删除页面失败')\n    }\n  },\n})\n"
+                                }
+                              },
+                              "properties": {
+                                "deleteBtn": {
+                                  "type": "string",
+                                  "x-component": "Button",
+                                  "x-component-props": {
+                                    "children": "删除",
+                                    "danger": true,
+                                    "icon": "DeleteOutlined"
+                                  }
+                                }
+                              }
+                            },
+                            "editBaseBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "编辑基础信息",
+                                "type": "dashed",
+                                "icon": "FormOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({ onClick: () => { const row = $utils.getArrayFieldRow($self, 'ArrayTable'); if (row) rf.showDrawer(row, '编辑') } })\n"
+                                }
+                              }
+                            },
+                            "previewBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "查看页面",
+                                "type": "primary",
+                                "icon": "EyeOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({ onClick: () => { const row = $utils.getArrayFieldRow($self, 'ArrayTable'); if (row) rf.openLowCodeEditorPage('preview', row) } })\n"
+                                }
+                              }
+                            },
+                            "editPageBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "编辑页面",
+                                "type": "primary",
+                                "icon": "EditOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({ onClick: () => { const row = $utils.getArrayFieldRow($self, 'ArrayTable'); if (row) rf.openLowCodeEditorPage('editor', row) } })\n"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "rowSpace2": {
+                          "type": "void",
+                          "x-component": "Space",
+                          "properties": {
+                            "copyBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "复制页面",
+                                "icon": "CopyOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({\n  onClick: async () => {\n    const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n    if (!row) return\n    try {\n      const newPage = { ...rf.cleanRow(row), name: row.name + '-副本', desc: row.desc + '-副本', id: $dayjs().format('YYYYMMDDHHmmssSSS'), isBuiltIn: false }\n      await rf.savePage(newPage)\n      $message.success('复制页面成功')\n      await rf.refreshList()\n      rf.showDrawer(newPage, '编辑')\n    } catch (e) {\n      $message.error('复制页面失败')\n    }\n  },\n})\n"
+                                }
+                              }
+                            },
+                            "exportBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "导出页面到文件",
+                                "icon": "ExportOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({\n  onClick: async () => {\n    const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n    if (!row) return\n    const extName = '上帝小助手'\n    $utils.exportJsonToFile(JSON.stringify(rf.cleanRow(row)), extName + '导出页面-' + row.id + '-' + (row.name || '').replace(/[\\\\/:*?\"<>|]/g, '_') + '-' + $dayjs().format('YYYYMMDD_HHmmss') + '.json')\n  },\n})\n"
+                                }
+                              }
+                            },
+                            "importBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "从文件导入页面（不覆盖 ID）",
+                                "icon": "ImportOutlined"
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({\n  onClick: async () => {\n    const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n    if (!row) return\n    const { canceled, result } = await $utils.importJsonFromFile()\n    if (canceled) return\n    if (!result || !result.id || !result.name || !result.desc || !result.jsonSchema) {\n      $message.error('从文件导入的内容格式错误')\n      return\n    }\n    try {\n      JSON.parse(result.jsonSchema)\n    } catch (e) {\n      $message.error('从文件导入的内容格式错误')\n      return\n    }\n    if (result.id === row.id) {\n      try {\n        await rf.savePage({ ...result, isBuiltIn: row.isBuiltIn })\n        $message.success('从文件导入页面成功')\n        rf.refreshList()\n      } catch (e) {\n        $message.error('从文件导入页面失败')\n      }\n    } else {\n      $modal.confirm({\n        title: '从文件导入页面「' + result.name + '」的 id「' + result.id + '」和当前选中的页面「' + row.name + '」的 id「' + row.id + '」不同，确认导入除 id 以外的页面信息吗？',\n        okText: '确认',\n        onOk: async () => {\n          try {\n            await rf.savePage({ ...result, id: row.id, isBuiltIn: row.isBuiltIn })\n            $message.success('从文件导入页面成功')\n            rf.refreshList()\n          } catch (e) {\n            $message.error('从文件导入页面失败')\n          }\n        },\n      })\n    }\n  },\n})\n"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "editDrawer": {
+            "type": "object",
+            "x-component": "Drawer",
+            "x-component-props": {
+              "title": "新增页面",
+              "size": "large",
+              "destroyOnClose": true
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({ onClose: () => rf.dismissDrawer() })\n"
+              }
+            },
+            "properties": {
+              "formLayout": {
+                "type": "void",
+                "x-component": "FormLayout",
+                "x-component-props": {
+                  "layout": "horizontal",
+                  "labelCol": 5,
+                  "wrapperCol": 19
+                },
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "页面名称",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
+                    "x-component-props": {
+                      "placeholder": "请输入页面名称，最大长度为 15"
+                    },
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请输入页面名称"
+                      },
+                      {
+                        "max": 15,
+                        "message": "页面名称不能超过 15 个字符"
+                      }
+                    ]
+                  },
+                  "desc": {
+                    "type": "string",
+                    "title": "页面描述",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input.TextArea",
+                    "x-component-props": {
+                      "placeholder": "请输入页面描述，最大长度为 30"
+                    },
+                    "x-validator": [
+                      {
+                        "required": true,
+                        "message": "请输入页面描述"
+                      },
+                      {
+                        "max": 30,
+                        "message": "页面描述不能超过 30 个字符"
+                      }
+                    ]
+                  }
+                }
+              },
+              "actionBar": {
+                "type": "void",
+                "x-component": "Div",
+                "x-component-props": {
+                  "style": {
+                    "display": "flex",
+                    "justifyContent": "flex-end",
+                    "marginTop": 16
+                  }
+                },
+                "properties": {
+                  "actionSpace": {
+                    "type": "void",
+                    "x-component": "Space",
+                    "properties": {
+                      "cancelBtn": {
+                        "type": "string",
+                        "x-component": "Button",
+                        "x-component-props": {
+                          "children": "取消",
+                          "size": "large"
+                        },
+                        "x-reactions": {
+                          "fulfill": {
+                            "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({ onClick: () => rf.dismissDrawer() })\n"
+                          }
+                        }
+                      },
+                      "saveBtn": {
+                        "type": "string",
+                        "x-component": "Button",
+                        "x-component-props": {
+                          "children": "保存",
+                          "type": "primary",
+                          "size": "large",
+                          "icon": "SaveOutlined"
+                        },
+                        "x-reactions": {
+                          "fulfill": {
+                            "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$props({ onClick: () => rf.handleSaveDrawer() })\n"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
