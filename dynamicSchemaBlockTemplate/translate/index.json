@@ -65,7 +65,8 @@
                 "style": {
                   "width": "20px",
                   "height": "20px"
-                }
+                },
+                "width": 200
               },
               "x-designable-id": "mx17k89jp3m",
               "x-index": 0,
@@ -235,12 +236,12 @@
               "apiUrl": "https://api.deepseek.com/v1/chat/completions",
               "modelDatasource": [
                 {
-                  "title": "deepseek-chat",
-                  "value": "deepseek-chat"
+                  "title": "deepseek-v4-flash",
+                  "value": "deepseek-v4-flash"
                 },
                 {
-                  "title": "deepseek-reasoner",
-                  "value": "deepseek-reasoner"
+                  "title": "deepseek-v4-pro",
+                  "value": "deepseek-v4-pro"
                 }
               ]
             },
@@ -251,12 +252,28 @@
               "apiUrl": "https://api.siliconflow.cn/v1/chat/completions",
               "modelDatasource": [
                 {
-                  "title": "deepseek-ai/DeepSeek-V3",
-                  "value": "deepseek-ai/DeepSeek-V3"
+                  "title": "deepseek-ai/DeepSeek-V4-Flash",
+                  "value": "deepseek-ai/DeepSeek-V4-Flash"
                 },
                 {
-                  "title": "deepseek-ai/DeepSeek-R1",
-                  "value": "deepseek-ai/DeepSeek-R1"
+                  "title": "deepseek-ai/DeepSeek-V4-Pro",
+                  "value": "deepseek-ai/DeepSeek-V4-Pro"
+                }
+              ]
+            },
+            {
+              "children": [],
+              "label": "nvidia",
+              "value": "nvidia",
+              "apiUrl": "https://integrate.api.nvidia.com/v1/chat/completions",
+              "modelDatasource": [
+                {
+                  "title": "deepseek-ai/deepseek-v4-flash",
+                  "value": "deepseek-ai/deepseek-v4-flash"
+                },
+                {
+                  "title": "deepseek-ai/deepseek-v4-pro",
+                  "value": "deepseek-ai/deepseek-v4-pro"
                 }
               ]
             },
