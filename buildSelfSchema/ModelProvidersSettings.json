@@ -1,0 +1,434 @@
+{
+  "form": {
+    "labelCol": 6,
+    "wrapperCol": 18
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "modalSettingsCardDiv": {
+        "type": "void",
+        "x-component": "Div",
+        "x-component-props": {
+          "style": {
+            "padding": "20px"
+          }
+        },
+        "name": "modalSettingsCardDiv",
+        "x-reactions": {
+          "fulfill": {
+            "run": "$utils.setAsBlockRoot($self)\nconst rootEntire = $self.address.entire\nconst STORAGE_KEY = 'modelProviderConfig'\nconst DEFAULT_PROVIDERS = [\n  { id: 'amazon-bedrock', baseUrl: 'https://bedrock-runtime.us-east-1.amazonaws.com/model/invoke', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'amazon.nova-2-lite-v1:0' },\n    { model: 'amazon.nova-lite-v1:0' },\n    { model: 'amazon.nova-micro-v1:0' }\n  ] },\n  { id: 'ant-ling', baseUrl: 'https://api.ant-ling.com/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'Ling-2.6-1T' },\n    { model: 'Ling-2.6-flash' },\n    { model: 'Ring-2.6-1T' }\n  ] },\n  { id: 'anthropic', baseUrl: 'https://api.anthropic.com/v1/messages', api: 'anthropic-messages', apiKey: '', custom: false, models: [\n    { model: 'claude-fable-5' },\n    { model: 'claude-haiku-4-5' },\n    { model: 'claude-haiku-4-5-20251001' }\n  ] },\n  { id: 'azure-openai-responses', baseUrl: 'https://{RESOURCE}.openai.azure.com/openai/v1/responses', api: 'openai-responses', apiKey: '', custom: false, models: [\n    { model: 'gpt-4' },\n    { model: 'gpt-4-turbo' },\n    { model: 'gpt-4.1' }\n  ] },\n  { id: 'cerebras', baseUrl: 'https://api.cerebras.ai/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'gemma-4-31b' },\n    { model: 'gpt-oss-120b' },\n    { model: 'zai-glm-4.7' }\n  ] },\n  { id: 'cloudflare-ai-gateway', baseUrl: 'https://gateway.ai.cloudflare.com/v1/{ACCOUNT_ID}/{GATEWAY_ID}/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'workers-ai/@cf/moonshotai/kimi-k2.5' },\n    { model: 'workers-ai/@cf/moonshotai/kimi-k2.6' },\n    { model: 'workers-ai/@cf/nvidia/nemotron-3-120b-a12b' }\n  ] },\n  { id: 'cloudflare-workers-ai', baseUrl: 'https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/ai/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: '@cf/google/gemma-4-26b-a4b-it' },\n    { model: '@cf/ibm-granite/granite-4.0-h-micro' },\n    { model: '@cf/meta/llama-3.3-70b-instruct-fp8-fast' }\n  ] },\n  { id: 'deepseek', baseUrl: 'https://api.deepseek.com/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'deepseek-v4-flash' },\n    { model: 'deepseek-v4-pro' }\n  ] },\n  { id: 'fireworks', baseUrl: 'https://api.fireworks.ai/inference/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'accounts/fireworks/models/glm-5p2' },\n    { model: 'accounts/fireworks/routers/glm-5p2-fast' }\n  ] },\n  { id: 'github-copilot', baseUrl: 'https://api.individual.githubcopilot.com/responses', api: 'openai-responses', apiKey: '', custom: false, models: [\n    { model: 'claude-fable-5' },\n    { model: 'gemini-2.5-pro' },\n    { model: 'gemini-3-flash-preview' }\n  ] },\n  { id: 'google', baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'deep-research-max-preview-04-2026' },\n    { model: 'deep-research-preview-04-2026' },\n    { model: 'gemini-2.0-flash' }\n  ] },\n  { id: 'google-vertex', baseUrl: 'https://{LOCATION}-aiplatform.googleapis.com/v1beta1/openai/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'gemini-2.5-flash' },\n    { model: 'gemini-2.5-flash-lite' },\n    { model: 'gemini-2.5-pro' }\n  ] },\n  { id: 'groq', baseUrl: 'https://api.groq.com/openai/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'llama-3.1-8b-instant' },\n    { model: 'llama-3.3-70b-versatile' },\n    { model: 'meta-llama/llama-4-scout-17b-16e-instruct' }\n  ] },\n  { id: 'huggingface', baseUrl: 'https://router.huggingface.co/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'MiniMaxAI/MiniMax-M2' },\n    { model: 'MiniMaxAI/MiniMax-M2.1' },\n    { model: 'MiniMaxAI/MiniMax-M2.5' }\n  ] },\n  { id: 'kimi-coding', baseUrl: 'https://api.kimi.com/coding/v1/messages', api: 'anthropic-messages', apiKey: '', custom: false, models: [\n    { model: 'k3' },\n    { model: 'k3-256k' },\n    { model: 'kimi-for-coding' }\n  ] },\n  { id: 'minimax', baseUrl: 'https://api.minimax.io/v1/messages', api: 'anthropic-messages', apiKey: '', custom: false, models: [\n    { model: 'MiniMax-M2.7' },\n    { model: 'MiniMax-M2.7-highspeed' },\n    { model: 'MiniMax-M3' }\n  ] },\n  { id: 'minimax-cn', baseUrl: 'https://api.minimaxi.com/v1/messages', api: 'anthropic-messages', apiKey: '', custom: false, models: [\n    { model: 'MiniMax-M2.7' },\n    { model: 'MiniMax-M2.7-highspeed' },\n    { model: 'MiniMax-M3' }\n  ] },\n  { id: 'mistral', baseUrl: 'https://api.mistral.ai/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'codestral-latest' },\n    { model: 'devstral-2512' },\n    { model: 'devstral-latest' }\n  ] },\n  { id: 'moonshotai', baseUrl: 'https://api.moonshot.ai/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'kimi-k2-0711-preview' },\n    { model: 'kimi-k2-0905-preview' },\n    { model: 'kimi-k2-thinking' }\n  ] },\n  { id: 'moonshotai-cn', baseUrl: 'https://api.moonshot.cn/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'kimi-k2-0711-preview' },\n    { model: 'kimi-k2-0905-preview' },\n    { model: 'kimi-k2-thinking' }\n  ] },\n  { id: 'nvidia', baseUrl: 'https://integrate.api.nvidia.com/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'meta/llama-3.1-70b-instruct' },\n    { model: 'meta/llama-3.1-8b-instruct' },\n    { model: 'meta/llama-3.2-11b-vision-instruct' }\n  ] },\n  { id: 'openai', baseUrl: 'https://api.openai.com/v1/responses', api: 'openai-responses', apiKey: '', custom: false, models: [\n    { model: 'gpt-4' },\n    { model: 'gpt-4-turbo' },\n    { model: 'gpt-4.1' }\n  ] },\n  { id: 'opencode', baseUrl: 'https://opencode.ai/zen/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'big-pickle' },\n    { model: 'deepseek-v4-flash' },\n    { model: 'deepseek-v4-flash-free' }\n  ] },\n  { id: 'opencode-go', baseUrl: 'https://opencode.ai/zen/go/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'deepseek-v4-flash' },\n    { model: 'deepseek-v4-pro' },\n    { model: 'glm-5.1' }\n  ] },\n  { id: 'openrouter', baseUrl: 'https://openrouter.ai/api/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'ai21/jamba-large-1.7' },\n    { model: 'aion-labs/aion-2.0' },\n    { model: 'aion-labs/aion-3.0' }\n  ] },\n  { id: 'qwen-token-plan', baseUrl: 'https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'MiniMax-M2.5' },\n    { model: 'deepseek-v3.2' },\n    { model: 'deepseek-v4-flash' }\n  ] },\n  { id: 'qwen-token-plan-cn', baseUrl: 'https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'MiniMax-M2.5' },\n    { model: 'deepseek-v3.2' },\n    { model: 'deepseek-v4-flash' }\n  ] },\n  { id: 'together', baseUrl: 'https://api.together.ai/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'MiniMaxAI/MiniMax-M2.7' },\n    { model: 'MiniMaxAI/MiniMax-M3' },\n    { model: 'Qwen/Qwen2.5-7B-Instruct-Turbo' }\n  ] },\n  { id: 'vercel-ai-gateway', baseUrl: 'https://ai-gateway.vercel.sh/v1/messages', api: 'anthropic-messages', apiKey: '', custom: false, models: [\n    { model: 'alibaba/qwen-3-14b' },\n    { model: 'alibaba/qwen-3-235b' },\n    { model: 'alibaba/qwen-3-30b' }\n  ] },\n  { id: 'xai', baseUrl: 'https://api.x.ai/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'grok-4.3' },\n    { model: 'grok-build-0.1' }\n  ] },\n  { id: 'xiaomi', baseUrl: 'https://api.xiaomimimo.com/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'mimo-v2-flash' },\n    { model: 'mimo-v2-omni' },\n    { model: 'mimo-v2-pro' }\n  ] },\n  { id: 'xiaomi-token-plan-ams', baseUrl: 'https://token-plan-ams.xiaomimimo.com/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'mimo-v2-pro' },\n    { model: 'mimo-v2.5' },\n    { model: 'mimo-v2.5-pro' }\n  ] },\n  { id: 'xiaomi-token-plan-cn', baseUrl: 'https://token-plan-cn.xiaomimimo.com/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'mimo-v2-pro' },\n    { model: 'mimo-v2.5' },\n    { model: 'mimo-v2.5-pro' }\n  ] },\n  { id: 'xiaomi-token-plan-sgp', baseUrl: 'https://token-plan-sgp.xiaomimimo.com/v1/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'mimo-v2-pro' },\n    { model: 'mimo-v2.5' },\n    { model: 'mimo-v2.5-pro' }\n  ] },\n  { id: 'zai', baseUrl: 'https://api.z.ai/api/coding/paas/v4/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'glm-4.5-air' },\n    { model: 'glm-4.7' },\n    { model: 'glm-5-turbo' }\n  ] },\n  { id: 'zai-coding-cn', baseUrl: 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions', api: 'openai-completions', apiKey: '', custom: false, models: [\n    { model: 'glm-4.5-air' },\n    { model: 'glm-4.7' },\n    { model: 'glm-5-turbo' }\n  ] }\n]\n$self.state = $observable({ modelProviderConfig: null, presetProviders: DEFAULT_PROVIDERS })\n$self.fetchModelProviders = async () => {\n  if ($self.state.modelProviderConfig) return $self.state.modelProviderConfig\n  const res = await $chrome.storage.local.get(STORAGE_KEY)\n  const list = res && Array.isArray(res[STORAGE_KEY]) ? res[STORAGE_KEY] : []\n  $self.state.modelProviderConfig = list\n  return list\n}\n$self.saveModelProviders = async (list) => {\n  const plain = JSON.parse(JSON.stringify(list))\n  await $chrome.storage.local.set({ [STORAGE_KEY]: plain })\n  $self.state.modelProviderConfig = plain\n}\n$self.showAddOrUpdateProviderDialog = (provider) => {\n  const dlg = $self.query(rootEntire + '.addOrUpdateProviderDialog').take()\n  if (!dlg) return\n  let form\n  if (provider) {\n    const isCustom = provider.custom !== false\n    form = {\n      providerSelect: isCustom ? '__custom__' : provider.id,\n      providerName: provider.name || '',\n      baseUrl: provider.baseUrl || '',\n      api: provider.api || 'openai-completions',\n      apiKey: provider.apiKey || '',\n      models: JSON.parse(JSON.stringify(provider.models || [])),\n      custom: isCustom,\n      id: provider.id || ''\n    }\n  } else {\n    form = { providerSelect: '__custom__', providerName: '', baseUrl: '', api: 'openai-completions', apiKey: '', models: [], custom: true, id: '' }\n  }\n  dlg.value = form\n  dlg.setComponentProps({ open: true, title: provider ? '修改模型提供方' : '添加模型提供方' })\n}\n$self.addOrUpdateProvider = async (form) => {\n  const list = (await $self.fetchModelProviders()).slice()\n  const selectVal = form.providerSelect\n  const isEdit = !!form.id\n  let id, name, custom\n  if (selectVal === '__custom__') {\n    custom = true\n    name = (form.providerName || '').trim()\n    if (!name) { $message.error('提供方名称不能为空'); return false }\n    id = isEdit ? form.id : ('custom-' + Date.now().toString(36))\n  } else {\n    const preset = DEFAULT_PROVIDERS.find((p) => p.id === selectVal)\n    if (!preset) { $message.error('提供方无效'); return false }\n    if (!isEdit && list.some((p) => p.id === preset.id)) {\n      $message.error('该提供方已添加')\n      return false\n    }\n    custom = false\n    name = preset.name\n    id = preset.id\n  }\n  const baseUrl = (form.baseUrl || '').trim()\n  if (!baseUrl) { $message.error('接口地址不能为空'); return false }\n  const models = (form.models || []).map((m) => { const mid = (m.model || '').trim(); return { model: mid } }).filter((m) => m.model)\n  const clean = { id, name, baseUrl, api: form.api || 'openai-completions', apiKey: form.apiKey || '', models, custom }\n  const existIdx = list.findIndex((p) => p.id === clean.id)\n  if (existIdx !== -1) list[existIdx] = clean\n  else list.push(clean)\n  await $self.saveModelProviders(list)\n  $message.success(isEdit ? '修改成功' : '添加成功')\n  return true\n}\n$self.deleteProvider = async (provider) => {\n  let list = (await $self.fetchModelProviders()).slice()\n  list = list.filter((p) => p.id !== provider.id)\n  await $self.saveModelProviders(list)\n  $message.success('删除成功')\n}\n\n$self.testModel = async (apiKey, baseUrl, api, model) => {\n  const key = String(apiKey || '').trim()\n  if (!key) return { ok: false, error: '尚未填写 API Key' }\n  let endpoint = String(baseUrl || '').trim().replace(/\\/+$/, '')\n  if (!endpoint) return { ok: false, error: '尚未填写接口地址' }\n  const headers = { 'Content-Type': 'application/json' }\n  let body\n  if (api === 'anthropic-messages') {\n    if (!/\\/messages$/.test(endpoint)) endpoint += '/messages'\n    body = { model, messages: [{ role: 'user', content: '你好' }], temperature: 0.3, max_tokens: 256, stream: false }\n    headers['x-api-key'] = key\n    headers['anthropic-version'] = '2023-06-01'\n  } else if (api === 'openai-responses') {\n    if (!/\\/responses$/.test(endpoint)) endpoint += '/responses'\n    body = { model, input: [{ role: 'user', content: '你好' }], temperature: 0.3, stream: false }\n    headers['Authorization'] = 'Bearer ' + key\n  } else {\n    if (!/\\/chat\\/completions$/.test(endpoint)) endpoint += '/chat/completions'\n    body = { model, messages: [{ role: 'user', content: '你好' }], temperature: 0.3, stream: false }\n    headers['Authorization'] = 'Bearer ' + key\n  }\n  try {\n    const res = await $chrome.fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(body) })\n    if (!res.ok) {\n      let detail = ''\n      try { detail = ': ' + (await res.text()).slice(0, 300) } catch (_e) {}\n      return { ok: false, error: 'HTTP ' + res.status + detail }\n    }\n    const data = await res.json()\n    let content = null\n    if (api === 'anthropic-messages') {\n      if (data && Array.isArray(data.content)) content = data.content.map((b) => (b && b.type === 'text' ? b.text : '')).join('')\n    } else if (api === 'openai-responses') {\n      if (data && Array.isArray(data.output)) content = data.output.filter((o) => o && o.type === 'message' && Array.isArray(o.content)).map((o) => o.content.filter((c) => c && c.type === 'output_text').map((c) => c.text).join('')).join('')\n    } else {\n      content = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content\n    }\n    if (content == null || String(content).trim() === '') return { ok: false, error: '接口未返回有效回复' }\n    return { ok: true, content: String(content).trim() }\n  } catch (e) {\n    return { ok: false, error: String((e && e.message) || e) }\n  }\n}\n$effect(() => { $self.fetchModelProviders() }, [])\n"
+          }
+        },
+        "properties": {
+          "headerDiv": {
+            "type": "void",
+            "x-component": "Div",
+            "x-component-props": {
+              "style": {
+                "display": "flex",
+                "justifyContent": "space-between",
+                "alignItems": "center",
+                "margin": "0px 0px 12px 0px"
+              }
+            },
+            "properties": {
+              "helpText": {
+                "type": "string",
+                "x-component": "Text",
+                "x-component-props": {
+                  "content": "管理各 AI 模型提供方的接口地址、API Key 与可用模型列表。配置后可在其他模块中选择使用。",
+                  "style": {
+                    "display": "block",
+                    "color": "#8c8c8c",
+                    "fontSize": "13px"
+                  }
+                }
+              },
+              "addProviderBtn": {
+                "type": "string",
+                "x-component": "Button",
+                "x-component-props": {
+                  "children": "添加模型提供方",
+                  "type": "primary",
+                  "icon": "PlusCircleOutlined"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; rf.showAddOrUpdateProviderDialog(null) } })\n"
+                  }
+                }
+              }
+            }
+          },
+          "providerTable": {
+            "type": "array",
+            "x-decorator": "FormItem",
+            "x-component": "ArrayTable",
+            "x-component-props": {
+              "bordered": true,
+              "showHeader": true,
+              "tableLayout": "fixed",
+              "style": {
+                "margin": "0px 0px 0px 0px"
+              }
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const rf = $utils.getBlockRootField($self)\n$effect(() => {\n  $self.value = (rf.state.modelProviderConfig || []).map((p) => ({\n    ...p,\n    nameDisplay: (p.name || p.id || '') + (p.custom === true ? ' (自定义)' : ''),\n    apiKeyStatus: p.apiKey ? '已配置' : '未配置',\n    modelCount: (p.models || []).length\n  }))\n}, [rf.state.modelProviderConfig])\n"
+              }
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "nameColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "提供方",
+                    "width": 160
+                  },
+                  "properties": {
+                    "nameDisplay": {
+                      "type": "string",
+                      "x-component": "Text",
+                      "x-component-props": {}
+                    }
+                  }
+                },
+                "baseUrlColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "接口地址"
+                  },
+                  "properties": {
+                    "baseUrl": {
+                      "type": "string",
+                      "x-component": "Text",
+                      "x-component-props": {
+                        "style": {
+                          "wordBreak": "break-all",
+                          "fontSize": "12px",
+                          "color": "#595959"
+                        }
+                      }
+                    }
+                  }
+                },
+                "apiColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "协议",
+                    "width": 150
+                  },
+                  "properties": {
+                    "api": {
+                      "type": "string",
+                      "x-component": "Text",
+                      "x-component-props": {}
+                    }
+                  }
+                },
+                "apiKeyStatusColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "API Key",
+                    "width": 90,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "apiKeyStatus": {
+                      "type": "string",
+                      "x-component": "Text",
+                      "x-component-props": {}
+                    }
+                  }
+                },
+                "modelCountColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "模型数",
+                    "width": 80,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "modelCount": {
+                      "type": "string",
+                      "x-component": "Text",
+                      "x-component-props": {}
+                    }
+                  }
+                },
+                "operateColumn": {
+                  "type": "void",
+                  "x-component": "ArrayTable.Column",
+                  "x-component-props": {
+                    "title": "操作",
+                    "width": 120,
+                    "align": "center"
+                  },
+                  "properties": {
+                    "editProviderBtn": {
+                      "type": "string",
+                      "x-component": "Button",
+                      "x-component-props": {
+                        "children": "",
+                        "icon": "EditOutlined",
+                        "size": "small",
+                        "style": {
+                          "margin": "0px 4px 0px 0px"
+                        }
+                      },
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; const row = $utils.getArrayFieldRow($self, 'ArrayTable'); rf.showAddOrUpdateProviderDialog(row) } })\n"
+                        }
+                      }
+                    },
+                    "deleteProviderBtn": {
+                      "type": "string",
+                      "x-component": "Button",
+                      "x-component-props": {
+                        "children": "",
+                        "icon": "DeleteOutlined",
+                        "size": "small",
+                        "danger": true
+                      },
+                      "x-reactions": {
+                        "fulfill": {
+                          "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; const row = $utils.getArrayFieldRow($self, 'ArrayTable'); $modal.confirm({ title: '确认删除？', content: '删除后无法恢复', okText: '确认删除', okType: 'danger', cancelText: '取消', onOk: async () => { await rf.deleteProvider(row) } }) } })\n"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "addOrUpdateProviderDialog": {
+            "type": "object",
+            "x-component": "Modal",
+            "x-component-props": {
+              "title": "添加模型提供方",
+              "okText": "确定",
+              "cancelText": "取消",
+              "width": 720
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "const rf = $utils.getBlockRootField($self)\n$props({\n  onCancel: () => { $self.componentProps.open = false },\n  onOk: () => {\n    $self.validate().then(async () => {\n      const form = $self.value\n      if (!rf) return\n      const ok = await rf.addOrUpdateProvider(form)\n      if (ok) $self.componentProps.open = false\n    }).catch((e) => { $logger.info('表单校验失败', e) })\n  }\n})\n"
+              }
+            },
+            "properties": {
+              "providerSelect": {
+                "type": "string",
+                "title": "选择提供方",
+                "required": true,
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-validator": [
+                  {
+                    "required": true,
+                    "message": "请选择提供方"
+                  }
+                ],
+                "default": "__custom__",
+                "x-component-props": {
+                  "showSearch": true,
+                  "optionFilterProp": "label",
+                  "placeholder": "请选择提供方"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "const dialogKey = 'addOrUpdateProviderDialog'\nconst dialogEntire = $self.address.entire.substring(0, $self.address.entire.lastIndexOf(dialogKey) + dialogKey.length)\nconst rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$effect(() => {\n  $self.dataSource = [{ label: '自定义提供方', value: '__custom__' }].concat((rf.state.presetProviders || []).map((p) => ({ label: p.name, value: p.id })))\n}, [rf.state.presetProviders])\n$props({\n  onChange: (val) => {\n    const isCustom = val === '__custom__'\n    $self.query(dialogEntire + '.providerName').forEach((f) => { f.visible = isCustom })\n    if (isCustom) {\n      $self.query(dialogEntire + '.providerName').forEach((f) => { f.value = '' })\n      $self.query(dialogEntire + '.baseUrl').forEach((f) => { f.value = '' })\n      $self.query(dialogEntire + '.api').forEach((f) => { f.value = 'openai-completions' })\n      $self.query(dialogEntire + '.models').forEach((f) => { f.value = [] })\n    } else {\n      const preset = (rf.state.presetProviders || []).find((p) => p.id === val)\n      if (!preset) return\n      $self.query(dialogEntire + '.providerName').forEach((f) => { f.value = preset.name })\n      $self.query(dialogEntire + '.baseUrl').forEach((f) => { f.value = preset.baseUrl })\n      $self.query(dialogEntire + '.api').forEach((f) => { f.value = preset.api })\n      $self.query(dialogEntire + '.models').forEach((f) => { f.value = JSON.parse(JSON.stringify(preset.models || [])) })\n    }\n  }\n})\n"
+                  }
+                }
+              },
+              "providerName": {
+                "type": "string",
+                "title": "提供方名称",
+                "required": true,
+                "x-decorator": "FormItem",
+                "x-component": "Input",
+                "x-validator": [
+                  {
+                    "required": true,
+                    "message": "提供方名称不能为空"
+                  },
+                  {
+                    "max": 50,
+                    "message": "提供方名称最多 50 个字符"
+                  }
+                ],
+                "x-component-props": {
+                  "placeholder": "如 my-deepseek"
+                },
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "$effect(() => {\n  const v = $self.parent && $self.parent.value\n  $self.visible = !v || v.providerSelect === '__custom__'\n}, [])\n"
+                  }
+                }
+              },
+              "baseUrl": {
+                "type": "string",
+                "title": "接口地址",
+                "required": true,
+                "x-decorator": "FormItem",
+                "x-component": "Input",
+                "x-validator": [
+                  {
+                    "required": true,
+                    "message": "接口地址不能为空"
+                  },
+                  {
+                    "max": 500,
+                    "message": "接口地址最多 500 个字符"
+                  }
+                ],
+                "x-component-props": {
+                  "placeholder": "如 https://api.deepseek.com/v1/chat/completions"
+                }
+              },
+              "api": {
+                "type": "string",
+                "title": "接口协议",
+                "required": true,
+                "x-decorator": "FormItem",
+                "x-component": "Select",
+                "x-validator": [
+                  {
+                    "required": true,
+                    "message": "请选择接口协议"
+                  }
+                ],
+                "enum": [
+                  {
+                    "label": "OpenAI Completions",
+                    "value": "openai-completions"
+                  },
+                  {
+                    "label": "Anthropic Messages",
+                    "value": "anthropic-messages"
+                  },
+                  {
+                    "label": "OpenAI Responses",
+                    "value": "openai-responses"
+                  }
+                ],
+                "default": "openai-completions"
+              },
+              "apiKey": {
+                "type": "string",
+                "title": "API Key",
+                "x-decorator": "FormItem",
+                "x-component": "Input.Password",
+                "x-validator": [
+                  {
+                    "max": 500,
+                    "message": "API Key 最多 500 个字符"
+                  }
+                ],
+                "x-component-props": {
+                  "placeholder": "粘贴你的 API Key"
+                }
+              },
+              "models": {
+                "type": "array",
+                "title": "可用模型",
+                "x-decorator": "FormItem",
+                "x-component": "ArrayTable",
+                "x-validator": [],
+                "x-component-props": {
+                  "bordered": true,
+                  "showHeader": true,
+                  "tableLayout": "fixed"
+                },
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "modelValueColumn": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "模型标识"
+                      },
+                      "properties": {
+                        "model": {
+                          "type": "string",
+                          "x-decorator": "FormItem",
+                          "x-component": "Input",
+                          "x-validator": [
+                            {
+                              "required": true,
+                              "message": "模型标识不能为空"
+                            },
+                            {
+                              "max": 200,
+                              "message": "模型标识最多 200 个字符"
+                            }
+                          ],
+                          "x-component-props": {
+                            "placeholder": "如 deepseek-v4-flash"
+                          }
+                        }
+                      }
+                    },
+                    "modelOperateColumn": {
+                      "type": "void",
+                      "x-component": "ArrayTable.Column",
+                      "x-component-props": {
+                        "title": "操作",
+                        "width": 130,
+                        "align": "center"
+                      },
+                      "properties": {
+                        "testModelBtn": {
+                          "type": "void",
+                          "x-component": "Button",
+                          "x-component-props": {
+                            "size": "small",
+                            "icon": "ApiOutlined",
+                            "style": {
+                              "margin": "0px 4px 0px 0px"
+                            }
+                          },
+                          "x-reactions": {
+                            "fulfill": {
+                              "run": "const rf = $utils.getBlockRootField($self)\nconst dialogKey = 'addOrUpdateProviderDialog'\nconst dialogEntire = $self.address.entire.substring(0, $self.address.entire.lastIndexOf(dialogKey) + dialogKey.length)\n$props({\n  onClick: async () => {\n    if (!rf) return\n    const dlg = rf.query(dialogEntire).take()\n    if (!dlg) return\n    const form = dlg.value || {}\n    const row = $utils.getArrayFieldRow($self, 'ArrayTable')\n    const modelVal = (row && (row.model || row.id)) || ''\n    if (!modelVal) { $message.error('请先填写模型标识'); return }\n    $self.setComponentProps({ loading: true, disabled: true })\n    const result = await rf.testModel(form.apiKey, form.baseUrl, form.api, modelVal)\n    $self.setComponentProps({ loading: false, disabled: false })\n    if (result.ok) $message.success('测试成功：' + (result.content || '').slice(0, 80))\n    else $message.error('测试失败：' + result.error)\n  }\n})\n"
+                            }
+                          }
+                        },
+                        "removeModelBtn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Remove",
+                          "x-component-props": {
+                            "size": "small",
+                            "danger": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "properties": {
+                  "addModelBtn": {
+                    "type": "void",
+                    "x-component": "ArrayTable.Addition",
+                    "x-component-props": {
+                      "title": "添加模型",
+                      "method": "push"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
