@@ -17,7 +17,7 @@
         "name": "translationSettingsCardDiv",
         "x-reactions": {
           "fulfill": {
-            "run": "$utils.setAsBlockRoot($self)\nconst rootEntire = $self.address.entire\nconst CONFIG_KEY = 'translationConfig'\nconst MODEL_KEY = 'modelProviderConfig'\n$self.state = $observable({ translationConfig: null, modelProviderConfig: [], selectedProviderId: '' })\nconst DEFAULT_CONFIG = {\n  enabled: false,\n  providerId: 'deepseek',\n  modelId: 'deepseek-v4-flash',\n  targetLang: '简体中文',\n  sourceLang: 'auto',\n  displayMode: 'bilingual',\n  autoTranslate: false,\n  concurrency: 4,\n  showBall: true,\n  hoverTranslate: true,\n  dynamicTranslate: true,\n  cache: true,\n  paragraphShortcut: 'double-ctrl'\n}\n$self.loadModelProviders = async () => {\n  const res = await $chrome.storage.local.get(MODEL_KEY)\n  $self.state.modelProviderConfig = (res && Array.isArray(res[MODEL_KEY])) ? res[MODEL_KEY] : []\n}\n$self.loadTranslationConfig = async () => {\n  const res = await $chrome.storage.local.get(CONFIG_KEY)\n  const cfg = res && res[CONFIG_KEY] && typeof res[CONFIG_KEY] === 'object' ? res[CONFIG_KEY] : null\n  $self.state.translationConfig = cfg || DEFAULT_CONFIG\n  $self.state.selectedProviderId = (cfg || DEFAULT_CONFIG).providerId || ''\n}\n$self.saveTranslationConfig = async (config) => {\n  const plain = JSON.parse(JSON.stringify(config || {}))\n  await $chrome.storage.local.set({ [CONFIG_KEY]: plain })\n  $self.state.translationConfig = plain\n}\n$effect(() => {\n  (async () => {\n    await $self.loadModelProviders()\n    await $self.loadTranslationConfig()\n  })()\n}, [])\n"
+            "run": "$utils.setAsBlockRoot($self)\nconst rootEntire = $self.address.entire\nconst CONFIG_KEY = 'translationConfig'\nconst MODEL_KEY = 'modelProviderConfig'\n$self.state = $observable({ translationConfig: null, modelProviderConfig: [], selectedProviderId: '' })\nconst DEFAULT_CONFIG = {\n  translationEnabled: false,\n  translationProviderId: 'deepseek',\n  translationModel: 'deepseek-v4-flash',\n  targetLanguage: '简体中文',\n  sourceLanguage: 'auto',\n  translationDisplayMode: 'bilingual',\n  autoTranslateOnPageLoad: false,\n  translationConcurrency: 4,\n  showFloatingBall: true,\n  hoverParagraphTranslate: true,\n  dynamicContentTranslate: true,\n  enableCache: true,\n  paragraphTranslateShortcut: 'double-ctrl'\n}\n$self.loadModelProviders = async () => {\n  const res = await $chrome.storage.local.get(MODEL_KEY)\n  $self.state.modelProviderConfig = (res && Array.isArray(res[MODEL_KEY])) ? res[MODEL_KEY] : []\n}\n$self.loadTranslationConfig = async () => {\n  const res = await $chrome.storage.local.get(CONFIG_KEY)\n  const cfg = res && res[CONFIG_KEY] && typeof res[CONFIG_KEY] === 'object' ? res[CONFIG_KEY] : null\n  $self.state.translationConfig = cfg || DEFAULT_CONFIG\n  $self.state.selectedProviderId = (cfg || DEFAULT_CONFIG).translationProviderId || ''\n}\n$self.saveTranslationConfig = async (config) => {\n  const plain = JSON.parse(JSON.stringify(config || {}))\n  await $chrome.storage.local.set({ [CONFIG_KEY]: plain })\n  $self.state.translationConfig = plain\n}\n$effect(() => {\n  (async () => {\n    await $self.loadModelProviders()\n    await $self.loadTranslationConfig()\n  })()\n}, [])\n"
           }
         },
         "properties": {
@@ -56,13 +56,51 @@
                       }
                     }
                   },
-                  "enabled": {
+                  "translationEnabled": {
                     "type": "boolean",
                     "x-component": "Switch",
                     "default": false,
                     "x-reactions": {
                       "fulfill": {
-                        "run": "const rf = $utils.getBlockRootField($self)\nif (!rf) return\n$props({ onChange: async (val) => {\n  const formField = rf.query(rf.address.entire + '.translationConfigForm').take()\n  if (!formField || !formField.value) return\n  formField.value.enabled = val\n  await rf.saveTranslationConfig(formField.value)\n  $message.success(val ? '翻译功能已开启' : '翻译功能已关闭')\n} })\n"
+                        "run": "const rf = $utils.getBlockRootField($self)\nif (!rf) return\n$props({ onChange: async (val) => {\n  const formField = rf.query(rf.address.entire + '.translationConfigForm').take()\n  if (!formField || !formField.value) return\n  formField.value.translationEnabled = val\n  await rf.saveTranslationConfig(formField.value)\n  $message.success(val ? '翻译功能已开启' : '翻译功能已关闭')\n} })\n"
+                      }
+                    }
+                  }
+                }
+              },
+              "manageGroup": {
+                "type": "void",
+                "x-component": "Div",
+                "x-component-props": {
+                  "style": {
+                    "display": "flex",
+                    "gap": "8px"
+                  }
+                },
+                "properties": {
+                  "showHistoryBtn": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-component-props": {
+                      "children": "划词翻译历史管理",
+                      "icon": "HistoryOutlined"
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; const dlg = rf.query(rf.address.entire + '.translationHistoryDialog').take(); if (dlg) dlg.setComponentProps({ open: true }) } })\n"
+                      }
+                    }
+                  },
+                  "showWordbookBtn": {
+                    "type": "string",
+                    "x-component": "Button",
+                    "x-component-props": {
+                      "children": "单词本管理",
+                      "icon": "BookOutlined"
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; const dlg = rf.query(rf.address.entire + '.translationWordbookDialog').take(); if (dlg) dlg.setComponentProps({ open: true }) } })\n"
                       }
                     }
                   }
@@ -79,7 +117,7 @@
                 },
                 "x-reactions": {
                   "fulfill": {
-                    "run": "const rf = $utils.getBlockRootField($self)\n$props({\n  onClick: async () => {\n    if (!rf) return\n    const formField = rf.query(rf.address.entire + '.translationConfigForm').take()\n    if (!formField) return\n    const config = formField.value || {}\n    if (!config.providerId) { $message.error('请选择翻译提供方'); return }\n    if (!config.modelId) { $message.error('请选择翻译模型'); return }\n    await rf.saveTranslationConfig(config)\n    $message.success('保存成功')\n  }\n})\n"
+                    "run": "const rf = $utils.getBlockRootField($self)\n$props({\n  onClick: async () => {\n    if (!rf) return\n    const formField = rf.query(rf.address.entire + '.translationConfigForm').take()\n    if (!formField) return\n    const config = formField.value || {}\n    if (!config.translationProviderId) { $message.error('请选择翻译提供方'); return }\n    if (!config.translationModel) { $message.error('请选择翻译模型'); return }\n    await rf.saveTranslationConfig(config)\n    $message.success('保存成功')\n  }\n})\n"
                   }
                 }
               }
@@ -89,7 +127,7 @@
             "type": "object",
             "x-reactions": {
               "fulfill": {
-                "run": "const rf = $utils.getBlockRootField($self)\n$effect(() => {\n  if (!rf || !rf.state || !rf.state.translationConfig) return\n  $self.value = rf.state.translationConfig\n  const enabledField = rf.query(rf.address.entire + '.headerDiv.enableGroup.enabled').take()\n  if (enabledField) enabledField.value = rf.state.translationConfig.enabled || false\n}, [rf.state.translationConfig])\n"
+                "run": "const rf = $utils.getBlockRootField($self)\n$effect(() => {\n  if (!rf || !rf.state || !rf.state.translationConfig) return\n  $self.value = rf.state.translationConfig\n  const enabledField = rf.query(rf.address.entire + '.headerDiv.enableGroup.translationEnabled').take()\n  if (enabledField) enabledField.value = rf.state.translationConfig.translationEnabled || false\n}, [rf.state.translationConfig])\n"
               }
             },
             "properties": {
@@ -121,7 +159,7 @@
                       }
                     }
                   },
-                  "providerId": {
+                  "translationProviderId": {
                     "type": "string",
                     "title": "翻译提供方",
                     "required": true,
@@ -140,11 +178,11 @@
                     },
                     "x-reactions": {
                       "fulfill": {
-                        "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$effect(() => {\n  $self.dataSource = (rf.state.modelProviderConfig || []).map((p) => ({ label: p.name, value: p.id }))\n}, [rf.state.modelProviderConfig])\n\n$props({ onChange: (val) => {\n  rf.state.selectedProviderId = val\n  const formVal = $self.parent && $self.parent.value\n  if (formVal) formVal.modelId = ''\n} })\n"
+                        "run": "const rf = $utils.getBlockRootField($self)\nif (!rf || !rf.state) return\n$effect(() => {\n  $self.dataSource = (rf.state.modelProviderConfig || []).map((p) => ({ label: p.name, value: p.id }))\n}, [rf.state.modelProviderConfig])\n\n$props({ onChange: (val) => {\n  rf.state.selectedProviderId = val\n  const formVal = $self.parent && $self.parent.value\n  if (formVal) formVal.translationModel = ''\n} })\n"
                       }
                     }
                   },
-                  "modelId": {
+                  "translationModel": {
                     "type": "string",
                     "title": "翻译模型",
                     "required": true,
@@ -180,7 +218,7 @@
                   }
                 },
                 "properties": {
-                  "sourceLang": {
+                  "sourceLanguage": {
                     "type": "string",
                     "title": "源语言",
                     "x-decorator": "FormItem",
@@ -274,7 +312,7 @@
                       }
                     ]
                   },
-                  "targetLang": {
+                  "targetLanguage": {
                     "type": "string",
                     "title": "目标语言",
                     "required": true,
@@ -383,7 +421,7 @@
                   }
                 },
                 "properties": {
-                  "displayMode": {
+                  "translationDisplayMode": {
                     "type": "string",
                     "title": "显示方式",
                     "required": true,
@@ -411,7 +449,7 @@
                       }
                     ]
                   },
-                  "concurrency": {
+                  "translationConcurrency": {
                     "type": "number",
                     "title": "并发数",
                     "required": true,
@@ -451,7 +489,7 @@
                   }
                 },
                 "properties": {
-                  "autoTranslate": {
+                  "autoTranslateOnPageLoad": {
                     "type": "boolean",
                     "title": "自动翻译",
                     "x-decorator": "FormItem",
@@ -462,7 +500,7 @@
                       "tooltip": "打开页面后自动翻译整页"
                     }
                   },
-                  "hoverTranslate": {
+                  "hoverParagraphTranslate": {
                     "type": "boolean",
                     "title": "悬停段落翻译",
                     "x-decorator": "FormItem",
@@ -473,7 +511,7 @@
                       "tooltip": "鼠标悬停段落时显示翻译按钮，点击翻译该段"
                     }
                   },
-                  "paragraphShortcut": {
+                  "paragraphTranslateShortcut": {
                     "type": "string",
                     "title": "段落翻译快捷键",
                     "x-decorator": "FormItem",
@@ -503,7 +541,7 @@
                       }
                     ]
                   },
-                  "dynamicTranslate": {
+                  "dynamicContentTranslate": {
                     "type": "boolean",
                     "title": "动态内容翻译",
                     "x-decorator": "FormItem",
@@ -514,7 +552,7 @@
                       "tooltip": "页面新增内容时自动翻译（MutationObserver）"
                     }
                   },
-                  "showBall": {
+                  "showFloatingBall": {
                     "type": "boolean",
                     "title": "显示悬浮球",
                     "x-decorator": "FormItem",
@@ -525,7 +563,7 @@
                       "tooltip": "在页面右下角显示悬浮球，点击翻译/恢复"
                     }
                   },
-                  "cache": {
+                  "enableCache": {
                     "type": "boolean",
                     "title": "启用缓存",
                     "x-decorator": "FormItem",
@@ -534,6 +572,566 @@
                     "default": true,
                     "x-decorator-props": {
                       "tooltip": "缓存翻译结果，7 天内重复内容直接命中缓存"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "translationHistoryDialog": {
+            "type": "object",
+            "x-component": "Modal",
+            "x-component-props": {
+              "title": "划词翻译历史管理",
+              "width": 1000,
+              "footer": null,
+              "destroyOnClose": true
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "$props({ onCancel: () => { $self.componentProps.open = false } })\n"
+              }
+            },
+            "properties": {
+              "translationHistoryCardDiv": {
+                "type": "void",
+                "x-component": "Div",
+                "x-component-props": {
+                  "style": {
+                    "padding": "20px"
+                  }
+                },
+                "name": "translationHistoryCardDiv",
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "$utils.setAsBlockRoot($self)\nconst rootEntire = $self.address.entire\nconst STORAGE_KEY = 'translationHistory'\n$self.state = $observable({ list: null })\n$self.fetchList = async () => {\n  if ($self.state.list) return $self.state.list\n  const res = await $chrome.storage.local.get(STORAGE_KEY)\n  const list = res && Array.isArray(res[STORAGE_KEY]) ? res[STORAGE_KEY] : []\n  $self.state.list = list\n  return list\n}\n$self.saveList = async (list) => {\n  const plain = JSON.parse(JSON.stringify(list))\n  await $chrome.storage.local.set({ [STORAGE_KEY]: plain })\n  $self.state.list = plain\n}\n$self.showEditDialog = (item) => {\n  if (!item) return\n  const dlg = $self.query(rootEntire + '.editItemDialog').take()\n  if (!dlg) return\n  dlg.value = { source: item.source || '', translation: item.translation || '', __editIndex: item.__index }\n  dlg.setComponentProps({ open: true, title: '修改翻译历史' })\n}\n$self.updateItem = async (form) => {\n  const source = (form.source || '').trim()\n  if (!source) { $message.error('源文不能为空'); return false }\n  const translation = (form.translation || '').trim()\n  if (!translation) { $message.error('译文不能为空'); return false }\n  const list = (await $self.fetchList()).slice()\n  const editIndex = form.__editIndex\n  if (editIndex == null || editIndex < 0 || editIndex >= list.length) return false\n  list[editIndex] = { ...list[editIndex], source, translation }\n  await $self.saveList(list)\n  $message.success('修改成功')\n  return true\n}\n$self.deleteItem = async (item) => {\n  const list = (await $self.fetchList()).slice()\n  const idx = item.__index\n  if (idx == null || idx < 0 || idx >= list.length) return\n  list.splice(idx, 1)\n  await $self.saveList(list)\n  $message.success('删除成功')\n}\n$self.clearAll = async () => {\n  await $self.saveList([])\n  $message.success('已清空全部翻译历史')\n}\n$effect(() => { $self.fetchList() }, [])\n"
+                  }
+                },
+                "properties": {
+                  "headerDiv": {
+                    "type": "void",
+                    "x-component": "Div",
+                    "x-component-props": {
+                      "style": {
+                        "display": "flex",
+                        "justifyContent": "space-between",
+                        "alignItems": "center",
+                        "margin": "0px 0px 16px 0px"
+                      }
+                    },
+                    "properties": {
+                      "helpText": {
+                        "type": "string",
+                        "x-component": "Text",
+                        "x-component-props": {
+                          "content": "管理划词翻译产生的历史记录，最多保留 100 条。",
+                          "style": {
+                            "display": "block",
+                            "color": "#8c8c8c",
+                            "fontSize": "13px"
+                          }
+                        }
+                      },
+                      "clearAllBtn": {
+                        "type": "string",
+                        "x-component": "Button",
+                        "x-component-props": {
+                          "children": "清空全部",
+                          "danger": true,
+                          "icon": "DeleteOutlined"
+                        },
+                        "x-reactions": {
+                          "fulfill": {
+                            "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; $modal.confirm({ title: '确认清空？', content: '将删除全部翻译历史，删除后无法恢复', okText: '确认清空', okType: 'danger', cancelText: '取消', onOk: async () => { await rf.clearAll() } }) } })\n"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "historyTable": {
+                    "type": "array",
+                    "x-decorator": "FormItem",
+                    "x-component": "ArrayTable",
+                    "x-component-props": {
+                      "bordered": true,
+                      "showHeader": true,
+                      "tableLayout": "fixed",
+                      "style": {
+                        "margin": "0px 0px 0px 0px"
+                      }
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const rf = $utils.getBlockRootField($self)\n$effect(() => {\n  $self.value = (rf.state.list || []).map((item, i) => ({\n    ...item,\n    timeDisplay: item.time ? $dayjs(item.time).format('YYYY-MM-DD HH:mm:ss') : '',\n    __index: i\n  }))\n}, [rf.state.list])\n"
+                      }
+                    },
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "sourceColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "源文"
+                          },
+                          "properties": {
+                            "source": {
+                              "type": "string",
+                              "x-component": "Text",
+                              "x-component-props": {
+                                "style": {
+                                  "wordBreak": "break-all",
+                                  "whiteSpace": "pre-wrap",
+                                  "fontSize": "13px",
+                                  "color": "#595959"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "translationColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "译文"
+                          },
+                          "properties": {
+                            "translation": {
+                              "type": "string",
+                              "x-component": "Text",
+                              "x-component-props": {
+                                "style": {
+                                  "wordBreak": "break-all",
+                                  "whiteSpace": "pre-wrap",
+                                  "fontSize": "13px",
+                                  "color": "#262626"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "timeColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "时间",
+                            "width": 160
+                          },
+                          "properties": {
+                            "timeDisplay": {
+                              "type": "string",
+                              "x-component": "Text",
+                              "x-component-props": {
+                                "style": {
+                                  "fontSize": "12px",
+                                  "color": "#8c8c8c"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "operateColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "操作",
+                            "width": 120,
+                            "align": "center"
+                          },
+                          "properties": {
+                            "editItemBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "",
+                                "icon": "EditOutlined",
+                                "size": "small",
+                                "style": {
+                                  "margin": "0px 4px 0px 0px"
+                                }
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; const row = $utils.getArrayFieldRow($self, 'ArrayTable'); rf.showEditDialog(row) } })\n"
+                                }
+                              }
+                            },
+                            "deleteItemBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "",
+                                "icon": "DeleteOutlined",
+                                "size": "small",
+                                "danger": true
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; const row = $utils.getArrayFieldRow($self, 'ArrayTable'); $modal.confirm({ title: '确认删除？', content: '删除后无法恢复', okText: '确认删除', okType: 'danger', cancelText: '取消', onOk: async () => { await rf.deleteItem(row) } }) } })\n"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "editItemDialog": {
+                    "type": "object",
+                    "x-component": "Modal",
+                    "x-component-props": {
+                      "title": "修改翻译历史",
+                      "okText": "确定",
+                      "cancelText": "取消",
+                      "width": 640
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const rf = $utils.getBlockRootField($self)\n$props({\n  onCancel: () => { $self.componentProps.open = false },\n  onOk: () => {\n    $self.validate().then(async () => {\n      const form = $self.value\n      if (!rf) return\n      const ok = await rf.updateItem(form)\n      if (ok) $self.componentProps.open = false\n    }).catch((e) => { $logger.info('表单校验失败', e) })\n  }\n})\n"
+                      }
+                    },
+                    "properties": {
+                      "source": {
+                        "type": "string",
+                        "title": "源文",
+                        "required": true,
+                        "x-decorator": "FormItem",
+                        "x-component": "Input.TextArea",
+                        "x-validator": [
+                          {
+                            "required": true,
+                            "message": "源文不能为空"
+                          },
+                          {
+                            "max": 4000,
+                            "message": "源文最多 4000 个字符"
+                          }
+                        ],
+                        "x-component-props": {
+                          "placeholder": "请输入源文",
+                          "autoSize": {
+                            "minRows": 2,
+                            "maxRows": 6
+                          }
+                        }
+                      },
+                      "translation": {
+                        "type": "string",
+                        "title": "译文",
+                        "required": true,
+                        "x-decorator": "FormItem",
+                        "x-component": "Input.TextArea",
+                        "x-validator": [
+                          {
+                            "required": true,
+                            "message": "译文不能为空"
+                          },
+                          {
+                            "max": 5000,
+                            "message": "译文最多 5000 个字符"
+                          }
+                        ],
+                        "x-component-props": {
+                          "placeholder": "请输入译文",
+                          "autoSize": {
+                            "minRows": 2,
+                            "maxRows": 6
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "translationWordbookDialog": {
+            "type": "object",
+            "x-component": "Modal",
+            "x-component-props": {
+              "title": "单词本管理",
+              "width": 1000,
+              "footer": null,
+              "destroyOnClose": true
+            },
+            "x-reactions": {
+              "fulfill": {
+                "run": "$props({ onCancel: () => { $self.componentProps.open = false } })\n"
+              }
+            },
+            "properties": {
+              "translationWordbookCardDiv": {
+                "type": "void",
+                "x-component": "Div",
+                "x-component-props": {
+                  "style": {
+                    "padding": "20px"
+                  }
+                },
+                "name": "translationWordbookCardDiv",
+                "x-reactions": {
+                  "fulfill": {
+                    "run": "$utils.setAsBlockRoot($self)\nconst rootEntire = $self.address.entire\nconst STORAGE_KEY = 'translationWordbook'\nconst MAX_COUNT = 200\n$self.state = $observable({ list: null })\n$self.fetchList = async () => {\n  if ($self.state.list) return $self.state.list\n  const res = await $chrome.storage.local.get(STORAGE_KEY)\n  const list = res && Array.isArray(res[STORAGE_KEY]) ? res[STORAGE_KEY] : []\n  $self.state.list = list\n  return list\n}\n$self.saveList = async (list) => {\n  const plain = JSON.parse(JSON.stringify(list))\n  await $chrome.storage.local.set({ [STORAGE_KEY]: plain })\n  $self.state.list = plain\n}\n$self.showAddOrUpdateDialog = (item) => {\n  const dlg = $self.query(rootEntire + '.addOrUpdateItemDialog').take()\n  if (!dlg) return\n  if (item) {\n    dlg.value = { source: item.source || '', translation: item.translation || '', __editIndex: item.__index }\n  } else {\n    dlg.value = { source: '', translation: '', __editIndex: -1 }\n  }\n  dlg.setComponentProps({ open: true, title: item ? '修改单词' : '添加单词' })\n}\n$self.addOrUpdateItem = async (form) => {\n  const source = (form.source || '').trim()\n  if (!source) { $message.error('源文不能为空'); return false }\n  const translation = (form.translation || '').trim()\n  if (!translation) { $message.error('译文不能为空'); return false }\n  const list = (await $self.fetchList()).slice()\n  const editIndex = form.__editIndex\n  if (editIndex != null && editIndex >= 0 && editIndex < list.length) {\n    list[editIndex] = { ...list[editIndex], source, translation }\n  } else {\n    if (list.some((w) => w.source === source && w.translation === translation)) {\n      $message.error('该单词已存在')\n      return false\n    }\n    list.unshift({ source, translation, time: Date.now() })\n    if (list.length > MAX_COUNT) list.length = MAX_COUNT\n  }\n  await $self.saveList(list)\n  $message.success(editIndex != null && editIndex >= 0 ? '修改成功' : '添加成功')\n  return true\n}\n$self.deleteItem = async (item) => {\n  const list = (await $self.fetchList()).slice()\n  const idx = item.__index\n  if (idx == null || idx < 0 || idx >= list.length) return\n  list.splice(idx, 1)\n  await $self.saveList(list)\n  $message.success('删除成功')\n}\n$self.clearAll = async () => {\n  await $self.saveList([])\n  $message.success('已清空全部单词')\n}\n$effect(() => { $self.fetchList() }, [])\n"
+                  }
+                },
+                "properties": {
+                  "headerDiv": {
+                    "type": "void",
+                    "x-component": "Div",
+                    "x-component-props": {
+                      "style": {
+                        "display": "flex",
+                        "justifyContent": "space-between",
+                        "alignItems": "center",
+                        "margin": "0px 0px 16px 0px"
+                      }
+                    },
+                    "properties": {
+                      "helpText": {
+                        "type": "string",
+                        "x-component": "Text",
+                        "x-component-props": {
+                          "content": "管理收藏的单词 / 翻译对，最多保留 200 条。",
+                          "style": {
+                            "display": "block",
+                            "color": "#8c8c8c",
+                            "fontSize": "13px"
+                          }
+                        }
+                      },
+                      "actionDiv": {
+                        "type": "void",
+                        "x-component": "Div",
+                        "x-component-props": {
+                          "style": {
+                            "display": "flex",
+                            "gap": "8px"
+                          }
+                        },
+                        "properties": {
+                          "addItemBtn": {
+                            "type": "string",
+                            "x-component": "Button",
+                            "x-component-props": {
+                              "children": "添加单词",
+                              "type": "primary",
+                              "icon": "PlusCircleOutlined"
+                            },
+                            "x-reactions": {
+                              "fulfill": {
+                                "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; rf.showAddOrUpdateDialog(null) } })\n"
+                              }
+                            }
+                          },
+                          "clearAllBtn": {
+                            "type": "string",
+                            "x-component": "Button",
+                            "x-component-props": {
+                              "children": "清空全部",
+                              "danger": true,
+                              "icon": "DeleteOutlined"
+                            },
+                            "x-reactions": {
+                              "fulfill": {
+                                "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; $modal.confirm({ title: '确认清空？', content: '将删除全部单词，删除后无法恢复', okText: '确认清空', okType: 'danger', cancelText: '取消', onOk: async () => { await rf.clearAll() } }) } })\n"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "wordbookTable": {
+                    "type": "array",
+                    "x-decorator": "FormItem",
+                    "x-component": "ArrayTable",
+                    "x-component-props": {
+                      "bordered": true,
+                      "showHeader": true,
+                      "tableLayout": "fixed",
+                      "style": {
+                        "margin": "0px 0px 0px 0px"
+                      }
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const rf = $utils.getBlockRootField($self)\n$effect(() => {\n  $self.value = (rf.state.list || []).map((item, i) => ({\n    ...item,\n    timeDisplay: item.time ? $dayjs(item.time).format('YYYY-MM-DD HH:mm:ss') : '',\n    __index: i\n  }))\n}, [rf.state.list])\n"
+                      }
+                    },
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "sourceColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "源文"
+                          },
+                          "properties": {
+                            "source": {
+                              "type": "string",
+                              "x-component": "Text",
+                              "x-component-props": {
+                                "style": {
+                                  "wordBreak": "break-all",
+                                  "whiteSpace": "pre-wrap",
+                                  "fontSize": "13px",
+                                  "color": "#595959"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "translationColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "译文"
+                          },
+                          "properties": {
+                            "translation": {
+                              "type": "string",
+                              "x-component": "Text",
+                              "x-component-props": {
+                                "style": {
+                                  "wordBreak": "break-all",
+                                  "whiteSpace": "pre-wrap",
+                                  "fontSize": "13px",
+                                  "color": "#262626"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "timeColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "时间",
+                            "width": 160
+                          },
+                          "properties": {
+                            "timeDisplay": {
+                              "type": "string",
+                              "x-component": "Text",
+                              "x-component-props": {
+                                "style": {
+                                  "fontSize": "12px",
+                                  "color": "#8c8c8c"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "operateColumn": {
+                          "type": "void",
+                          "x-component": "ArrayTable.Column",
+                          "x-component-props": {
+                            "title": "操作",
+                            "width": 120,
+                            "align": "center"
+                          },
+                          "properties": {
+                            "editItemBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "",
+                                "icon": "EditOutlined",
+                                "size": "small",
+                                "style": {
+                                  "margin": "0px 4px 0px 0px"
+                                }
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; const row = $utils.getArrayFieldRow($self, 'ArrayTable'); rf.showAddOrUpdateDialog(row) } })\n"
+                                }
+                              }
+                            },
+                            "deleteItemBtn": {
+                              "type": "string",
+                              "x-component": "Button",
+                              "x-component-props": {
+                                "children": "",
+                                "icon": "DeleteOutlined",
+                                "size": "small",
+                                "danger": true
+                              },
+                              "x-reactions": {
+                                "fulfill": {
+                                  "run": "const rf = $utils.getBlockRootField($self)\n$props({ onClick: () => { if (!rf) return; const row = $utils.getArrayFieldRow($self, 'ArrayTable'); $modal.confirm({ title: '确认删除？', content: '删除后无法恢复', okText: '确认删除', okType: 'danger', cancelText: '取消', onOk: async () => { await rf.deleteItem(row) } }) } })\n"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "addOrUpdateItemDialog": {
+                    "type": "object",
+                    "x-component": "Modal",
+                    "x-component-props": {
+                      "title": "添加单词",
+                      "okText": "确定",
+                      "cancelText": "取消",
+                      "width": 640
+                    },
+                    "x-reactions": {
+                      "fulfill": {
+                        "run": "const rf = $utils.getBlockRootField($self)\n$props({\n  onCancel: () => { $self.componentProps.open = false },\n  onOk: () => {\n    $self.validate().then(async () => {\n      const form = $self.value\n      if (!rf) return\n      const ok = await rf.addOrUpdateItem(form)\n      if (ok) $self.componentProps.open = false\n    }).catch((e) => { $logger.info('表单校验失败', e) })\n  }\n})\n"
+                      }
+                    },
+                    "properties": {
+                      "source": {
+                        "type": "string",
+                        "title": "源文",
+                        "required": true,
+                        "x-decorator": "FormItem",
+                        "x-component": "Input.TextArea",
+                        "x-validator": [
+                          {
+                            "required": true,
+                            "message": "源文不能为空"
+                          },
+                          {
+                            "max": 4000,
+                            "message": "源文最多 4000 个字符"
+                          }
+                        ],
+                        "x-component-props": {
+                          "placeholder": "请输入源文",
+                          "autoSize": {
+                            "minRows": 2,
+                            "maxRows": 6
+                          }
+                        }
+                      },
+                      "translation": {
+                        "type": "string",
+                        "title": "译文",
+                        "required": true,
+                        "x-decorator": "FormItem",
+                        "x-component": "Input.TextArea",
+                        "x-validator": [
+                          {
+                            "required": true,
+                            "message": "译文不能为空"
+                          },
+                          {
+                            "max": 5000,
+                            "message": "译文最多 5000 个字符"
+                          }
+                        ],
+                        "x-component-props": {
+                          "placeholder": "请输入译文",
+                          "autoSize": {
+                            "minRows": 2,
+                            "maxRows": 6
+                          }
+                        }
+                      }
                     }
                   }
                 }
