@@ -74,7 +74,7 @@
 
 ### 2.2-通过 zip 包安装扩展
 
-1、下载 [god-assistant-0.2.1.zip](https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/god-assistant-0.2.1.zip) 文件到本地，并解压
+1、下载 [god-assistant-0.2.2.zip](https://raw.githubusercontent.com/bingoogolapple/bga-god-assistant-config/main/god-assistant-0.2.2.zip) 文件到本地，并解压
 
 2、在 Chrome 或 Microsoft Edge 中打开「chrome://extensions/」
 
@@ -278,3 +278,16 @@ $props({
 | 微信                                                          | QQ                                                      | 支付宝                                                          |
 | ------------------------------------------------------------- | ------------------------------------------------------- | --------------------------------------------------------------- |
 | <img width="180" alt="微信" src="./images/donate-wechat.jpg"> | <img width="180" alt="QQ" src="./images/donate-qq.jpg"> | <img width="180" alt="支付宝" src="./images/donate-alipay.jpg"> |
+
+* 作者主要使用的 Coding Plan 是 [OpenCode Go](https://opencode.ai/go?ref=8CYK5082AG)，基于开源的 [opencode.ai](https://opencode.ai/go?ref=8CYK5082AG) 提供云端订阅（OpenCode Go）。通过作者的邀请链接 [订阅 OpenCode Go](https://opencode.ai/go?ref=8CYK5082AG)，**您和作者各可得 $5 订阅额度**——欢迎通过此链接支持作者，感谢！
+
+OpenCode Go 包含以下使用额度限制，使用便宜点的模型几乎不会有 Token 焦虑：
+
+- 5 小时限制 — 12 美元使用额度
+- 每周限制 — 30 美元使用额度
+- 每月限制 — 60 美元使用额度
+
+## 作者项目推荐
+
+* 欢迎您使用作者的 DSH 项目 [DSH 桌面客户端（bga-dsh-client）](https://github.com/bingoogolapple/bga-dsh-client)：一个基于 Tauri 2 的 DeepSeek Harness 桌面客户端，提供小白用户一键安装、dsh 服务管理、局域网代理服务管理等功能
+* 欢迎您使用作者的 DeepSeek Harness 插件 [DSH 工作台插件（bga-dsh-workbench）](https://github.com/bingoogolapple/bga-dsh-workbench)：在 hero 空态页展示个性化横幅与头像、完成回合时撒彩带庆祝，并内置一个可驱动 agent 会话执行、支持 5 段 cron 定时调度的任务看板
