@@ -6,6 +6,7 @@
 - [1-功能介绍](#1-功能介绍)
   - [1.1-低码搭建插件页面](#11-低代码搭建插件页面)
   - [1.2-用户脚本管理](#12-用户脚本管理)
+  - [1.3-常用开发配置页面](#13-常用开发配置页面)
 - [2-安装和更新扩展](#2-安装和更新扩展)
   - [2.1-从应用商店安装扩展](#21-从应用商店安装扩展)
   - [2.2-通过 zip 包安装扩展](#22-通过-zip-包安装扩展)
@@ -57,6 +58,10 @@
 
 <img width="600" src="./images/ga-block-template-market.png">
 
+低代码编辑器还内置了 AI 助手，可以用自然语言聊天的方式描述需求，AI 直接生成页面并应用到设计器中继续编辑
+
+<img width="700" src="./images/ga-editor-ai.png">
+
 ### 1.2-用户脚本管理
 
 用户可以添加各种自动化任务脚本
@@ -64,6 +69,60 @@
 <img width="700" src="./images/ga-userScripts-manage.png">
 
 <img width="700" src="./images/ga-userScripts-preview.png">
+
+### 1.3-常用开发配置页面
+
+扩展还提供了多个面向开发者的配置页面，都可以在扩展选项页中打开
+
+#### 1.3.1-模型提供方配置
+
+管理各 AI 模型提供方的接口地址、API Key 与可用模型列表，配置后可在 AI 生成页面、翻译等模块中选择使用，也支持添加自定义提供方和测试模型连通性
+
+<img width="700" src="./images/ga-ModelProvidersSettings.png">
+
+#### 1.3.2-翻译配置
+
+内置翻译功能，可以配置翻译提供方、模型、源语言与目标语言、显示模式（如双语）等，并支持页面自动翻译、悬停段落翻译、动态内容翻译、快捷键翻译、翻译悬浮球、翻译缓存，以及划词翻译历史与单词本管理
+
+<img width="700" src="./images/ga-TranslationSettings.png">
+
+翻译效果演示
+
+<img width="700" src="./images/ga-translate-demo.png">
+
+翻译过程中遇到的生词可以一键加入单词本，方便后续集中复习
+
+<img width="700" src="./images/ga-wordbook.png">
+
+#### 1.3.3-网络请求修改配置
+
+开启总开关后，为所有 HTTP 请求自动追加规则中配置的 Header / Cookie / Query 参数，规则支持三种类型且每条可单独启用或停用
+
+<img width="700" src="./images/ga-ModRequestSettings.png">
+
+#### 1.3.4-Cookie 同步配置
+
+将当前窗口打开的 HTTP 页面（或手动输入的源 URL）的 Cookie 一键同步到配置的目标域名（如 localhost、127.0.0.1），方便本地开发调试登录态
+
+<img width="700" src="./images/ga-CookieSyncSettings.png">
+
+#### 1.3.5-跨域配置
+
+放宽 CORS 跨域限制，可按「目标接口域名」或「发起请求的页面」配置放行规则，并可叠加 URL 过滤（通配符 / 正则）、排除域名、限定请求方法、限定资源类型、限定第一方 / 第三方等条件
+
+<img width="700" src="./images/ga-CorsSettings.png">
+
+#### 1.3.6-泳道配置
+
+通过注入 swimlane 请求头的方式切换接口环境，支持配置多个泳道并激活其中一个，也可在页面显示当前泳道角标，方便多环境并行调试
+
+<img width="700" src="./images/ga-SwimlaneSettings.png">
+
+#### 1.3.7-环境角标配置
+
+页面 URL 命中规则中的正则表达式时，自动在页面标题追加对应的环境标签（如 [Dev]、[Test]、[Stage]）
+
+<img width="700" src="./images/ga-EnvironmentMarkerSettings.png">
 
 ## 2-安装和更新扩展
 
